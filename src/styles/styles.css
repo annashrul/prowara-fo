@@ -8,7 +8,9 @@
     /*position: absolute;*/
     display: none !important;
 }
-
+.intl-tel-input{
+    width:100%;
+}
 .intl-tel-input .selected-dial-code{
     color: white !important;
     padding-left:34px !important;
@@ -25,7 +27,7 @@
 }
 
 .intl-tel-input input[type=tel]{
-     width:122%
+     width:100%
 }
 
 .intl-tel-input input[type=tel]::placeholder{

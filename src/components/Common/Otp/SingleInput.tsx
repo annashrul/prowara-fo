@@ -1,4 +1,4 @@
-import React, { memo, useRef, useLayoutEffect } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import usePrevious from '../../../lib/usePrevious';
 
 export interface SingleOTPInputProps
@@ -10,7 +10,7 @@ export function SingleOTPInputComponent(props: SingleOTPInputProps) {
   const { focus, autoFocus, ...rest } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const prevFocus = usePrevious(!!focus);
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (inputRef.current) {
       if (focus && autoFocus) {
         inputRef.current.focus();

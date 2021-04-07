@@ -1,19 +1,11 @@
 // import jwtDecode from "jwt-decode";
 import http from "./httpService";
 import Cookies from "js-cookie";
+import {iUser} from './interface'
 
 const tokenKey = "token";
 
 // http.setJwt (getJwt());
-interface iUser { 
-  id: string,
-  foto: string,
-  fullname: string,
-  mobile_no: string,
-  referral: string,
-  status: number,
-  created_at: string
- }
 
 
 function setUser(datum: iUser) {
