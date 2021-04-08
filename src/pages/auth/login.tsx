@@ -42,10 +42,6 @@ const Login: NextPage<iLogin> = ({apiUrl,otpLength}) =>{
         setStartTimer(false);
       }
     }, [counter, startTimer]);
-  // const [checkbox, setCheckbox] = useState(false);
-  // const onChangeCheckbox = (value: boolean) => {
-  //   setCheckbox(value);
-  // };
 
   const onChangeOtp = async (value: string) => {
     setOtpInput(value);
@@ -224,8 +220,6 @@ const Login: NextPage<iLogin> = ({apiUrl,otpLength}) =>{
       }
 
   }
-
-
 
 
   return (

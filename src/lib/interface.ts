@@ -22,3 +22,36 @@ export interface iOpt{
   value:string,
   label:string,
 }
+
+export interface iBankPt{
+  id: string;
+  bank_name: string;
+  logo: string;
+  acc_name: string;
+  acc_no: string;
+  tf_code: string;
+}
+
+export interface iBankData{
+  id:string,
+  name:string,
+}
+
+export interface iRegist{
+    fullname: string;
+    mobile_no:string;
+    nik:string;
+    sponsor:string;
+    signup_source:string;
+    id_paket:string;
+    id_bank_destination:string;
+    datumPaket:iPaket;
+    typeSponsor:string;
+    namaSponsor:string;
+    bank:{
+      id:string;
+      bank_name:string;
+      acc_name:string;
+      acc_no:string;
+    }
+}

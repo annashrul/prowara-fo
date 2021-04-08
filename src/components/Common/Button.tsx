@@ -13,7 +13,7 @@ const Auth: React.FC<iButton> = ({ title,color,style,size,handleClick }) => {
   return (
         <button 
         onClick={handleClick}
-        className={(style===undefined?'':style)+" "+( "bg-"+color+"-400 hover:bg-"+color+"-600")+" "+uk+" border-0  focus:outline-none rounded"}
+        className={(style===undefined?'':style)+" "+( "bg-"+color+"-600 hover:bg-"+color+"-500")+" "+uk+" border-0  focus:outline-none rounded"}
         >
             {title}
         </button>

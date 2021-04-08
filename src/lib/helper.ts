@@ -1,3 +1,23 @@
+import Cookies from "js-cookie";
+import atob from 'atob';
+
+const decode=(str:string)=>{return atob(str);}
+
+const setCookie=(name:string,data:string)=>{
+    Cookies.set(name, btoa(data), { expires: 1 });
+}
+
+const removeCookie=(name:string)=>{
+    Cookies.remove(name);
+}
+
+const isEmptyObj=(obj:Object)=>{
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 
 const formatRupiah=(angka:string)=>{
     if(angka===undefined) return 0;
@@ -18,5 +38,9 @@ const formatRupiah=(angka:string)=>{
 }
 
 export default {
-  formatRupiah
+  formatRupiah,
+  setCookie,
+  removeCookie,
+  decode,
+  isEmptyObj
 };
