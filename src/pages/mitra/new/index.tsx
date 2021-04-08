@@ -100,7 +100,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
             willClose: () => {}
         })
         try {
-          const cekSponsor=await Api.get(Api.apiUrl+`member/uid/${uid}?id_upline=${userData.referral}`)
+          const cekSponsor=await Api.get(Api.apiClient+`member/uid/${uid}?id_upline=${userData.referral}`)
           if(cekSponsor.status===200){
             setTimeout(
               function () {
@@ -221,7 +221,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
                 willClose: () => {}
           })
           try {
-            const sendOtp=await Api.post(Api.apiUrl+'auth/otp', {
+            const sendOtp=await Api.post(Api.apiClient+'auth/otp', {
                   "nomor":phones,
                   "type":"wa",
                   "isRegister":true
@@ -286,6 +286,24 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
       }
     });
 
+  }
+
+  const onReset = ()=>{
+    Swal.fire({
+            title   : 'Perhatian !!!',
+            html    :`Data yang telah anda isi akan hilang.`,
+            icon    : 'warning',
+            showCancelButton: true,
+            confirmButtonColor  : '#3085d6',
+            cancelButtonColor   : '#d33',
+            confirmButtonText   : `Reset`,
+            cancelButtonText    : 'Batal',
+        }).then(async (result) => {
+            if (result.value) {
+              Helper.removeCookie("_regist");
+              router.reload();
+            }
+        })
   }
 
   return (
@@ -536,13 +554,12 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
                       size="sm"
                     />
 
-                    <Button
-                      style="mt-5 text-gray-700 dark:text-gray-200 px-5 py-3 text-sm bg-maroon-700 ml-3"
-                      title="Reset."
-                      color="maroon"
-                      size="sm"
-                    />
-
+                    <button 
+                      onClick={(event)=>{event.preventDefault();onReset();}}
+                      className="mt-5 text-gray-700 dark:text-gray-200 ml-4 px-5 py-3 text-sm bg-maroon-700 border-0  focus:outline-none rounded"
+                      >
+                      Reset
+                    </button>
                   </div>
                 </div>
               </form>

@@ -50,7 +50,7 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
                 })
         
                 try {
-                  const submitRegister=await Api.post(Api.apiUrl+'auth/register', {
+                  const submitRegister=await Api.post(Api.apiClient+'auth/register', {
                     fullname: dataRegister.fullname,
                     mobile_no:dataRegister.mobile_no,
                     nik:dataRegister.nik,
@@ -135,16 +135,16 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
               {
                 dataBank?.map((item:iBankPt,i:number)=>{
                   return (
-                  <CardBank 
-                    key={i}
-                    style={bank===item.id?"w-full border-4 border-old-gold":"w-full"}
-                    id={item.id}
-                    title={item.bank_name}
-                    acc_name={item.acc_name}
-                    acc_no={item.acc_no}
-                    logo={item.logo}
-                    handleClick={(id:string)=>setBank(id)}
-                  />
+                    <CardBank 
+                      key={i}
+                      style={bank===item.id?"w-full border-4 border-old-gold":"w-full"}
+                      id={item.id}
+                      title={item.bank_name}
+                      acc_name={item.acc_name}
+                      acc_no={item.acc_no}
+                      logo={item.logo}
+                      handleClick={(id:string)=>setBank(id)}
+                    />
 
                   )
                 })
@@ -152,9 +152,9 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
             </div>
             <div className="text-right mr-5">
               <Button
-                style="mt-5 text-gray-700 dark:text-gray-200 px-5 py-3 text-sm bg-maroon-700"
+                style="mt-5 text-gray-700 dark:text-gray-200 px-5 py-3 text-sm"
                 title="Edit data mitra"
-                color="maroon"
+                color="royal-blue"
                 size="sm"
                 handleClick={()=>router.push("/mitra/new")}
               />
@@ -165,9 +165,6 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
                 size="sm"
                 handleClick={doPay}
               />
-
-
-
             </div>
           </CardBody>
         </Card>

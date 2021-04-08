@@ -20,12 +20,12 @@ Router.events.on('routeChangeStart', () => NProgress.start()); Router.events.on(
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return <Windmill dark>
-              <ToastProvider
-              autoDismiss
-              autoDismissTimeout={2000}
-              placement="bottom-right"
-            >
-              <Component {...pageProps} />
-            </ToastProvider>
-          </Windmill>;
+            <ToastProvider
+            autoDismiss
+            autoDismissTimeout={2000}
+            placement="bottom-right"
+          >
+            <Component {...pageProps} />
+          </ToastProvider>
+        </Windmill>;
 }

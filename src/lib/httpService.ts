@@ -11,5 +11,6 @@ export default {
   post: axios.post,
   put: axios.put,
   delete: axios.delete,
-  apiUrl: "http://localhost:6691/"
+  apiUrl: "http://localhost:6704/",
+  apiClient: "http://api.prowara.com/"
 };
