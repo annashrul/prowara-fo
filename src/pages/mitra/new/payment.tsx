@@ -132,12 +132,21 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
               Pilih Bank Tujuan
             </h5>
             <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 mt-1 p-5">
+              <CardBank 
+                selected={bank==='saldo'}
+                id={'saldo'}
+                title="Saldo"
+                acc_name={`${Helper.numFormat(`100`)}`}
+                acc_no="Sisa Poin :"
+                logo="/wallet.webp"
+                handleClick={(id:string)=>setBank(id)}
+              />
               {
                 dataBank?.map((item:iBankPt,i:number)=>{
                   return (
                     <CardBank 
                       key={i}
-                      style={bank===item.id?"w-full border-4 border-old-gold":"w-full"}
+                      selected={bank===item.id}
                       id={item.id}
                       title={item.bank_name}
                       acc_name={item.acc_name}

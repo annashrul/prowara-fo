@@ -15,7 +15,10 @@ export interface iPaket{
   category:string,
   gambar:string,
   caption:string,
-  pin_required:number
+  pin_required:number,
+  profit_sharing:number,
+  contract:number,
+  total_poin:number
 }
 
 export interface iOpt{
