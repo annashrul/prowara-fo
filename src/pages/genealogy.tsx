@@ -1,10 +1,7 @@
 import React from 'react';
 import Layout from 'Layouts'
-import Widget from 'components/Dashboard/Card';
-import Slot from 'components/Dashboard/Slot';
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
-import { Card, CardBody } from '@windmill/react-ui'
 
 export default function Index() {
   // const router = useRouter();

@@ -3,13 +3,11 @@ import Layout from 'Layouts'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import Select from 'react-select'
-import Swal from 'sweetalert2'
 import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
 
 
 import Api from 'lib/httpService'
-import Helper from 'lib/helper';
 import Card from 'components/investment/paket'
 import {iPaket, iOpt} from 'lib/interface'
 

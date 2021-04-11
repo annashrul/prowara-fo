@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from '@windmill/react-ui'
+import { Modal, ModalBody, ModalFooter, Button } from '@windmill/react-ui'
 import OTPInput from 'components/Common/Otp';
 import { useToasts } from 'react-toast-notifications'
 

@@ -10,7 +10,7 @@ interface iBank {
   id:string;
   selected: Boolean;
 }
-const Bank: React.FC<iBank> = ({style,selected,handleClick,title,acc_no,acc_name,logo,id}) => {
+const Bank: React.FC<iBank> = ({selected,handleClick,title,acc_no,acc_name,logo,id}) => {
   return (
         <button
           onClick={(event)=>{event.preventDefault();handleClick(id)}}
