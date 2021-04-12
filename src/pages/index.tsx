@@ -95,7 +95,6 @@ export default function Index() {
 export async function getServerSideProps(ctx:NextPageContext) {
   // Parse
   const cookies = nookies.get(ctx)
-  console.log(cookies);
   if(!cookies._prowara){
     return {
       redirect: {

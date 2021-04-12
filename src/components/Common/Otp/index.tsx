@@ -8,6 +8,7 @@ export interface OTPInputProps {
   autoFocus?: boolean;
   isNumberInput?: boolean;
   disabled?: boolean;
+  secure?: boolean;
 
   style?: CSSProperties;
   className?: string;
@@ -22,6 +23,7 @@ export function OTPInputComponent(props: OTPInputProps) {
     isNumberInput,
     autoFocus,
     disabled,
+    secure,
     onChangeOTP,
     inputClassName,
     inputStyle,
@@ -187,6 +189,7 @@ export function OTPInputComponent(props: OTPInputProps) {
             style={inputStyle}
             className={inputClassName}
             disabled={disabled}
+            secure={secure}
           />
         ))}
     </div>

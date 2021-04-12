@@ -1,9 +1,9 @@
 {
-  "name": "nextjs-admin-template",
+  "name": "prowara",
   "private": true,
-  "description": "Admin dashboard template based on nextjs with @paljs/ui component package",
+  "description": "",
   "version": "0.1.0",
-  "author": "Ahmed Elywa",
+  "author": "Dayus",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@tinymce/tinymce-react": "3.11.0",

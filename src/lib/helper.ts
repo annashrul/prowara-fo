@@ -19,7 +19,7 @@ const isEmptyObj=(obj:Object)=>{
     return true;
 }
 
-const formatRupiah=(angka:string)=>{
+const numFormat=(angka:string)=>{
     if(angka===undefined) return 0;
     const number_string = angka?.toString().replace(/[^,\d]/g, '');
     const split = number_string.split('.');
@@ -34,11 +34,11 @@ const formatRupiah=(angka:string)=>{
     }
 
     rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-    return 'Rp ' + rupiah;
+    return rupiah+" Poin";
 }
 
 export default {
-  formatRupiah,
+  numFormat,
   setCookie,
   removeCookie,
   decode,

@@ -53,7 +53,7 @@ const Cards: React.FC<iCards> = ({datum}) => {
                     </tr>
                     <tr className="text-gray-500 dark:text-gray-400">
                         <td className="px-2 py-3 text-base">Harga  :</td>
-                        <td className="px-2 py-3 text-left ml-10 text-base">{Helper.formatRupiah(datum.datumPaket.price)}</td>
+                        <td className="px-2 py-3 text-left ml-10 text-base">{Helper.numFormat(datum.datumPaket.price)}</td>
                     </tr>
                 </tbody>
                 </table>

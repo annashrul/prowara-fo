@@ -1,22 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar'
 import SEO, { SEOProps } from 'components/SEO';
 
 const LayoutPage: React.FC<SEOProps> = ({ children, ...rest }) => {
-  const sidebarRef = useRef(null);
+  const [open,setOpen]=useState(false);
   const {title}=rest;
   return (
     <div className={`flex h-screen bg-gray-50 dark:bg-gray-900`}>
       <SEO {...rest} />
       {
-        title!=='Login'&& <Sidebar toggleSidebar="sek" />
+        title!=='Login'&& <Sidebar isOpen={open} toggleSidebar={() => setOpen(!open)} />
       }
         <div className="flex flex-col flex-1 w-full" style={{zoom:'90%'}}>
           {
-            title!=='Login'&& <Header
-                                toggleSidebar={() => sidebarRef.current}
-                              />
+            title!=='Login'&& <Header toggleSidebar={() => setOpen(!open)} />
           }
             
             <main className="h-full overflow-y-auto">

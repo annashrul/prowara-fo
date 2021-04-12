@@ -17,7 +17,7 @@ interface iLogin  {
   apiUrl:string;
   otpLength: number;
 }
-const Login: NextPage<iLogin> = ({apiUrl,otpLength}) =>{ 
+const Login: NextPage<iLogin> = ({otpLength}) =>{ 
   const router = useRouter()
 
   // const cekSess = Sess.getToken();
@@ -79,7 +79,7 @@ const Login: NextPage<iLogin> = ({apiUrl,otpLength}) =>{
             willClose: () => {}
         })
         try {
-          const sendOtp=await Sess.http.post(apiUrl+'auth/otp', {
+          const sendOtp=await Sess.http.post(Sess.http.apiClient+'auth/otp', {
                 "nomor":phones,
                 "type":"wa",
                 "islogin":true
@@ -164,7 +164,7 @@ const Login: NextPage<iLogin> = ({apiUrl,otpLength}) =>{
         })
 
         try {
-          const hitLogin=await Sess.http.post(apiUrl+'auth', {
+          const hitLogin=await Sess.http.post(Sess.http.apiClient+'auth', {
               nohp:phones,
               type:"otp",
               otp_code:otpInput
