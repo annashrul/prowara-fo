@@ -8,7 +8,8 @@ import {iInvestment} from 'lib/interface';
 import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
-
+import nookies from 'nookies'
+import { NextPageContext } from 'next'
 interface iReportInvestment {}
 
 
@@ -186,6 +187,23 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
             </div>
         </Layout>
       );
+}
+export async function getServerSideProps(ctx:NextPageContext) {
+    const cookies = nookies.get(ctx)
+    if(!cookies._prowara){
+        return {
+          redirect: {
+              destination: '/auth/login',
+              permanent: false,
+          },
+        }
+    }else{
+        Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
+    }
+
+    return { 
+        props:{}
+    }
 }
 
 

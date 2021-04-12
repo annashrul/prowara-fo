@@ -85,3 +85,20 @@ export interface iArrInvestment{
   }
 
 }
+
+
+export interface iDeposit{
+  id:string,
+  kd_trx:string,
+  id_member:string,
+  fullname:string,
+  id_bank_destination:string,
+  bank_name:string,
+  acc_name:string,
+  acc_no:string,
+  amount:string,
+  unique_code:number,
+  status:number,
+  payment_slip:string,
+  created_at:string,
+}
