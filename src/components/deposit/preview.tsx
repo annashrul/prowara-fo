@@ -5,7 +5,7 @@ import React from 'react';
 import Helper from 'lib/helper'
 
 interface iCards {
-    handleClick?:(nominal:number)=>void;
+    handleClick:()=>void;
     goBack:(val:number)=>void;
     bank?:string;
     atas_nama?:string;
@@ -13,7 +13,7 @@ interface iCards {
     admin:string;
     total?:string;
 }
-const Cards: React.FC<iCards> = ({bank,atas_nama,nominal,admin,total,goBack}) => {
+const Cards: React.FC<iCards> = ({bank,atas_nama,nominal,admin,total,goBack,handleClick}) => {
   
     return (
         <>
@@ -52,10 +52,10 @@ const Cards: React.FC<iCards> = ({bank,atas_nama,nominal,admin,total,goBack}) =>
                                 <p className="text-old-gold font-bold">{total}</p>
                             </div>
                         </div>
-                        <button onClick={(event)=>{event.preventDefault();goBack(2);}} className="w-full md:w-1/2 bg-base-red-600 hover:bg-base-red-600-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
+                        <button onClick={(event)=>{event.preventDefault();goBack(2);}} className="w-full md:w-1/2 bg-base-red-600 hover:bg-base-red-700  text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
                             Kembali
                         </button>
-                        <button onClick={(event)=>{event.preventDefault();console.log('poin');}} className="w-full md:w-1/2 bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
+                        <button onClick={(event)=>{event.preventDefault();handleClick();}} className="w-full md:w-1/2 bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
                             Verifikasi
                         </button>
                     </div>
