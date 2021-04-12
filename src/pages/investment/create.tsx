@@ -20,7 +20,7 @@ interface iInvoice{
 const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
     const { addToast } = useToasts();
     const router = useRouter()
-    
+
     const [datumPaket,setDatumPaket]= useState<Array<iPaket>>([]);
     const [paket,setPaket]= useState("");
     const [kategori,setKategori]= useState("");
@@ -43,7 +43,6 @@ const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
                 // save token to localStorage
                 if(getPaket.data.status==='success'){
                     const datum = getPaket.data.result;
-                    console.log('datum',datum);
                     setDatumPaket(datum.data);
                 }else{
                     addToast("Kesalahan pada server.", {
@@ -87,10 +86,10 @@ const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
     const handleCheckout=()=>{
         let tiket_required=0;
         for (var i=0; i < datumPaket.length; i++) {
-          if (datumPaket[i].id === paket) {
-            tiket_required=datumPaket[i].pin_required;
-          }
-      }
+            if (datumPaket[i].id === paket) {
+                tiket_required=datumPaket[i].pin_required;
+            }
+        }
         if(paket===""){addToast("Pilih Paket untuk melanjutkan!", {appearance: 'error',autoDismiss: true,})}
         else if(total_tiket<tiket_required){addToast("Tiket anda tidak cukup. Silahkan order Tiket terlebih dahulu.", {appearance: 'error',autoDismiss: true,})}
         else{

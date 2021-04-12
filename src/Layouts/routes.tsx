@@ -17,6 +17,11 @@ const Routes=[
         title:'Order Paket',
         icon: Forms
     },
+    {
+        link:'/wallet/deposit',
+        title:'Deposit',
+        icon: Forms
+    },
 
 ]
 
