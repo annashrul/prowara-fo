@@ -27,7 +27,10 @@ const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
     const [loading,setLoading] = useState(true);
 
     useEffect(() => {
-        handleCategory(options[0].value)
+        console.log(options);
+        // if(options!==undefined){
+            handleCategory(options[0]?.value)
+        // }
 	}, [setKategori]);
 
     const handleCategory= async (val:string)=>{

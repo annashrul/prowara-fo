@@ -12,11 +12,8 @@ export default {
   post: axios.post,
   put: axios.put,
   delete: axios.delete,
-<<<<<<< HEAD
-  apiUrl: "http://api.prowara.com/"
-=======
-  apiUrl: "http://localhost:6704/",
+  apiUrl: "http://192.168.100.10:6704/",
   // apiClient: "http://localhost:6704/",
-  apiClient: "http://api.prowara.com/"
->>>>>>> 7527805a692247e975790f407bcdd37054fc9029
+  apiClient: "http://192.168.100.10:6704/"
+  // apiClient: "http://api.prowara.com/"
 };

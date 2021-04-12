@@ -17,6 +17,16 @@ const Routes=[
         title:'Order Paket',
         icon: Forms
     },
+    {
+        link:'/investment/report',
+        title:'Laporan Investment',
+        icon: Forms
+    },
+    {
+        link:'/investment/report',
+        title:'Laporan Investment',
+        icon: Forms
+    },
 
 ]
 
