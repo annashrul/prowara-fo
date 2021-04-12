@@ -52,7 +52,7 @@ const Cards: React.FC<iCards> = ({dataBank,handleClick,goBack}) => {
                                 })
                             }
                         </div>
-                        <button onClick={(event)=>{event.preventDefault();goBack(1);}} className="w-full md:w-1/2 bg-base-red-600 hover:bg-base-red-600-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
+                        <button onClick={(event)=>{event.preventDefault();goBack(1);}} className="w-full md:w-1/2 bg-base-red-600 0 hover:bg-base-red-700 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
                             Kembali
                         </button>
                         <button onClick={(event)=>{event.preventDefault();doClick(bank);}} className="w-full md:w-1/2 bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
