@@ -15,7 +15,7 @@ const Cards: React.FC<iCards> = ({ c1,c2,c3,c4 }) => {
             <Card
               color="orange"
               icon="money"
-              title="Total Komisi"
+              title="Saldo Utama"
               value={c1}
             />  
           </div>
