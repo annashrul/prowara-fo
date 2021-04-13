@@ -18,8 +18,18 @@ const Routes=[
         icon: Forms
     },
     {
+        link:'/investment/report',
+        title:'Laporan Investment',
+        icon: Forms
+    },
+    {
         link:'/wallet/deposit',
         title:'Deposit',
+        icon: Forms
+    },
+    {
+        link:'/wallet/deposit/report',
+        title:'Laporan Deposit',
         icon: Forms
     },
 

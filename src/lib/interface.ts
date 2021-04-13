@@ -58,3 +58,47 @@ export interface iRegist{
       acc_no:string;
     }
 }
+
+export interface iInvestment{
+  id:string,
+  kd_trx:string,
+  fullname:string,
+  trx_in:string,
+  trx_out:string,
+  note:string,
+  created_at:string,
+}
+
+export interface iArrInvestment{
+  total:number,
+  per_page:number,
+  offset:number,
+  to:number,
+  last_page:number,
+  current_page:number,
+  from:number,
+  data:Array<iInvestment>
+  summary:{
+    trx_in:string,
+    trx_out:string,
+    saldo_awal:string,
+  }
+
+}
+
+
+export interface iDeposit{
+  id:string,
+  kd_trx:string,
+  id_member:string,
+  fullname:string,
+  id_bank_destination:string,
+  bank_name:string,
+  acc_name:string,
+  acc_no:string,
+  amount:string,
+  unique_code:number,
+  status:number,
+  payment_slip:string,
+  created_at:string,
+}

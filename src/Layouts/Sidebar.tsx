@@ -21,8 +21,9 @@ const Sidebar: React.FC<iSidebar> = ({isOpen,toggleSidebar}) => {
                     </a>
                     <ul className="mt-2">
                         {
-                            Route.map(item=>{
+                            Route.map((item,x)=>{
                                 return <Menu
+                                key={x}
                                     icon={item.icon}
                                     title={item.title}
                                     link={item.link}
@@ -41,8 +42,9 @@ const Sidebar: React.FC<iSidebar> = ({isOpen,toggleSidebar}) => {
                     <div className="text-gray-500 dark:text-gray-400">
                         <ul className="mt-6">
                             {
-                                Route.map(item=>{
+                                Route.map((item,x)=>{
                                     return <Menu
+                                        key={x}
                                         icon={item.icon}
                                         title={item.title}
                                         link={item.link}

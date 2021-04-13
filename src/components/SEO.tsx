@@ -20,6 +20,7 @@ const SEO: React.FC<SEOProps> = ({ description, keywords, title }) => (
     <meta property="og:image" content="" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" type="image/png" href="/logo.png" />
+    
   </Head>
 );
 

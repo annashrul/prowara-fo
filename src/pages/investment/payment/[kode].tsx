@@ -220,10 +220,10 @@ export async function getServerSideProps(ctx:NextPageContext) {
 
     if(!cookies._prowara){
         return {
-        redirect: {
-            destination: '/auth/login',
-            permanent: false,
-        },
+          redirect: {
+              destination: '/auth/login',
+              permanent: false,
+          },
         }
     }else{
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
