@@ -4,12 +4,7 @@ import { NextPageContext } from 'next'
 import nookies from 'nookies'
 
 export default function Index() {
-  // const router = useRouter();
-  // useEffect(() => {
-  //   router.push('/extra-components/accordion');
-  // }),
-  //   [];
-  // const handleClick = ()=>{console.log('CLICKED')}
+
   return (
     <Layout title="Dashboard">
       <div className="container mt-6 lg:px-6 md:px-3 mx-auto xs:px-2 sm:px-2 grid mb-20">

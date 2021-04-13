@@ -19,7 +19,6 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
     const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
     useEffect(() => {
-        console.log("componentDidMount")
         handleLoadData("page=1");
     }, []);
 
@@ -80,11 +79,9 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
     }
 
     const handleSearch=()=>{
-        console.log(any);
         handleLoadData(`page=1&q=${btoa(any)}`);
     }
     const handlePage=(pagenum:string)=>{
-        console.log(pagenum);
         if(any!==''){
             handleLoadData(`page=${pagenum}&q=${btoa(any)}`);
         }

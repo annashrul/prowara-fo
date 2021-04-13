@@ -30,7 +30,6 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
   const [otpInput, setOtpInput] = React.useState('');
   const [phone, setPhone] = useState('0');
   // const cek = Sess.getUser();
-  // console.log('Sess',cek); 
   useEffect(() => {
       if (counter > 0) {
         const timer = setInterval(() => setCounter(counter - 1), 1000);
@@ -38,7 +37,6 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
       }
 
       if (counter === 0 && startTimer) {
-        console.log("done");
         setStartTimer(false);
       }
     }, [counter, startTimer]);
@@ -193,7 +191,6 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
               function () {
                   Swal.close()
                   // save token to localStorage
-                  console.log(err.response.data);
                   if (err.message === 'Network Error') {
                     addToast("Tidak dapat tersambung ke server!", {
                       appearance: 'error',
@@ -238,7 +235,6 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
                             inputClassName="block w-full mt-1 text-white dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
                             preferredCountries={['id']}
                             onPhoneNumberChange={(status, value) => {
-                                console.log(status);
                                 setPhone(value.replace(/^0+/, ''))
                             }}
                             placeholder="Masukan no. handphone anda"
@@ -303,7 +299,6 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
 export async function getServerSideProps(ctx:NextPageContext) {
   // Parse
   const cookies = nookies.get(ctx)
-  console.log('cookies',cookies);
   if(cookies._prowara!==undefined){
     return {
       redirect: {

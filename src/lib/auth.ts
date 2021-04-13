@@ -27,10 +27,8 @@ function getUser() {
   //    return datum;
   // } catch (err) {
   //     // const datum:iUser= JSON.parse();
-  //     console.log(Buffer.from(coo, 'base64').toString());
   //     return datum;
   // }
-  console.log('coo',coo);
 }
 
 function getToken() {

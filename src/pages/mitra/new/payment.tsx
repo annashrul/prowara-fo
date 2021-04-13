@@ -83,7 +83,6 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
                       function () {
                           Swal.close()
                           // save token to localStorage
-                          console.log(err.response.data);
                           if (err.message === 'Network Error') {
                             addToast("Tidak dapat tersambung ke server!", {
                               appearance: 'error',

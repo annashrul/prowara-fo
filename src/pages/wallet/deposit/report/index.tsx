@@ -36,7 +36,6 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
             if(getData.data.status==='success'){
                 const datum = getData.data.result;
                 setArrDatum(datum.data);
-                console.log(datum);
                 setArrData({
                     current_page:datum.current_page,
                     total:datum.total,
@@ -76,11 +75,9 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
     }
 
     const handleSearch=()=>{
-        console.log(any);
         handleLoadData(`page=1&q=${btoa(any)}`);
     }
     const handlePage=(pagenum:number)=>{
-        console.log(pagenum);
         handleLoadData(`page=${pagenum}&datefrom=2021-01-01&dateto=2021-12-12&perpage=1`);
 
     }

@@ -2,7 +2,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const coo: string=Cookies.get('_prowara')!;
-console.log("COKIES",coo);
 if(coo!==undefined) {
   axios.defaults.headers.common["Authorization"] = atob(coo);
 }

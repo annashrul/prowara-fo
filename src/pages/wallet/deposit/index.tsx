@@ -24,7 +24,7 @@ interface iInvoice{
 const Invoice: React.FC<iInvoice> =({dataBank})=> {
     const { addToast } = useToasts();
     const router = useRouter();
-    const min_nominal=50000;
+    const min_nominal=50;
     const [step,setStep]=useState(1);
     const [nominal,setNominal]=useState(0);
     const [bank,setBank]=useState<iBankPt>();
@@ -114,7 +114,6 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                         })
                 }
           },800)
-          console.log(pin);
       } catch (err) {
 
         setTimeout(
@@ -223,6 +222,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
             {
                 step===1?(
                     <Nominal
+                        min_nominal={min_nominal}
                         handleClick={(nominal)=>doNominal(nominal)}
                     />
                     

@@ -10,7 +10,6 @@ interface iWidget{
 }
 
 const Widget: React.FC<iWidget> = ({ title,value,icon,color }) => {
-  // console.log(title,value,icon,color);
   return (
     <Card>
       <CardBody className="flex items-center">
