@@ -15,10 +15,10 @@ const Cards: React.FC<iCards> = ({handleClick}) => {
     const nominalPoin=['100000','200000','300000','400000','500000','600000']
     return (
         <>
-            <div className="h-auto mt-16 w-full flex flex-col justify-center items-center mb-20">
-                <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  mx-24">
+            <div className="h-auto mt-16 w-full flex flex-row md:flex-col justify-center items-center mb-20">
+                <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  md:mx-24">
                     <div className="py-8 px-8">
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 gap-4">
                             {
                                 nominalPoin.map((item,key)=>{
                                     return <Nomine key={key} selected={poin===parseInt(item)} Poin={item} cb={cbPoin} />
