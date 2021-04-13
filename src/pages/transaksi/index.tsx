@@ -4,30 +4,34 @@ import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iDeposit} from 'lib/interface';
-import { Card,CardBody, Pagination } from '@windmill/react-ui'
+import {iTransaksi} from 'lib/interface';
+import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
 import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import { } from '@windmill/react-ui'
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+import 'bootstrap-daterangepicker/daterangepicker.css';
 
-interface iReportInvestment {}
+interface iReportTransaksi {}
 
-
-const ReportDeposit: React.FC<iReportInvestment> = () =>{
+const Transaksi: React.FC<iReportTransaksi> = () =>{
     const { addToast } = useToasts();
-    const [arrDatum,setArrDatum]= useState<Array<iDeposit>>([]);
+    const [arrDatum,setArrDatum]= useState<Array<iTransaksi>>([]);
     const [arrData,setArrData]= useState({});
     const [any,setAny]=useState("");
+    const [datefrom,setDatefrom]=useState(moment(new Date()).format("MM/DD/yyyy"));
+    const [dateto,setDateto]=useState(moment(new Date()).format("MM/DD/yyyy"));
+    const no=10;
     useEffect(() => {
-        handleLoadData("page=1&datefrom=2021-01-01&dateto=2021-12-12&perpage=10");
+        handleLoadData(`page=1&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
     }, []);
    
     const handleLoadData = async(val:string)=>{
         NProgress.start();
         try {
-            let url = Api.apiClient+`transaction/deposit`;
+            let url = Api.apiClient+`transaction/history`;
             if(val!==null){
                 url+=`?${val}`;
             }
@@ -81,23 +85,36 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
     }
     const handlePage=(pagenum:number)=>{
         console.log(pagenum);
-        handleLoadData(`page=${pagenum}&datefrom=2021-01-01&dateto=2021-12-12&perpage=10`);
+        handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
 
+    }
+    const handleEvent=(event:string,picker:any)=>{
+        console.log(event);
+        console.log(picker);
+        const from = moment(picker.startDate._d).format('YYYY-MM-DD');
+        const to = moment(picker.endDate._d).format('YYYY-MM-DD');
+        setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
+        setDateto(moment(picker.endDate._d).format('MM/DD/yyyy'));
+        handleLoadData(`page=1&datefrom=${from}&dateto=${to}&perpage=${no}`);
     }
 
     return (
         <Layout title="Report Investment">
-            <div className="container grid px-6 mx-auto">
+            <div className="container mt-6 px-2 lg:px-7 mx-auto grid mb-20">
                 <div className="flex justify-between">
                     <div>
                         <h2 className="mt-6 text-2xl align-middle font-semibold text-gray-700 dark:text-gray-200">
-                            Riwayat Deposit
+                            Riwayat Transaksi
                         </h2>
                        
                     </div>
                 </div>
                 <div className="shadow-md rounded my-6">
                 <div className={"mt-4 flex"}>
+                <DateRangePicker onApply={handleEvent}>
+                    <input type="text" readOnly={true} className="block w-full mt-1 px-3 text-sm dark:border-gray-600 dark:bg-gray-700 focus:outline-none  dark:text-gray-300 div-input" value={`${datefrom} - ${dateto}`}/>
+                </DateRangePicker>
+
                   <input 
                   className="block w-full mt-1 px-3 text-sm dark:border-gray-600 dark:bg-gray-700 focus:outline-none  dark:text-gray-300 div-input" 
                   placeholder="tulis kode trx atau catatan disini" 
@@ -115,40 +132,36 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                   </button>
                 </div>
                 <br/>
-                <div className="w-full overflow-hidden rounded-lg shadow-xs mb-8">
-                    <div className="w-full overflow-x-auto">
-                        <table className="w-full whitespace-no-wrap">
-                            <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 text-gray-700 dark:text-gray-400">
-                            {
-                                arrDatum?.length>0?arrDatum.map((item:iDeposit,i:number)=>{
-                                    let stts;
+                <div className="grid grid-cols-2 gap-4">
+                    {
+                        arrDatum?.length>0?arrDatum.map((item:iTransaksi,i:number)=>{
+                            return(
+                                <div key={i} className="w-full mx-auto border-t border-b border-r rounded">
+                                    <div className="p-4 border-l-4 border-teal rounded flex justify-between">
+                                        <div>
+                                            <div className="m-2 uppercase text-xs font-semibold text-gray-200">{item.fullname}</div>
+                                            <div className="m-2 text-xl font-bold text-gray-200">{item.kd_trx}</div>
+                                            <div className="m-2 pb-2 text-gray-200 border-b-2 border-grey-lighter">
+                                                {item.note}
+                                            </div>
+                                            <div className="m-2 text-xs font-semibold text-gray-200">{moment(item.created_at).format("yyyy-MM-DD hh:mm")}</div>
+                                        </div>
+                                        <div>
+                                            <div className="text-right m-2 text-xs font-semibold text-green-200">{Helper.numFormat(item.trx_in)}</div>
+                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">{Helper.numFormat(item.trx_out)}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        }):"tidak ada data"
+                    }
 
-                                    if(item.status===0){
-                                        stts=<span className="inline-flex px-2 text-xs font-medium leading-5 rounded-full text-purple-700 bg-purple-100 dark:text-white dark:bg-purple-600">Pending</span>
-                                    }else if(item.status===1){
-                                        stts=<span className="inline-flex px-2 text-xs font-medium leading-5 rounded-full text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100">Berhasil</span>
-                                    }else{
-                                        stts=<span className="inline-flex px-2 text-xs font-medium leading-5 rounded-full text-orange-700 bg-orange-100 dark:text-white dark:bg-orange-600">Gagal</span>
-                                    }
-                                    return (
-                                        <tr key={i} className={i%2===0?`bg-gray-700`:''}>
-                                            <td className="py-3 px-6 text-center">{i+1 + (1 * (parseInt(arrData.current_page,10)-1))}</td>
-                                            <td className="py-3 px-6 text-left text-sm"><span className="text-white">{item.kd_trx}</span> <br/> {item.fullname}</td>
-                                            <td className="py-3 px-6 text-left text-sm">{item.bank_name} <br/>{item.acc_name} - ( <span className="text-sm">{item.acc_no}</span> )</td>
-                                            <td className="py-3 px-6 text-right text-old-gold-700">{Helper.numFormat(item.amount)}</td>
-                                            <td className="py-3 px-6 text-center">{stts}</td>
-                                            <td className="py-3 px-6 text-center">{moment(item.created_at).format('YYYY-MM-DD')}</td>
-                                        </tr>
-
-                                    )
-                                }):"tidak ada data."
-
-                            }
-                        </tbody>
-                        </table>
-                    </div>
                 </div>
+                
+                
+               
                 <br/>
+                    
                 <Pagination
                     totalResults={arrData.total}
                     resultsPerPage={arrData.per_page}
@@ -178,4 +191,4 @@ export async function getServerSideProps(ctx:NextPageContext) {
     }
 }
 
-export default ReportDeposit;
+export default Transaksi;

@@ -4,12 +4,12 @@
 import React from 'react';
 import { useToasts } from 'react-toast-notifications'
 
-import {iBankPt} from 'lib/interface'
+import {iBankMember} from 'lib/interface'
 import CardBank from 'components/payment/CardBank';
 
 interface iCards {
-    dataBank:Array<iBankPt>;
-    handleClick:(datum:iBankPt)=>void;
+    dataBank:Array<iBankMember>;
+    handleClick:(datum:iBankMember)=>void;
     goBack:(val:number)=>void;
 
 }
@@ -35,7 +35,7 @@ const Cards: React.FC<iCards> = ({dataBank,handleClick,goBack}) => {
                     <div className="py-8 px-8">
                         <div className="grid grid-cols-1 gap-4 w-96">
                             {
-                                dataBank?.map((item:iBankPt,i:number)=>{
+                                dataBank?.map((item:iBankMember,i:number)=>{
                                 return (
                                     <CardBank 
                                         key={i}
@@ -44,7 +44,7 @@ const Cards: React.FC<iCards> = ({dataBank,handleClick,goBack}) => {
                                         title={item.bank_name}
                                         acc_name={item.acc_name}
                                         acc_no={item.acc_no}
-                                        logo={item.logo}
+                                        logo={'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png'}
                                         handleClick={(id:string)=>setBank(id)}
                                     />
                                 )

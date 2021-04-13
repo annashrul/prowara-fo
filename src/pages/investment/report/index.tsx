@@ -123,57 +123,37 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                   </button>
                 </div>
                 <br/>
-                    <table className="min-w-max w-full table-auto">
-                        <thead className="text-gray-200 uppercase text-sm leading-normal dark:bg-gray-800 border-b-2 border-gray-300">
-                            <tr>
-                                <th className="py-3 px-6 text-center" rowSpan={2}>No</th>
-                                <th className="py-3 px-6 text-center" rowSpan={2}>Kode Trx</th>
-                                <th className="py-3 px-6 text-center" rowSpan={2}>Nama</th>
-                                <th className="py-3 px-6 text-center" colSpan={2}>Transaksi</th>
-                                <th className="py-3 px-6 text-center" rowSpan={2}>Catatan</th>
-                                <th className="py-3 px-6 text-center" rowSpan={2}>Tanggal</th>
-                            </tr>
-                            <tr>
-                                <th className="py-3 px-6 text-center">Masuk</th>
-                                <th className="py-3 px-6 text-center">Keluar</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-gray-200 uppercase text-sm leading-normal dark:bg-gray-800 font-bold font-bold">
-                            {
-                                datumInvestment.length>0?datumInvestment?.map((item:iInvestment,i:number)=>{
-                                    totTrxIn+=parseInt(item.trx_in,10);
-                                    totTrxOut+=parseInt(item.trx_out,10);
-                                    return (
-                                        <tr key={i}>
-                                            <td className="py-3 px-6 text-center">{i+1 + (10 * (parseInt(arrData.current_page,10)-1))}</td>
-                                            <td className="py-3 px-6 text-center">{item.kd_trx}</td>
-                                            <td className="py-3 px-6 text-center">{item.fullname}</td>
-                                            <td className="py-3 px-6 text-right text-red-600">{Helper.numFormat(item.trx_in)}</td>
-                                            <td className="py-3 px-6 text-right text-red-600">{Helper.numFormat(item.trx_out)}</td>
-                                            <td className="py-3 px-6 text-center">{item.note}</td>
-                                            <td className="py-3 px-6 text-center">{moment(item.created_at).format('YYYY-MM-DD')}</td>
-                                        </tr>
+               
+                <div className="grid grid-cols-2 gap-4">
+                    {
+                        datumInvestment?.length>0?datumInvestment.map((item:iInvestment,i:number)=>{
+                            return(
+                                <div key={i} className="w-full mx-auto border-t border-b border-r rounded">
+                                    <div className="p-4 border-l-4 border-teal rounded flex justify-between">
+                                        <div>
+                                            <div className="m-2 uppercase text-xs font-semibold text-gray-200">{item.fullname}</div>
+                                            <div className="m-2 text-xl font-bold text-gray-200">{item.kd_trx}</div>
+                                            <div className="m-2 pb-2 text-gray-200 border-b-2 border-grey-lighter">
+                                                {item.note}
+                                            </div>
+                                            <div className="m-2 text-xs font-semibold text-gray-200">{moment(item.created_at).format("yyyy-MM-DD")}</div>
+                                        </div>
+                                        <div>
+                                            <div className="text-right m-2 text-xs font-semibold text-green-200">{Helper.numFormat(item.trx_in)}</div>
+                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">{Helper.numFormat(item.trx_out)}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        }):"tidak ada data"
+                    }
 
-                                    )
-                                }):"tidak ada data."
+                </div>
+                
+                
 
-                            }
-                        </tbody>
-                        <tfoot className="text-black-200 uppercase text-sm leading-normal dark:bg-gray-300">
-                            <tr>
-                                <th className="py-3 px-6 text-left" colSpan={3}>Total Perhalaman</th>
-                                <th className="py-3 px-6 text-right text-red-600">{Helper.numFormat(`${totTrxIn}`)}</th>
-                                <th className="py-3 px-6 text-right text-red-600">{Helper.numFormat(`${totTrxOut}`)}</th>
-                                <th colSpan={2}/>
-                            </tr>
-                            <tr>
-                                <th className="py-3 px-6 text-left" colSpan={3}>Total Keseluruhan </th>
-                                <th className="py-3 px-6 text-right text-red-600">{Helper.numFormat(`${arrData.summary?.trx_in}`)}</th>
-                                <th className="py-3 px-6 text-right text-red-600">{Helper.numFormat(`${arrData.summary?.trx_out}`)}</th>
-                                <th colSpan={2}/>
-                            </tr>
-                        </tfoot>
-                    </table>
+
+                    
 
                     
                     <br/>

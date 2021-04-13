@@ -35,6 +35,14 @@ export interface iBankPt{
   tf_code: string;
 }
 
+export interface iBankMember{
+  id: string;
+  id_member: string;
+  bank_name: string;
+  acc_name: string;
+  acc_no: string;
+}
+
 export interface iBankData{
   id:string,
   name:string,
@@ -100,5 +108,30 @@ export interface iDeposit{
   unique_code:number,
   status:number,
   payment_slip:string,
+  created_at:string,
+}
+
+export interface iWithdrawal{
+  id:string,
+  id_member:string,
+  fullname:string,
+  id_bank:string,
+  bank_name:string,
+  acc_name:string,
+  acc_no:string,
+  amount:string,
+  charge:string,
+  status:number,
+  kd_trx:string,
+  created_at:string,
+}
+
+export interface iTransaksi{
+  id:string,
+  kd_trx:string,
+  fullname:string,
+  trx_in:string,
+  trx_out:string,
+  note:number,
   created_at:string,
 }

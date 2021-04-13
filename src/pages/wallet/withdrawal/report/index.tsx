@@ -4,30 +4,34 @@ import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iDeposit} from 'lib/interface';
-import { Card,CardBody, Pagination } from '@windmill/react-ui'
+import {iWithdrawal} from 'lib/interface';
+import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
 import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import { } from '@windmill/react-ui'
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+import 'bootstrap-daterangepicker/daterangepicker.css';
 
-interface iReportInvestment {}
+interface iReportWithdrawal {}
 
-
-const ReportDeposit: React.FC<iReportInvestment> = () =>{
+const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
     const { addToast } = useToasts();
-    const [arrDatum,setArrDatum]= useState<Array<iDeposit>>([]);
+    const [arrDatum,setArrDatum]= useState<Array<iWithdrawal>>([]);
     const [arrData,setArrData]= useState({});
     const [any,setAny]=useState("");
+    const [datefrom,setDatefrom]=useState(moment(new Date()).format("MM/DD/yyyy"));
+    const [dateto,setDateto]=useState(moment(new Date()).format("MM/DD/yyyy"));
+
     useEffect(() => {
-        handleLoadData("page=1&datefrom=2021-01-01&dateto=2021-12-12&perpage=10");
+        handleLoadData(`page=1&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=10`);
     }, []);
    
     const handleLoadData = async(val:string)=>{
         NProgress.start();
         try {
-            let url = Api.apiClient+`transaction/deposit`;
+            let url = Api.apiClient+`transaction/withdrawal`;
             if(val!==null){
                 url+=`?${val}`;
             }
@@ -81,23 +85,36 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
     }
     const handlePage=(pagenum:number)=>{
         console.log(pagenum);
-        handleLoadData(`page=${pagenum}&datefrom=2021-01-01&dateto=2021-12-12&perpage=10`);
+        handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=10`);
 
+    }
+    const handleEvent=(event:string,picker:any)=>{
+        console.log(event);
+        console.log(picker);
+        const from = moment(picker.startDate._d).format('YYYY-MM-DD');
+        const to = moment(picker.endDate._d).format('YYYY-MM-DD');
+        setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
+        setDateto(moment(picker.endDate._d).format('MM/DD/yyyy'));
+        handleLoadData(`page=1&datefrom=${from}&dateto=${to}&perpage=10`);
     }
 
     return (
         <Layout title="Report Investment">
-            <div className="container grid px-6 mx-auto">
+            <div className="container mt-6 px-2 lg:px-7 mx-auto grid mb-20">
                 <div className="flex justify-between">
                     <div>
                         <h2 className="mt-6 text-2xl align-middle font-semibold text-gray-700 dark:text-gray-200">
-                            Riwayat Deposit
+                            Riwayat Penarikan
                         </h2>
                        
                     </div>
                 </div>
                 <div className="shadow-md rounded my-6">
                 <div className={"mt-4 flex"}>
+                <DateRangePicker onApply={handleEvent}>
+                    <input type="text" readOnly={true} className="block w-full mt-1 px-3 text-sm dark:border-gray-600 dark:bg-gray-700 focus:outline-none  dark:text-gray-300 div-input" value={`${datefrom} - ${dateto}`}/>
+                </DateRangePicker>
+
                   <input 
                   className="block w-full mt-1 px-3 text-sm dark:border-gray-600 dark:bg-gray-700 focus:outline-none  dark:text-gray-300 div-input" 
                   placeholder="tulis kode trx atau catatan disini" 
@@ -136,6 +153,7 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                                             <td className="py-3 px-6 text-left text-sm"><span className="text-white">{item.kd_trx}</span> <br/> {item.fullname}</td>
                                             <td className="py-3 px-6 text-left text-sm">{item.bank_name} <br/>{item.acc_name} - ( <span className="text-sm">{item.acc_no}</span> )</td>
                                             <td className="py-3 px-6 text-right text-old-gold-700">{Helper.numFormat(item.amount)}</td>
+                                            <td className="py-3 px-6 text-right text-red-600">{Helper.numFormat(item.charge)}</td>
                                             <td className="py-3 px-6 text-center">{stts}</td>
                                             <td className="py-3 px-6 text-center">{moment(item.created_at).format('YYYY-MM-DD')}</td>
                                         </tr>
@@ -148,6 +166,8 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                         </table>
                     </div>
                 </div>
+
+
                 <br/>
                 <Pagination
                     totalResults={arrData.total}
@@ -178,4 +198,4 @@ export async function getServerSideProps(ctx:NextPageContext) {
     }
 }
 
-export default ReportDeposit;
+export default ReportWithdrawal;
