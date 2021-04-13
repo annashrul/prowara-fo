@@ -127,8 +127,6 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                   })
                     
                 }else{
-                    alert("CEK")
-                    console.log(err.response.data.msg);
                   if(err.response.data.msg!==undefined){
                     if(err.response.data.msg=="Masih ada transaksi yang belum selesai."){
                         Swal.fire({
@@ -185,7 +183,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                 <div className="flex items-center">
                     <div className="flex items-center relative">
                         <div className={"rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-old-gold-600 "+(step===1?"bg-old-gold-600 text-white":"text-old-gold-600 ")}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"  fill="none" stroke-linecap="round" strokeLinejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"  fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor" >
                                 <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                             </svg>
                         </div>
@@ -200,7 +198,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                         <path
                             fill-rule="evenodd"
                             d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                         ></path>
                         </svg>
                         </div>

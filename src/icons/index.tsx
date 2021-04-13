@@ -7,9 +7,9 @@ export const Bell = (
 export const Button=(
     <svg className="w-5 h-5"
         fill="none"
-        stroke-linecap="round"
+        strokeLinecap="round"
         strokeLinejoin="round"
-        stroke-width="2"
+        strokeWidth="2"
         viewBox="0 0 24 24"
         stroke="currentColor"
     >
@@ -20,9 +20,9 @@ export const Button=(
 export const Card=(
     <svg className="w-5 h-5"
     fill="none"
-    stroke-linecap="round"
+    strokeLinecap="round"
     strokeLinejoin="round"
-    stroke-width="2"
+    strokeWidth="2"
     viewBox="0 0 24 24"
     stroke="currentColor"
     >
@@ -39,9 +39,9 @@ export const Cart=(
 export const Home=(
     <svg className="w-5 h-5"        
     fill="none"
-    stroke-linecap="round"
+    strokeLinecap="round"
     strokeLinejoin="round"
-    stroke-width="2"
+    strokeWidth="2"
     viewBox="0 0 24 24"
     stroke="currentColor"
     >
@@ -54,7 +54,7 @@ export const Money=(
     <path
         fill-rule="evenodd"
         d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-        clip-rule="evenodd"
+        clipRule="evenodd"
     ></path>
     </svg>
 )
@@ -69,9 +69,9 @@ export const People =(
 export const Gear=(
     <svg className="w-5 h-5"
     fill="none"
-    stroke-linecap="round"
+    strokeLinecap="round"
     strokeLinejoin="round"
-    stroke-width="2"
+    strokeWidth="2"
     viewBox="0 0 24 24"
     stroke="currentColor"
     >
@@ -85,7 +85,7 @@ export const Search=(
     <path
         fill-rule="evenodd"
         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-        clip-rule="evenodd"
+        clipRule="evenodd"
     ></path>
     </svg>
 )
@@ -98,13 +98,13 @@ export const Trash=(
     <path
         fill-rule="evenodd"
         d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-        clip-rule="evenodd"
+        clipRule="evenodd"
     ></path>
 </svg>
 )
 
 export const Forms=(
-    <svg className="w-5 h-5" fill="none" stroke-linecap="round" strokeLinejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" >
+    <svg className="w-5 h-5" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor" >
     <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
     </svg>
 )
@@ -120,7 +120,7 @@ export const Dropdown=(
     <path
         fill-rule="evenodd"
         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-        clip-rule="evenodd"
+        clipRule="evenodd"
     ></path>
     </svg>
 )

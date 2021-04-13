@@ -94,7 +94,6 @@ export interface iArrInvestment{
 
 }
 
-
 export interface iDeposit{
   id:string,
   kd_trx:string,
@@ -134,4 +133,30 @@ export interface iTransaksi{
   trx_out:string,
   note:number,
   created_at:string,
+}
+export interface iSlot{
+  id: string;
+  id_member:  string;
+  fullname:  string;
+  id_paket:  string;
+  title:  string;
+  slot_no: number;
+  amount:  string;
+  daily_earning:  string;
+  contract: number;
+  start_date: Date;
+  status: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface iPagin{
+    current_page:number;
+    total:number;
+    per_page:number;
+    summary:{
+      trx_in:number;
+      trx_out:number;
+      saldo_awal:number;
+    }
 }

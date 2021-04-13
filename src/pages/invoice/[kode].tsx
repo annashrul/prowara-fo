@@ -26,7 +26,7 @@ const Invoice: React.FC<iInvoice> =({kode,datum})=> {
             </h2>
             </div>
         </div>
-        <div className="h-auto mt-8 w-full flex flex-col m-w-96 justify-center items-center mb-20">
+        <div className="h-auto mt-8 w-full flex flex-col lg:m-w-96 justify-center items-center mb-20">
             <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  mx-24 w-2/3">
                 <div className="py-4 px-8 mt-3 text-gray-700 dark:text-gray-200 flex flex-col items-center justify-items-center">
                     <div className="p-3 text-center">

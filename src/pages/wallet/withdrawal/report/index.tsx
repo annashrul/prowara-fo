@@ -4,7 +4,7 @@ import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iWithdrawal} from 'lib/interface';
+import {iWithdrawal,iPagin} from 'lib/interface';
 import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
@@ -19,7 +19,7 @@ interface iReportWithdrawal {}
 const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
     const { addToast } = useToasts();
     const [arrDatum,setArrDatum]= useState<Array<iWithdrawal>>([]);
-    const [arrData,setArrData]= useState({});
+    const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
     const [datefrom,setDatefrom]=useState(moment(new Date()).format("MM/DD/yyyy"));
     const [dateto,setDateto]=useState(moment(new Date()).format("MM/DD/yyyy"));
@@ -41,11 +41,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
                 const datum = getData.data.result;
                 setArrDatum(datum.data);
                 console.log(datum);
-                setArrData({
-                    current_page:datum.current_page,
-                    total:datum.total,
-                    per_page:datum.per_page,
-                });
+                setArrData(datum);
             }else{
                 addToast("Kesalahan pada server.", {
                     appearance: 'error',
@@ -149,7 +145,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
                                     }
                                     return (
                                         <tr key={i} className={i%2===0?`bg-gray-700`:''}>
-                                            <td className="py-3 px-6 text-center">{i+1 + (1 * (parseInt(arrData.current_page,10)-1))}</td>
+                                            <td className="py-3 px-6 text-center">{i+1 + (1 * (arrData===undefined?0:parseInt(arrData.current_page,10)-1))}</td>
                                             <td className="py-3 px-6 text-left text-sm"><span className="text-white">{item.kd_trx}</span> <br/> {item.fullname}</td>
                                             <td className="py-3 px-6 text-left text-sm">{item.bank_name} <br/>{item.acc_name} - ( <span className="text-sm">{item.acc_no}</span> )</td>
                                             <td className="py-3 px-6 text-right text-old-gold-700">{Helper.numFormat(item.amount)}</td>
@@ -170,8 +166,8 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
 
                 <br/>
                 <Pagination
-                    totalResults={arrData.total}
-                    resultsPerPage={arrData.per_page}
+                    totalResults={arrData===undefined?0:arrData.total}
+                    resultsPerPage={arrData===undefined?0:arrData.per_page}
                     onChange={(val) => {handlePage(val)}}
                     label="Page navigation"
                 />

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iDeposit} from 'lib/interface';
-import { Card,CardBody, Pagination } from '@windmill/react-ui'
+import {iDeposit,iPagin} from 'lib/interface';
+import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
 import nookies from 'nookies'
@@ -18,7 +18,7 @@ interface iReportInvestment {}
 const ReportDeposit: React.FC<iReportInvestment> = () =>{
     const { addToast } = useToasts();
     const [arrDatum,setArrDatum]= useState<Array<iDeposit>>([]);
-    const [arrData,setArrData]= useState({});
+    const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
     useEffect(() => {
         handleLoadData("page=1&datefrom=2021-01-01&dateto=2021-12-12&perpage=10");
@@ -37,11 +37,7 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                 const datum = getData.data.result;
                 setArrDatum(datum.data);
                 console.log(datum);
-                setArrData({
-                    current_page:datum.current_page,
-                    total:datum.total,
-                    per_page:datum.per_page,
-                });
+                setArrData(datum);
             }else{
                 addToast("Kesalahan pada server.", {
                     appearance: 'error',
@@ -132,7 +128,7 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                                     }
                                     return (
                                         <tr key={i} className={i%2===0?`bg-gray-700`:''}>
-                                            <td className="py-3 px-6 text-center">{i+1 + (1 * (parseInt(arrData.current_page,10)-1))}</td>
+                                            <td className="py-3 px-6 text-center">{i+1 + (1 * (parseInt(arrData===undefined?0:arrData.current_page,10)-1))}</td>
                                             <td className="py-3 px-6 text-left text-sm"><span className="text-white">{item.kd_trx}</span> <br/> {item.fullname}</td>
                                             <td className="py-3 px-6 text-left text-sm">{item.bank_name} <br/>{item.acc_name} - ( <span className="text-sm">{item.acc_no}</span> )</td>
                                             <td className="py-3 px-6 text-right text-old-gold-700">{Helper.numFormat(item.amount)}</td>
@@ -150,8 +146,8 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                 </div>
                 <br/>
                 <Pagination
-                    totalResults={arrData.total}
-                    resultsPerPage={arrData.per_page}
+                    totalResults={arrData===undefined?0:arrData.total}
+                    resultsPerPage={arrData===undefined?0:arrData.per_page}
                     onChange={(val) => {handlePage(val)}}
                     label="Page navigation"
                 />
