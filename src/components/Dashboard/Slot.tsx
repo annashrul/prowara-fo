@@ -1,14 +1,80 @@
-import React from 'react';
+
+import React,{useEffect,useState} from 'react';
 import Button from '../Common/Button'
+import { useToasts } from 'react-toast-notifications'
+
+import Api from 'lib/httpService'
+import Row from './Row_slot';
+import {iSlot,iPagin} from 'lib/interface';
+import { Pagination } from '@windmill/react-ui'
+
 interface iCards {
 }
+
 const Cards: React.FC<iCards> = () => {
+  const { addToast } = useToasts();
+  const [loading,setLoading] = useState(true);
+  const [datumSlot,setDatumSlot]=useState<Array<iSlot>>();
+  const [pagination,setPagination]=useState<iPagin>();
+
+  useEffect(() => {
+    getSlot(1);
+	}, []);
+  const getSlot= async (page:number)=>{
+        setLoading(true)
+
+        try {
+        const getPaket=await Api.get(Api.apiClient+`site/slot?page=${page}`)
+            setTimeout(
+            function () {
+                setLoading(false)
+
+                // save token to localStorage
+                if(getPaket.data.status==='success'){
+                    const datum = getPaket.data.result;
+                    setDatumSlot(datum.data);
+                    setPagination(datum)
+                }else{
+                    addToast("Kesalahan pada server.", {
+                        appearance: 'error',
+                        autoDismiss: true,
+                    })
+                }
+            },800)
+        
+        } catch (err) {
+        setTimeout(
+            function () {
+                setLoading(false)
+                // save token to localStorage
+                if (err.message === 'Network Error') {
+                    addToast("Tidak dapat tersambung ke server!", {
+                    appearance: 'error',
+                    autoDismiss: true,
+                    })
+                }else{
+                    if(err.response.data.msg!==undefined){
+                    addToast(err.response.data.msg, {
+                        appearance: 'error',
+                        autoDismiss: true,
+                        })
+                    }else{
+                    addToast("Kesalahan pada server.", {
+                        appearance: 'error',
+                        autoDismiss: true,
+                        })
+                    }
+                }
+            },800)
+        }
+  }
+
   return (
         <div className="w-full overflow-hidden rounded-lg shadow-xs">
           <div className="w-full overflow-x-auto">
             <table className="w-full whitespace-no-wrap">
               <thead>
-                <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                <tr className="text-xs font-semibold text-center tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                   <th className="px-4 py-3">#</th>
                   <th className="px-4 py-3">Modal</th>
                   <th className="px-4 py-3">Kontrak</th>
@@ -16,80 +82,42 @@ const Cards: React.FC<iCards> = () => {
                   <th className="px-4 py-3">Dimulai pada</th>
                   <th className="px-4 py-3">Sisa Waktu</th>
                   <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                  <tr>
-                    <td colSpan={7}>
-                      <div  className="text-center text-white p-4 text-md">
-                        Anda belum mempunyai paket aktif, silahkan <Button title="beli paket" color="orange" size="sm"/> terlebiih dahulu.
-                      </div>
-                    </td>
-                  </tr>
+              <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 text-center">
+                {
+                  loading?
+                      <Row datum={({} as iSlot)} isLoading={true}/>
+                      :
+
+                        datumSlot?.length===0?(
+                            <tr>
+                              <td colSpan={7}>
+                                <div  className="text-center text-white p-4 text-md">
+                                  Anda belum mempunyai paket aktif, silahkan <Button title="beli paket" color="orange" size="sm"/> terlebiih dahulu.
+                                </div>
+                              </td>
+                            </tr>
+                        ):
+                        datumSlot?.map((item:iSlot)=>{
+                          return(
+                            <Row datum={(item as iSlot)} isLoading={false}/>
+                          )
+                        })
+                }
 
        
               </tbody>
             </table>
           </div>
-          <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-            <span className="flex items-center col-span-3">
-              Showing 21-30 of 100
-            </span>
-            <span className="col-span-2" />
-            {/* Pagination */}
-            <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-              <nav aria-label="Table navigation">
-                <ul className="inline-flex items-center">
-                  <li>
-                    <button className="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple" aria-label="Previous">
-                      <svg aria-hidden="true" className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                        <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" fillRule="evenodd" />
-                      </svg>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                      1
-                    </button>
-                  </li>
-                  <li>
-                    <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                      2
-                    </button>
-                  </li>
-                  <li>
-                    <button className="px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple">
-                      3
-                    </button>
-                  </li>
-                  <li>
-                    <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                      4
-                    </button>
-                  </li>
-                  <li>
-                    <span className="px-3 py-1">...</span>
-                  </li>
-                  <li>
-                    <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                      8
-                    </button>
-                  </li>
-                  <li>
-                    <button className="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                      9
-                    </button>
-                  </li>
-                  <li>
-                    <button className="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple" aria-label="Next">
-                      <svg className="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
-                        <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" fillRule="evenodd" />
-                      </svg>
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </span>
+          <div className="mt-3">
+            <Pagination
+                totalResults={pagination===undefined?0:pagination.total}
+                resultsPerPage={pagination===undefined?0:pagination.per_page}
+                onChange={(val) => {console.log(val)}}
+                label="Page navigation"
+            />
           </div>
         </div>
   );

@@ -1,41 +1,107 @@
 import React from 'react';
+import {iSlot} from 'lib/interface';
+import Helper from 'lib/helper'
+import Skeleton from 'components/Common/Skeleton'
+import { Badge } from '@windmill/react-ui'
+import { useToasts } from 'react-toast-notifications'
+
+
 interface iCards {
+    datum:iSlot;
+    isLoading?: boolean;
 }
-const Cards: React.FC<iCards> = () => {
+const Cards: React.FC<iCards> = ({datum,isLoading}) => {
+    const { addToast } = useToasts();
+
+    const handleToast=()=>addToast("Transaksi akan berjalan sesuai dengan tanggal dimulai.", {appearance: 'warning',autoDismiss: true})
+    const load=[];
+    for(let i=0;i<4;i++){
+        load.push(
+            <tr key={i} className="text-gray-700 dark:text-gray-400">
+                <td className="px-4 py-3">
+                    <Skeleton />
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    <Skeleton />
+                </td>
+                <td className="px-4 py-3 text-xs">
+                   <Skeleton />
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    <Skeleton />
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    <Skeleton />
+                </td>
+                <td className="px-4 py-3 text-sm">
+                   <Skeleton />
+                </td>
+                <td className="px-4 py-3 text-sm">
+                <Skeleton />
+                </td>
+                <td className="px-4 py-3 text-sm">
+                <Skeleton />
+                </td>
+            </tr>
+        )
+    }
   return (
-        <tr className="text-gray-700 dark:text-gray-400">
-        <td className="px-4 py-3">
-            <div className="flex items-center text-sm">
-            <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                <img className="object-cover w-full h-full rounded-full" src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ" alt="" loading="lazy" />
-                <div className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-            </div>
-            <div>
-                <p className="font-semibold">Paket 10jt</p>
-            </div>
-            </div>
-        </td>
-        <td className="px-4 py-3 text-sm">
-            Rp 10.000.000
-        </td>
-        <td className="px-4 py-3 text-xs">
-            50 Hari
-        </td>
-        <td className="px-4 py-3 text-sm">
-            Rp 150.000
-        </td>
-        <td className="px-4 py-3 text-sm">
-            Senin, 20 april 2015
-        </td>
-        <td className="px-4 py-3 text-sm">
-            70 Hari 12 Jam 30 Menit
-        </td>
-        <td className="px-4 py-3 text-sm">
-        <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-            Approved
-            </span>
-        </td>
-        </tr>
+      <>
+      {
+          isLoading?load:(
+            <tr className="text-gray-700 dark:text-gray-400">
+                <td className="px-4 py-3">
+                    <p className="font-semibold">{datum?.title}</p>
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    {Helper.numFormat(datum?.amount)}
+                </td>
+                <td className="px-4 py-3 text-xs">
+                    {datum?.contract} Hari
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    {Helper.numFormat(`${parseFloat(datum?.amount)*(parseFloat(datum?.daily_earning)/100)}`)}
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    {Helper.formatDate(`${datum?.start_date}`,false)}
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    {datum.status===1?Helper.calculateCountdown(`${datum.start_date}`):"-- Hari -- Jam -- Menit"}
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    {
+                        datum.status===1?(
+                            <span className="px-2 py-1 font-semibold leading-tight text-base-blue-700 bg-base-blue-100 rounded-full dark:bg-base-blue-700 dark:text-base-blue-100">
+                                Aktif
+                            </span>
+                        ):datum.status===0?(
+                                <span 
+                                    className="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100" 
+                                    onClick={(event)=>{event.preventDefault();handleToast();}}>
+                                <abbr title="Transaksi akan berjalan sesuai dengan tanggal dimulai.">Pending<i className="fa fa-warning"/></abbr>
+                            </span>
+                        ):datum.status===2?(
+                            <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                Selesai
+                            </span>
+                        ):(
+                            <span className="px-2 py-1 font-semibold leading-tight text-base-red-700 bg-base-red-100 rounded-full dark:bg-base-red-700 dark:text-base-red-100">
+                                Tidak Aktif
+                            </span>
+                        )
+                    }
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    {
+                        datum.status===2?(
+                            <Badge>Tarik Modal</Badge>
+                        ):"#"
+                    }
+                </td>
+            </tr>
+          )
+      }
+      </>
   );
 };
 export default Cards;

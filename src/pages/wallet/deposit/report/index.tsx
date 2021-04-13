@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iDeposit} from 'lib/interface';
-import { Card,CardBody, Pagination } from '@windmill/react-ui'
+import {iDeposit,iPagin} from 'lib/interface';
+import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
 import nookies from 'nookies'
@@ -18,7 +18,7 @@ interface iReportInvestment {}
 const ReportDeposit: React.FC<iReportInvestment> = () =>{
     const { addToast } = useToasts();
     const [arrDatum,setArrDatum]= useState<Array<iDeposit>>([]);
-    const [arrData,setArrData]= useState({});
+    const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
     useEffect(() => {
         handleLoadData("page=1&datefrom=2021-01-01&dateto=2021-12-12&perpage=1");
@@ -132,12 +132,12 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                             <th className="py-3 px-6 text-center">No.Rekening</th>
                         </tr>
                     </thead>
-                    <tbody className="text-gray-200 uppercase text-sm leading-normal dark:bg-gray-800 font-bold font-bold">
+                    <tbody className="text-gray-200 uppercase text-sm leading-normal dark:bg-gray-800 font-bold">
                         {
                             arrDatum?.length>0?arrDatum.map((item:iDeposit,i:number)=>{
                                 return (
                                     <tr key={i}>
-                                        <td className="py-3 px-6 text-center">{i+1 + (1 * (parseInt(arrData.current_page,10)-1))}</td>
+                                        <td className="py-3 px-6 text-center">{i+1 + (1 * ((arrData===undefined?0:arrData.current_page)-1))}</td>
                                         <td className="py-3 px-6 text-center">{item.kd_trx}</td>
                                         <td className="py-3 px-6 text-center">{item.fullname}</td>
                                         <td className="py-3 px-6 text-center">{item.bank_name}</td>
@@ -157,8 +157,8 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                 </table>
                 <br/>
                 <Pagination
-                    totalResults={arrData.total}
-                    resultsPerPage={arrData.per_page}
+                    totalResults={arrData===undefined?0:arrData.total}
+                    resultsPerPage={arrData===undefined?0:arrData.per_page}
                     onChange={(val) => {handlePage(val)}}
                     label="Page navigation"
                 />

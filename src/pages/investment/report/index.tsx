@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect                                                              } from "react";
 import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iInvestment} from 'lib/interface';
+import {iInvestment,iPagin} from 'lib/interface';
 import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
@@ -16,7 +16,7 @@ interface iReportInvestment {}
 const ReportInvestment: React.FC<iReportInvestment> = () =>{
     const { addToast } = useToasts();
     const [datumInvestment,setDatumInvestment]= useState<Array<iInvestment>>([]);
-    const [arrData,setArrData]= useState({});
+    const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
     useEffect(() => {
         console.log("componentDidMount")
@@ -92,7 +92,6 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
 
     let totTrxIn=0;
     let totTrxOut=0;
-    console.log(arrData);
     return (
         <Layout title="Report Investment">
             <div className="container mt-6 px-2 lg:px-7 mx-auto grid mb-20">
@@ -138,14 +137,14 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                                 <th className="py-3 px-6 text-center">Keluar</th>
                             </tr>
                         </thead>
-                        <tbody className="text-gray-200 uppercase text-sm leading-normal dark:bg-gray-800 font-bold font-bold">
+                        <tbody className="text-gray-200 uppercase text-sm leading-normal dark:bg-gray-800 font-bold">
                             {
                                 datumInvestment.length>0?datumInvestment?.map((item:iInvestment,i:number)=>{
                                     totTrxIn+=parseInt(item.trx_in,10);
                                     totTrxOut+=parseInt(item.trx_out,10);
                                     return (
                                         <tr key={i}>
-                                            <td className="py-3 px-6 text-center">{i+1 + (10 * (parseInt(arrData.current_page,10)-1))}</td>
+                                            <td className="py-3 px-6 text-center">{i+1 + (10 * ((arrData===undefined?0:arrData.current_page)-1))}</td>
                                             <td className="py-3 px-6 text-center">{item.kd_trx}</td>
                                             <td className="py-3 px-6 text-center">{item.fullname}</td>
                                             <td className="py-3 px-6 text-right text-red-600">{Helper.numFormat(item.trx_in)}</td>
@@ -168,8 +167,8 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                             </tr>
                             <tr>
                                 <th className="py-3 px-6 text-left" colSpan={3}>Total Keseluruhan </th>
-                                <th className="py-3 px-6 text-right text-red-600">{Helper.numFormat(`${arrData.summary?.trx_in}`)}</th>
-                                <th className="py-3 px-6 text-right text-red-600">{Helper.numFormat(`${arrData.summary?.trx_out}`)}</th>
+                                <th className="py-3 px-6 text-right text-red-600">{Helper.numFormat(`${arrData===undefined?0:arrData.summary?.trx_in}`)}</th>
+                                <th className="py-3 px-6 text-right text-red-600">{Helper.numFormat(`${arrData===undefined?0:arrData.summary?.trx_out}`)}</th>
                                 <th colSpan={2}/>
                             </tr>
                         </tfoot>
@@ -178,8 +177,8 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                     
                     <br/>
                     <Pagination
-                        totalResults={arrData.total}
-                        resultsPerPage={arrData.per_page}
+                        totalResults={arrData===undefined?0:arrData.total}
+                        resultsPerPage={arrData===undefined?0:arrData.per_page}
                         onChange={() => {handlePage}}
                         label="Page navigation"
                     />
