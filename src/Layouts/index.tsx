@@ -12,7 +12,7 @@ const LayoutPage: React.FC<SEOProps> = ({ children, ...rest }) => {
       {
         title!=='Login'&& <Sidebar isOpen={open} toggleSidebar={() => setOpen(!open)} />
       }
-        <div className="flex flex-col flex-1 w-full" style={{zoom:'90%'}}>
+        <div className="flex flex-col flex-1 w-1/2" style={{zoom:'90%'}}>
           {
             title!=='Login'&& <Header toggleSidebar={() => setOpen(!open)} />
           }

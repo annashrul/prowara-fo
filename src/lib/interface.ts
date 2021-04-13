@@ -102,3 +102,9 @@ export interface iDeposit{
   payment_slip:string,
   created_at:string,
 }
+export interface iProfiles{
+  id:number,
+  name:string,
+  role:string,
+  profiles:Array<iProfiles>,
+}
