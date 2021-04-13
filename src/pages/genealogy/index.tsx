@@ -1,18 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-// import { useToasts } from 'react-toast-notifications'
+import React from "react";
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-// import {iInvestment} from 'lib/interface';
-// import { Pagination } from '@windmill/react-ui'
-// import NProgress from 'nprogress'; //nprogress module
-// import moment from 'moment'
 import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import ProfileCard from "components/genealogy/ProfileCard";
 import profiles from "./data.json";
-// import { iProfiles } from "lib/interface";
 interface iIndexGenealogy {
   // profiles: Array<iProfiles>;
 }

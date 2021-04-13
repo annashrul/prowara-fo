@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 
 import Api from 'lib/httpService'
-import {iPaket, iOpt, iBankMember} from 'lib/interface'
+import {iBankMember} from 'lib/interface'
 import Helper from 'lib/helper'
 import Nominal from 'components/deposit/nominal';
 import ListBank from 'components/withdrawal/listBank';

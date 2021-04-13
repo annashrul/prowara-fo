@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
@@ -133,7 +133,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
                         <table className="w-full whitespace-no-wrap">
                             <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 text-gray-700 dark:text-gray-400">
                             {
-                                arrDatum?.length>0?arrDatum.map((item:iDeposit,i:number)=>{
+                                arrDatum?.length>0?arrDatum.map((item:iWithdrawal,i:number)=>{
                                     let stts;
 
                                     if(item.status===0){
@@ -145,7 +145,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
                                     }
                                     return (
                                         <tr key={i} className={i%2===0?`bg-gray-700`:''}>
-                                            <td className="py-3 px-6 text-center">{i+1 + (1 * (arrData===undefined?0:parseInt(arrData.current_page,10)-1))}</td>
+                                            <td className="py-3 px-6 text-center">{i+1 + (1 * (arrData===undefined?0:arrData.current_page-1))}</td>
                                             <td className="py-3 px-6 text-left text-sm"><span className="text-white">{item.kd_trx}</span> <br/> {item.fullname}</td>
                                             <td className="py-3 px-6 text-left text-sm">{item.bank_name} <br/>{item.acc_name} - ( <span className="text-sm">{item.acc_no}</span> )</td>
                                             <td className="py-3 px-6 text-right text-old-gold-700">{Helper.numFormat(item.amount)}</td>

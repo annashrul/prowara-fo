@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iTransaksi} from 'lib/interface';
+import {iTransaksi,iPagin} from 'lib/interface';
 import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
@@ -19,7 +19,7 @@ interface iReportTransaksi {}
 const Transaksi: React.FC<iReportTransaksi> = () =>{
     const { addToast } = useToasts();
     const [arrDatum,setArrDatum]= useState<Array<iTransaksi>>([]);
-    const [arrData,setArrData]= useState({});
+    const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
     const [datefrom,setDatefrom]=useState(moment(new Date()).format("MM/DD/yyyy"));
     const [dateto,setDateto]=useState(moment(new Date()).format("MM/DD/yyyy"));
@@ -41,11 +41,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
                 const datum = getData.data.result;
                 setArrDatum(datum.data);
                 console.log(datum);
-                setArrData({
-                    current_page:datum.current_page,
-                    total:datum.total,
-                    per_page:datum.per_page,
-                });
+                setArrData(datum);
             }else{
                 addToast("Kesalahan pada server.", {
                     appearance: 'error',
@@ -163,8 +159,8 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
                 <br/>
                     
                 <Pagination
-                    totalResults={arrData.total}
-                    resultsPerPage={arrData.per_page}
+                    totalResults={arrData===undefined?0:arrData.total}
+                    resultsPerPage={arrData===undefined?0:arrData.per_page}
                     onChange={(val) => {handlePage(val)}}
                     label="Page navigation"
                 />
