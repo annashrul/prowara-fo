@@ -21,16 +21,14 @@ export function logout() {
 }
 
 function getUser() {
-  const coo: string=Cookies.get('__uid')!;
+  // const coo: string=Cookies.get('__uid')!;
   //  try {
   //    const datum:iUser= JSON.parse(atob(coo));
   //    return datum;
   // } catch (err) {
   //     // const datum:iUser= JSON.parse();
-  //     console.log(Buffer.from(coo, 'base64').toString());
   //     return datum;
   // }
-  console.log('coo',coo);
 }
 
 function getToken() {

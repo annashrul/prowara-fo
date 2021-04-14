@@ -225,6 +225,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
             {
                 step===1?(
                     <Nominal
+                    min_nominal={min_nominal}
                         handleClick={(nominal)=>doNominal(nominal)}
                     />
                     

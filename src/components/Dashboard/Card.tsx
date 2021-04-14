@@ -35,7 +35,7 @@ const Cards: React.FC<iCards> = ({ c1,c2,c3,c4 }) => {
             <Card
               color="orange"
               icon="bank"
-              title="Paket Berjalan"
+              title="Total Modal"
               value={c3}
             />  
           </div>
