@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
 import {iDeposit,iPagin} from 'lib/interface';
 import { Pagination } from '@windmill/react-ui'
-import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
-import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import { } from '@windmill/react-ui'
 import { handleGet } from "lib/handleAction";
+import nookies from 'nookies'
 
 interface iReportInvestment {}
 
@@ -122,16 +120,10 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
 export async function getServerSideProps(ctx:NextPageContext) {
     const cookies = nookies.get(ctx)
     if(!cookies._prowara){
-        return {
-          redirect: {
-              destination: '/auth/login',
-              permanent: false,
-          },
-        }
+        return {redirect: {destination: '/auth/login',permanent: false}}
     }else{
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
-
     return { 
         props:{}
     }

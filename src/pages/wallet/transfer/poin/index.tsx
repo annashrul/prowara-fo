@@ -52,20 +52,9 @@ const TransferPoin: React.FC<iTfPoin> =()=> {
     }
 
     const doVerif=()=>{
-        Swal.fire({
-            title   : 'Perhatian !!!',
-            html    :`Pastikan data telah sesuai.`,
-            icon    : 'warning',
-            showCancelButton: true,
-            confirmButtonColor  : '#3085d6',
-            cancelButtonColor   : '#d33',
-            confirmButtonText   : `Verifikasi`,
-            cancelButtonText    : 'Batal',
-        }).then(async (result) => {
-            if (result.value) {
-              setOpenPin(true);
-            }
-        })
+        Helper.mySwalWithCallback('Pastikan data telah sesuai.',()=>{
+            setOpenPin(true);
+        });
     }
 
     const doCheckout= async (pin:string)=>{
@@ -74,13 +63,11 @@ const TransferPoin: React.FC<iTfPoin> =()=> {
             penerima:user?.id,
             amount:nominal
         }
-        await handlePost(Api.apiClient+'transaction/transfer', checkoutData,(isStatus,msg)=>{
-            if(!isStatus){
+        await handlePost(Api.apiClient+'transaction/transfer', checkoutData,(datum,isStatus,msg)=>{
+            Helper.mySwalWithCallback(datum.msg,()=>{
                 setOpenPin(false);
                 router.push(`/`);
-            }else{
-                setOpenPin(false);
-            }
+            });
         })
     }
 
@@ -166,18 +153,7 @@ const TransferPoin: React.FC<iTfPoin> =()=> {
 }
 
 export async function getServerSideProps(ctx:NextPageContext) {
-    // Parse
-    const cookies = nookies.get(ctx)
-    if(!cookies._prowara){
-        return {
-          redirect: {
-              destination: '/auth/login',
-              permanent: false,
-          },
-        }
-    }else{
-        Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
-    }
+    Helper.handleRoute(ctx);
     return { 
         props:{}
     }

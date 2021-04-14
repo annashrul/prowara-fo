@@ -1,10 +1,8 @@
 import React,{useState} from 'react';
 import Layout from 'Layouts'
 import { NextPageContext } from 'next'
-import nookies from 'nookies'
 import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
-import Swal from 'sweetalert2'
 import Api from 'lib/httpService'
 import {iMemberUid} from 'lib/interface'
 import Helper from 'lib/helper'
@@ -49,28 +47,15 @@ const TransferPin: React.FC<iTfPin> =()=> {
         });
     }
 
-
-    
-
     const doStep=(step:number)=>{
         setStep(step);
     }
 
     const doVerif=()=>{
-        Swal.fire({
-            title   : 'Perhatian !!!',
-            html    :`Pastikan data telah sesuai.`,
-            icon    : 'warning',
-            showCancelButton: true,
-            confirmButtonColor  : '#3085d6',
-            cancelButtonColor   : '#d33',
-            confirmButtonText   : `Verifikasi`,
-            cancelButtonText    : 'Batal',
-        }).then(async (result) => {
-            if (result.value) {
-              setOpenPin(true);
-            }
-        })
+        Helper.mySwalWithCallback('Pastikan data telah sesuai.',()=>{
+            setOpenPin(true);
+        });
+        
     }
 
     const doCheckout= async (pin:string)=>{
@@ -79,80 +64,14 @@ const TransferPin: React.FC<iTfPin> =()=> {
             uid:user?.id,
             qty:nominal
         }
-        await handlePost(Api.apiClient+'pin/transfer',checkoutData,(isStatus,msg)=>{
-            if(!isStatus){
+        await handlePost(Api.apiClient+'pin/transfer',checkoutData,(datum,isStatus,msg)=>{
+            Helper.mySwalWithCallback(datum.msg,()=>{
                 setOpenPin(false);
                 router.push(`/`);
-            }else{
-                setOpenPin(false);
-            }
+            });
         })
-
-    //   Swal.fire({
-    //         title: 'Silahkan tunggu...',
-    //         html: "Memproses permintaan.",
-    //         willOpen: () => {
-    //             Swal.showLoading()
-    //         },
-    //         showConfirmButton:false,
-    //         willClose: () => {}
-    //   })
-
-    //   try {
-    //     const submitRegister=await Api.post(Api.apiClient+'pin/transfer', checkoutData)
-
-    //     setTimeout(
-    //         function () {
-    //             Swal.close()
-    //             const datum = submitRegister.data;
-    //             if(datum.status==='success'){
-    //               addToast("Berhasil memproses permintaan.", {
-    //                 appearance: 'success',
-    //                 autoDismiss: true,
-    //               })
-    //               setOpenPin(false);
-    //               //  Go to invoice page
-    //               router.push(`/`);
-    //             }else{
-    //               Swal.fire({
-    //                         title   : 'Perhatian !!!',
-    //                         html    :`${datum.msg}`,
-    //                         icon    : 'warning',
-    //                         showCancelButton: false,
-    //                         confirmButtonColor  : '#3085d6',
-    //                         confirmButtonText   : `Oke`,
-    //                     }).then(async (result) => {
-    //                         if (result.value) {
-    //                             setOpenPin(false);
-    //                             //  Go to invoice page
-    //                             router.push(`/`);
-    //                         }
-    //                     })
-    //             }
-    //       },800)
-    //   } catch (err) {
-
-    //     setTimeout(
-    //         function () {
-    //             Swal.close()
-    //             // save token to localStorage
-    //             if (err.message === 'Network Error') {
-    //               addToast("Tidak dapat tersambung ke server!", {
-    //                 appearance: 'error',
-    //                 autoDismiss: true,
-    //               })
-                    
-    //             }else{
-    //                 addToast(err.response.data.msg, {
-    //                     appearance: 'error',
-    //                     autoDismiss: true,
-    //                   })
-      
-    //             }
-    //       },800)
-      
-    //   }
-  }
+   
+    }
 
     return (
         <Layout title="Transfer Pin">
@@ -236,18 +155,7 @@ const TransferPin: React.FC<iTfPin> =()=> {
 }
 
 export async function getServerSideProps(ctx:NextPageContext) {
-    // Parse
-    const cookies = nookies.get(ctx)
-    if(!cookies._prowara){
-        return {
-          redirect: {
-              destination: '/auth/login',
-              permanent: false,
-          },
-        }
-    }else{
-        Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
-    }
+    Helper.handleRoute(ctx);
     return { 
         props:{}
     }

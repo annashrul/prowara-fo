@@ -1,23 +1,21 @@
 import React, { useState, useEffect} from "react";
-import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
 import {iWithdrawal,iPagin} from 'lib/interface';
 import { Pagination } from '@windmill/react-ui'
-import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
-import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import { } from '@windmill/react-ui'
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
+import { handleGet } from "lib/handleAction";
+import nookies from 'nookies'
 
 interface iReportWithdrawal {}
 
 const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
-    const { addToast } = useToasts();
     const [arrDatum,setArrDatum]= useState<Array<iWithdrawal>>([]);
     const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
@@ -29,64 +27,25 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
     }, []);
    
     const handleLoadData = async(val:string)=>{
-        NProgress.start();
-        try {
-            let url = Api.apiClient+`transaction/withdrawal`;
-            if(val!==null){
-                url+=`?${val}`;
-            }
-            const getData=await Api.get(url)
-            NProgress.done()
-            if(getData.data.status==='success'){
-                const datum = getData.data.result;
-                setArrDatum(datum.data);
-                console.log(datum);
-                setArrData(datum);
-            }else{
-                addToast("Kesalahan pada server.", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                })
-            }
-        
-        } catch (err) {
-            NProgress.done()
-            // save token to localStorage
-            if (err.message === 'Network Error') {
-                addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                })
-                
-            }else{
-                if(err.response.data.msg!==undefined){
-                addToast(err.response.data.msg, {
-                    appearance: 'error',
-                    autoDismiss: true,
-                    })
-                }else{
-                addToast("Kesalahan pada server.", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                    })
-                }
-    
-            }
+        let url = Api.apiClient+`transaction/withdrawal`;
+        if(val!==null){
+            url+=`?${val}`;
         }
+        await handleGet(url,(datum)=>{
+            setArrDatum(datum.data);
+            console.log(datum);
+            setArrData(datum);
+        })
     }
 
     const handleSearch=()=>{
-        console.log(any);
         handleLoadData(`page=1&q=${btoa(any)}`);
     }
     const handlePage=(pagenum:number)=>{
-        console.log(pagenum);
         handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=10`);
 
     }
-    const handleEvent=(event:string,picker:any)=>{
-        console.log(event);
-        console.log(picker);
+    const handleEvent=(picker:any)=>{
         const from = moment(picker.startDate._d).format('YYYY-MM-DD');
         const to = moment(picker.endDate._d).format('YYYY-MM-DD');
         setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
@@ -179,16 +138,10 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
 export async function getServerSideProps(ctx:NextPageContext) {
     const cookies = nookies.get(ctx)
     if(!cookies._prowara){
-        return {
-          redirect: {
-              destination: '/auth/login',
-              permanent: false,
-          },
-        }
+        return {redirect: {destination: '/auth/login',permanent: false}}
     }else{
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
-
     return { 
         props:{}
     }

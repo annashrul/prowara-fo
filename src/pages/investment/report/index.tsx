@@ -10,6 +10,7 @@ import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
 import nookies from 'nookies'
 import { NextPageContext } from 'next'
+import { handleGet } from "lib/handleAction";
 interface iReportInvestment {}
 
 
@@ -24,58 +25,15 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
 
    
     const handleLoadData = async(val:string)=>{
-        NProgress.start();
-        try {
-            let url = Api.apiClient+`transaction/history/investment`;
-            if(val!==null){
-                url+=`?${val}`;
-            }
-            const getData=await Api.get(url)
-            NProgress.done()
-            if(getData.data.status==='success'){
-                const datum = getData.data.result;
-                setDatumInvestment(datum.data);
-                setArrData({
-                    current_page:datum.current_page,
-                    total:datum.total,
-                    per_page:datum.per_page,
-                    summary:{
-                        trx_in:datum.summary.trx_in,
-                        trx_out:datum.summary.trx_out,
-                        saldo_awal: datum.summary.saldo_awal
-                    }
-                });
-            }else{
-                addToast("Kesalahan pada server.", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                })
-            }
-        
-        } catch (err) {
-            NProgress.done()
-            // save token to localStorage
-            if (err.message === 'Network Error') {
-                addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                })
-                
-            }else{
-                if(err.response.data.msg!==undefined){
-                addToast(err.response.data.msg, {
-                    appearance: 'error',
-                    autoDismiss: true,
-                    })
-                }else{
-                addToast("Kesalahan pada server.", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                    })
-                }
-    
-            }
+        let url = Api.apiClient+`transaction/history/investment`;
+        if(val!==null){
+            url+=`?${val}`;
         }
+        await handleGet(url,(datum)=>{
+            setDatumInvestment(datum.data);
+            setArrData(datum);
+        })
+       
     }
 
     const handleSearch=()=>{
