@@ -287,11 +287,13 @@ export async function getServerSideProps(ctx:NextPageContext) {
     const cookies = nookies.get(ctx)
     if(!cookies._prowara){
         return {
-            redirect: {
-                destination: '/auth/login',
-                permanent: false,
-            },
+          redirect: {
+              destination: '/auth/login',
+              permanent: false,
+          },
         }
+    }else{
+        Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
 
     // GET BANK DATA

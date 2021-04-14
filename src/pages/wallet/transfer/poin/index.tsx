@@ -6,37 +6,84 @@ import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import Api from 'lib/httpService'
-import {iPaket, iOpt, iBankPt} from 'lib/interface'
+import {iPaket, iOpt, iBankPt, iMemberUid} from 'lib/interface'
 import Helper from 'lib/helper'
 import Nominal from 'components/deposit/nominal';
 import ListBank from 'components/deposit/ListBank';
 import Preview from 'components/deposit/preview';
 import Modal from 'components/pin'
+import Step1 from 'components/transfer/poin/step1';
+import Step2 from 'components/transfer/poin/step2';
 
-interface iInvoice{
-    category: Array<iOpt>;
-    options: Array<iOpt>;
-    total_tiket:number;
-    dataBank?:Array<iBankPt>;
-}
+interface iTfPoin{}
 
-const Invoice: React.FC<iInvoice> =({dataBank})=> {
+const TransferPoin: React.FC<iTfPoin> =()=> {
     const { addToast } = useToasts();
     const router = useRouter();
     const min_nominal=50;
     const [step,setStep]=useState(1);
     const [nominal,setNominal]=useState(0);
-    const [bank,setBank]=useState<iBankPt>();
+    const [id,setId]=useState('');
+    const [user,setUser]=useState<iMemberUid>();
     const [openPin,setOpenPin]=useState(false);
 
-    const doNominal=(nominal:number)=>{
-        if(nominal===0) addToast("Nominal tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
+    const doNominal=(nominal:number,userId:string)=>{
+        if(nominal===0||isNaN(nominal)) addToast("Nominal tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
         else if(nominal<min_nominal) addToast(`Minimal deposit adalah ${Helper.numFormat(`${min_nominal}`)}`, {appearance: 'warning',autoDismiss: true});
+        else if(userId==='') addToast(`User ID tidak boleh kosong!`, {appearance: 'warning',autoDismiss: true});
         else{
-            setNominal(nominal)
-            setStep(step+1);
+            setNominal(nominal);
+            checkMember(userId);
         }
     }
+
+    
+
+
+    const checkMember=async(userId:string)=>{
+        Swal.fire({
+            title: 'Silahkan tunggu...',
+            html: "Memproses permintaan.",
+            willOpen: () => {
+                Swal.showLoading()
+            },
+            showConfirmButton:false,
+            willClose: () => {}
+      })
+
+      try {
+        const submitRegister=await Api.get(Api.apiClient+`member/uid/${userId}`);
+        setTimeout(
+            function () {
+                Swal.close();
+                if(submitRegister.data.status==='success'){
+                    const datum = submitRegister.data.result;
+                    
+                    setUser(datum);
+                    setStep(step+1);
+                }
+          },800)
+      } catch (err) {
+        setTimeout(
+            function () {
+                Swal.close()
+                // save token to localStorage
+                if (err.message === 'Network Error') {
+                  addToast("Tidak dapat tersambung ke server!", {
+                    appearance: 'error',
+                    autoDismiss: true,
+                  })
+                }else{
+                    addToast(err.response.data.msg, {
+                        appearance: 'error',
+                        autoDismiss: true,
+                      })
+                }
+          },800)
+      
+      }
+    }
+
 
     const getBank=(datum:iBankPt)=>{
         setBank(datum)
@@ -78,11 +125,11 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
       try {
         const checkoutData={
           member_pin:pin,
-          id_bank_destination:bank?.id,
+          penerima:user?.id,
           amount:nominal
         }
         
-        const submitRegister=await Api.post(Api.apiClient+'transaction/deposit', checkoutData)
+        const submitRegister=await Api.post(Api.apiClient+'transaction/transfer', checkoutData)
 
         setTimeout(
             function () {
@@ -95,7 +142,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                   })
                   setOpenPin(false);
                   //  Go to invoice page
-                  router.push(`/invoice/${btoa(datum.result.kd_trx)}`);
+                  router.push(`/`);
                 }else{
                   Swal.fire({
                             title   : 'Perhatian !!!',
@@ -108,7 +155,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                             if (result.value) {
                                 setOpenPin(false);
                                 //  Go to invoice page
-                                router.push(`/invoice/${btoa(datum.result.kd_trx)}`);
+                                router.push(`/`);
                             }
                         })
                 }
@@ -126,35 +173,10 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                   })
                     
                 }else{
-                  if(err.response.data.msg!==undefined){
-                    if(err.response.data.msg=="Masih ada transaksi yang belum selesai."){
-                        Swal.fire({
-                            title   : 'Perhatian !!!',
-                            html    :`${err.response.data.msg}`,
-                            icon    : 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor  : '#3085d6',
-                            confirmButtonText   : `Oke`,
-                        }).then(async (result) => {
-                            if (result.value) {
-                                setOpenPin(false);
-                                //  Go to invoice page
-                                router.push(`/invoice/${btoa(err.response.data.result.kd_trx)}`);
-                            }
-                        })
-
-                    }else{
-                        addToast(err.response.data.msg, {
-                            appearance: 'error',
-                            autoDismiss: true,
-                        })
-                    }
-                  }else{
-                    addToast("Kesalahan pada server.", {
+                    addToast(err.response.data.msg, {
                         appearance: 'error',
                         autoDismiss: true,
                       })
-                  }
       
                 }
           },800)
@@ -162,14 +184,12 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
       }
   }
 
-
-
     return (
-        <Layout title="Deposit Poin">
+        <Layout title="Transfer Poin">
             <div className="container mt-6 lg:px-6 md:px-3">
                 <div className="flex justify-between">
                     <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
-                        Deposit Poin
+                        Transfer Poin
                     </h2>
                 </div>
             </div>
@@ -201,7 +221,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                         ></path>
                         </svg>
                         </div>
-                        <div className="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-old-gold-600">Metode Pembayaran</div>
+                        <div className="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-old-gold-600">Detail Transfer</div>
                     </div>
                     {
                         step===3?<div className="flex-auto border-t-2 transition duration-500 ease-in-out border-old-gold-600" />:<div className="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-300" />
@@ -220,23 +240,22 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
             </div>
             {
                 step===1?(
-                    <Nominal
+                    <Step1
                         min_nominal={min_nominal}
-                        handleClick={(nominal)=>doNominal(nominal)}
+                        handleClick={(nominal,userId)=>doNominal(nominal,userId)}
                     />
                     
                 ):step===2?(
-                    <ListBank dataBank={(dataBank as Array<iBankPt>)} handleClick={(datum:iBankPt)=>getBank(datum)} goBack={(val:number)=>doStep(val)}/>
-                ):(
-                    <Preview
-                        bank={bank?.bank_name}
-                        atas_nama={bank?.acc_name}
-                        nominal={`${nominal}`}
+                    <Step2
+                        penerima={user?.fullname}
+                        jumlah_transfer={`${nominal}`}
                         admin="0"
-                        total={`${nominal*10000}`}
+                        total_transfer={`${nominal}`}
                         handleClick={doVerif}
                         goBack={(val:number)=>doStep(val)}
                     />
+                ):(
+                    <div></div>
                 )
             }
 
@@ -259,49 +278,9 @@ export async function getServerSideProps(ctx:NextPageContext) {
     }else{
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
-
-    // manipulate PAKET
-    let kate=[];
-    let total_tiket=0;
-    const options: iOpt[] =[];
-    try {
-        const getKategori = await Api.get(Api.apiUrl+"category/membership")
-        if(getKategori.status===200){
-            kate=getKategori.data.result.data;
-            total_tiket=getKategori.data.result.total_tiket;
-        }else{
-            kate=[];
-        }
-        kate.map((item: iPaket)=>{
-            return options.push({
-                value: item.id,
-                label: item.title
-            })
-        })
-    } catch (err) {}
-
-    // END PAKET
-
-    // GET BANK DATA
-    let dataBank=[];
-    try {
-        const getBank = await Api.get(Api.apiUrl+"bank?perpage=20")
-
-        if(getBank.status===200){
-        dataBank=getBank.data.result.data;
-        }else{
-        dataBank=[];
-        }
-    } catch (err) {}
-
     return { 
-        props:{
-            kategori:kate,
-            total_tiket,
-            options,
-            dataBank
-        }
+        props:{}
     }
 }
 
-export default Invoice;
+export default TransferPoin;

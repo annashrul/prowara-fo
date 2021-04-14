@@ -1,11 +1,16 @@
 import React from 'react';
+import nookies from 'nookies'
+import { NextPageContext } from 'next'
+import Api from 'lib/httpService';
+import Helper from 'lib/helper';
+import {iWidget} from 'lib/interface';
 
 interface HeaderProps {
   toggleSidebar: () => void;
+  dataWidget:iWidget;
 }
 
-const Header: React.FC<HeaderProps> = ({toggleSidebar}) => {
- 
+const Header: React.FC<HeaderProps> = ({toggleSidebar,dataWidget}) => {
   return (
     <header className="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
       <div className="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
@@ -18,7 +23,6 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar}) => {
         <div className="flex justify-center flex-1 lg:mr-32">
           <div className="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
             <div className="absolute inset-y-0 flex items-center pl-2">
-
             </div>
           </div>
         </div>
@@ -29,6 +33,10 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar}) => {
               <template x-if="!dark" />
               <template x-if="dark" />
             </button>
+          </li>
+          <li className="relative">
+            <span className="inline-flex px-2 text-xs font-medium leading-5 rounded-full text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100">Pin : {dataWidget===undefined?10:dataWidget.total_pin}</span>
+            <template x-if="isProfileMenuOpen" />
           </li>
           {/* Notifications menu */}
           <li className="relative">
@@ -54,4 +62,33 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar}) => {
 
   );
 };
+
+export async function getServerSideProps(ctx:NextPageContext) {
+  const cookies = nookies.get(ctx)
+  if(!cookies._prowara){
+      return {
+        redirect: {
+            destination: '/auth/login',
+            permanent: false,
+        },
+      }
+  }else{
+      Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
+  }
+  let dataWidget={};
+  try {
+      const getData = await Api.get(Api.apiUrl+"site/memberarea")
+      dataWidget=getData.data.result;
+      console.log("DATA",dataWidget);
+
+  } catch (err) {
+      console.log("CONSOLE",err);
+  }
+
+
+  return { 
+      props:{dataWidget}
+  }
+}
+
 export default Header;
