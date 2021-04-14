@@ -21,7 +21,7 @@ export function logout() {
 }
 
 function getUser() {
-  const coo: string=Cookies.get('__uid')!;
+  // const coo: string=Cookies.get('__uid')!;
   //  try {
   //    const datum:iUser= JSON.parse(atob(coo));
   //    return datum;

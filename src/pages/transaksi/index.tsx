@@ -1,32 +1,37 @@
-import React, { useState, useEffect                                                              } from "react";
+import React, { useState, useEffect} from "react";
 import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iInvestment,iPagin} from 'lib/interface';
+import {iTransaksi,iPagin} from 'lib/interface';
 import { Pagination } from '@windmill/react-ui'
 import NProgress from 'nprogress'; //nprogress module
 import moment from 'moment'
 import nookies from 'nookies'
 import { NextPageContext } from 'next'
-interface iReportInvestment {}
+import { } from '@windmill/react-ui'
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+import 'bootstrap-daterangepicker/daterangepicker.css';
 
+interface iReportTransaksi {}
 
-const ReportInvestment: React.FC<iReportInvestment> = () =>{
+const Transaksi: React.FC<iReportTransaksi> = () =>{
     const { addToast } = useToasts();
-    const [datumInvestment,setDatumInvestment]= useState<Array<iInvestment>>([]);
+    const [arrDatum,setArrDatum]= useState<Array<iTransaksi>>([]);
     const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
+    const [datefrom,setDatefrom]=useState(moment(new Date()).format("MM/DD/yyyy"));
+    const [dateto,setDateto]=useState(moment(new Date()).format("MM/DD/yyyy"));
+    const no=10;
     useEffect(() => {
-        handleLoadData("page=1");
+        handleLoadData(`page=1&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
     }, []);
-
    
     const handleLoadData = async(val:string)=>{
         NProgress.start();
         try {
-            let url = Api.apiClient+`transaction/history/investment`;
+            let url = Api.apiClient+`transaction/history`;
             if(val!==null){
                 url+=`?${val}`;
             }
@@ -34,17 +39,9 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
             NProgress.done()
             if(getData.data.status==='success'){
                 const datum = getData.data.result;
-                setDatumInvestment(datum.data);
-                setArrData({
-                    current_page:datum.current_page,
-                    total:datum.total,
-                    per_page:datum.per_page,
-                    summary:{
-                        trx_in:datum.summary.trx_in,
-                        trx_out:datum.summary.trx_out,
-                        saldo_awal: datum.summary.saldo_awal
-                    }
-                });
+                setArrDatum(datum.data);
+                console.log(datum);
+                setArrData(datum);
             }else{
                 addToast("Kesalahan pada server.", {
                     appearance: 'error',
@@ -79,12 +76,22 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
     }
 
     const handleSearch=()=>{
+        console.log(any);
         handleLoadData(`page=1&q=${btoa(any)}`);
     }
-    const handlePage=(pagenum:string)=>{
-        if(any!==''){
-            handleLoadData(`page=${pagenum}&q=${btoa(any)}`);
-        }
+    const handlePage=(pagenum:number)=>{
+        console.log(pagenum);
+        handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
+
+    }
+    const handleEvent=(event:string,picker:any)=>{
+        console.log(event);
+        console.log(picker);
+        const from = moment(picker.startDate._d).format('YYYY-MM-DD');
+        const to = moment(picker.endDate._d).format('YYYY-MM-DD');
+        setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
+        setDateto(moment(picker.endDate._d).format('MM/DD/yyyy'));
+        handleLoadData(`page=1&datefrom=${from}&dateto=${to}&perpage=${no}`);
     }
 
     return (
@@ -93,13 +100,17 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                 <div className="flex justify-between">
                     <div>
                         <h2 className="mt-6 text-2xl align-middle font-semibold text-gray-700 dark:text-gray-200">
-                            Laporan Investment
+                            Riwayat Transaksi
                         </h2>
                        
                     </div>
                 </div>
                 <div className="shadow-md rounded my-6">
                 <div className={"mt-4 flex"}>
+                <DateRangePicker onApply={handleEvent}>
+                    <input type="text" readOnly={true} className="block w-full mt-1 px-3 text-sm dark:border-gray-600 dark:bg-gray-700 focus:outline-none  dark:text-gray-300 div-input" value={`${datefrom} - ${dateto}`}/>
+                </DateRangePicker>
+
                   <input 
                   className="block w-full mt-1 px-3 text-sm dark:border-gray-600 dark:bg-gray-700 focus:outline-none  dark:text-gray-300 div-input" 
                   placeholder="tulis kode trx atau catatan disini" 
@@ -117,10 +128,9 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                   </button>
                 </div>
                 <br/>
-               
                 <div className="grid grid-cols-2 gap-4">
                     {
-                        datumInvestment?.length>0?datumInvestment.map((item:iInvestment,i:number)=>{
+                        arrDatum?.length>0?arrDatum.map((item:iTransaksi,i:number)=>{
                             return(
                                 <div key={i} className="w-full mx-auto border-t border-b border-r rounded">
                                     <div className="p-4 border-l-4 border-teal rounded flex justify-between">
@@ -145,22 +155,19 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                 </div>
                 
                 
-
-
+               
+                <br/>
                     
-
-                    
-                    <br/>
-                    <Pagination
-                        totalResults={arrData===undefined?0:arrData.total}
-                        resultsPerPage={arrData===undefined?0:arrData.per_page}
-                        onChange={() => {handlePage}}
-                        label="Page navigation"
-                    />
-                </div>
+                <Pagination
+                    totalResults={arrData===undefined?0:arrData.total}
+                    resultsPerPage={arrData===undefined?0:arrData.per_page}
+                    onChange={(val) => {handlePage(val)}}
+                    label="Page navigation"
+                />
             </div>
-        </Layout>
-      );
+        </div>
+    </Layout>
+    );
 }
 export async function getServerSideProps(ctx:NextPageContext) {
     const cookies = nookies.get(ctx)
@@ -180,5 +187,4 @@ export async function getServerSideProps(ctx:NextPageContext) {
     }
 }
 
-
-export default ReportInvestment;
+export default Transaksi;

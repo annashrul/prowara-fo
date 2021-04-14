@@ -87,7 +87,7 @@ const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
 
     const handleCheckout=()=>{
         let tiket_required=0;
-        for (var i=0; i < datumPaket.length; i++) {
+        for (var i=0; i < datumPaket?.length; i++) {
             if (datumPaket[i].id === paket) {
                 tiket_required=datumPaket[i].pin_required;
             }
