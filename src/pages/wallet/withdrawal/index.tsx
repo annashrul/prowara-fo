@@ -21,7 +21,7 @@ interface iTrxWithdrawal{
 const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
     const { addToast } = useToasts();
     const router = useRouter();
-    const min_nominal=50000;
+    const min_nominal=50;
     const [step,setStep]=useState(1);
     const [nominal,setNominal]=useState(0);
     const [bank,setBank]=useState<iBankMember>();
@@ -225,7 +225,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
             {
                 step===1?(
                     <Nominal
-                    min_nominal={min_nominal}
+                        min_nominal={min_nominal}
                         handleClick={(nominal)=>doNominal(nominal)}
                     />
                     

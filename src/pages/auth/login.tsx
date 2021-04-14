@@ -43,7 +43,7 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
 
   const onChangeOtp = async (value: string) => {
     setOtpInput(value);
-    if((value.length+1)===4){
+    if((value.length)===4){
       await onCompareOtp();
     }
   }

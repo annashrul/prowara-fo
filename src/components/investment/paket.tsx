@@ -14,7 +14,7 @@ const Cards: React.FC<iCards> = ({selected,loading,handleClick,datum}) => {
     const load=[];
     for(let i=0;i<4;i++){
         load.push(
-            <div className="md:flex shadow-2xl h-40 w-full min-w-96">
+            <div className="md:flex shadow-2xl h-40 w-full md:min-w-96">
                     <div className=" md:w-1/2">
                         <Skeleton style="h-full w-full  object-cover rounded-lg rounded-r-none pb-5/6 border border-gray-200  border-r-0"/>
                     </div>

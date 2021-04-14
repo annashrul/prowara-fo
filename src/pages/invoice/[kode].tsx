@@ -1,9 +1,10 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import Layout from 'Layouts'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import { Card, CardBody, Button } from '@windmill/react-ui'
 import { useRouter } from 'next/router'
+import Swal from 'sweetalert2';
 
 import Api from 'lib/httpService'
 import Helper from 'lib/helper';
@@ -15,7 +16,24 @@ interface iInvoice{
 }
 
 const Invoice: React.FC<iInvoice> =({kode,datum})=> {
-  const router = useRouter()
+  console.log('datum',Helper.isEmptyObj(datum));
+  const router = useRouter();
+  useEffect(() => {
+      if (Helper.isEmptyObj(datum)) {
+        Swal.fire({
+            title   : 'Perhatian!',
+            html    :`Invoice dengan nomor #${kode} tidak ditemukan atau telah selesai.`,
+            icon    : 'warning',
+            showCancelButton: false,
+            confirmButtonColor  : '#D4AF37',
+            confirmButtonText   : `Oke`,
+        }).then(async (result) => {
+            if (result.value) {
+              router.push('/')
+            }
+        })
+      }
+    }, []);
 
   return (
     <Layout title={`Invoice`}>
@@ -111,13 +129,11 @@ export async function getServerSideProps(ctx:NextPageContext) {
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
 
-    let datum=[];
+    let datum={};
     try {
         const getDetail = await Api.get(Api.apiUrl+"transaction/get_payment/"+kode)
         if(getDetail.status===200){
             datum=getDetail.data.result;
-        }else{
-            datum=[];
         }
     } catch (err) {
     }
