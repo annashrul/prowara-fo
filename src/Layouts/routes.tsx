@@ -18,6 +18,22 @@ const Routes=[
         icon: Forms
     },
     {
+        link:'/order/tiket',
+        title:'Order Tiket',
+        icon: Forms
+    },
+    {
+        link:'/wallet/transfer/poin',
+        title:'Transfer Poin',
+        icon: Forms
+    },
+    {
+        link:'/wallet/transfer/pin',
+        title:'Transfer Pin',
+        icon: Forms
+    },
+    {
+      
         link:'/wallet/deposit',
         title:'Deposit',
         icon: Forms

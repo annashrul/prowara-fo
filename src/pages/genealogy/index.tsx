@@ -93,16 +93,15 @@ const Index: React.FC<iIndexGenealogy> = () =>{
     // let totTrxOut=0;
     // console.log(arrData);
     return (
-      <Layout title="Dashboard">
+      <Layout title="Genealogy">
         <div className="container mt-6 lg:px-6 md:px-3 mx-auto xs:px-2 sm:px-2 grid mb-20">
           <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Dashboard
+            Genealogy
           </h2>
           {/* CARD SECTION */}
           {/* component */}
           <div className="flex flex-col justify-center items-center">
-            <h1 className="text-3xl top-0 absolute">Organisation Flow chart</h1>
-            <div className="overflow-y-scroll h-screen" style={{width:'90%'}}>
+            <div className="">
               <div className="items-center justify-center flex">
                 {profiles && profiles.map((profile, idX) => (
                   <ProfileCard

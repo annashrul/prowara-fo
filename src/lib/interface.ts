@@ -173,3 +173,13 @@ export interface iWidget{
   modal: number;
   sponsor: number;
 }
+
+export interface iMemberUid{
+  id: string;
+  fullname: string;
+  referral: string;
+  status: number;
+  foto: string;
+}
+
+

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import Layout from 'Layouts'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
@@ -9,7 +9,6 @@ import Swal from 'sweetalert2'
 import Api from 'lib/httpService'
 import {iBankMember} from 'lib/interface'
 import Helper from 'lib/helper'
-import Nominal from 'components/deposit/nominal';
 import ListBank from 'components/withdrawal/listBank';
 import Preview from 'components/deposit/preview';
 import Modal from 'components/pin'
@@ -19,19 +18,23 @@ interface iTrxWithdrawal{
 }
 
 const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
+
     const { addToast } = useToasts();
     const router = useRouter();
     const min_nominal=50;
     const [step,setStep]=useState(1);
-    const [nominal,setNominal]=useState(0);
+    const [oldPoin,setOldPoin] = React.useState(0)
+    const [poin,setPoin] = React.useState(0)
     const [bank,setBank]=useState<iBankMember>();
     const [openPin,setOpenPin]=useState(false);
-
-    const doNominal=(nominal:number)=>{
-        if(nominal===0) addToast("Nominal tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
-        else if(nominal<min_nominal) addToast(`Minimal deposit adalah ${Helper.numFormat(`${min_nominal}`)}`, {appearance: 'warning',autoDismiss: true});
+     useEffect(() => {
+        setOldPoin(100000);
+    }, []);
+    const handleCheck=()=>{
+        if(poin===0) addToast("poin tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
+        else if(poin<min_nominal) addToast(`Minimal deposit adalah ${Helper.numFormat(`${min_nominal}`)}`, {appearance: 'warning',autoDismiss: true});
         else{
-            setNominal(nominal)
+            setPoin(poin)
             setStep(step+1);
         }
     }
@@ -77,7 +80,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
         const checkoutData={
           member_pin:pin,
           id_bank:bank?.id,
-          amount:nominal
+          amount:poin
         }
         console.log(checkoutData);
         
@@ -166,6 +169,10 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
       }
   }
 
+  const handleOldPoin=()=>{
+      setPoin(oldPoin);
+  }
+
 
 
     return (
@@ -224,10 +231,35 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
             </div>
             {
                 step===1?(
-                    <Nominal
-                        min_nominal={min_nominal}
-                        handleClick={(nominal)=>doNominal(nominal)}
-                    />
+                    <div className="h-auto mt-16 w-full flex flex-row md:flex-col justify-center items-center mb-20">
+                        <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  md:mx-24">
+                            <div className="py-8 px-8">
+                                <div className="rounded shadow border p-6 w-full">
+                                    
+                                    <p className="text-gray-200 text-sm text-center">poin anda</p>
+                                    <p className="text-gray-200 text-3xl text-center">{oldPoin}</p>
+                                    <button onClick={(event)=>{
+                                        event.preventDefault();
+                                        handleOldPoin();
+                                    }} className="w-full  text-gray-700 dark:text-gray-200 px-8 py-2 mt-2 border">
+                                        tarik semua poin
+                                    </button>
+                                </div>
+                                <h6 className="mt-8 text-yellow-400 text-sm">poin:</h6>
+                                <input 
+                                    type="number" 
+                                    className="pb-2 pt-3 w-full text-center focus:outline-none border-b-4 border-dashed border-old-gold text-3xl  bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200  p-8" 
+                                    autoFocus 
+                                    onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
+                                    value={poin}
+                                    />
+                                <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Deposit: 50000 Poin</h6>
+                                <button onClick={(event)=>{event.preventDefault();handleCheck();}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
+                                    Lanjut
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     
                 ):step===2?(
                     <ListBank dataBank={(dataBank as Array<iBankMember>)} handleClick={(datum:iBankMember)=>getBank(datum)} goBack={(val:number)=>doStep(val)}/>
@@ -235,7 +267,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
                     <Preview
                         bank={bank?.bank_name}
                         atas_nama={bank?.acc_name}
-                        nominal={`${nominal}`}
+                        nominal={`${poin}`}
                         admin="0"
                         total={""}
                         handleClick={doVerif}
@@ -255,11 +287,13 @@ export async function getServerSideProps(ctx:NextPageContext) {
     const cookies = nookies.get(ctx)
     if(!cookies._prowara){
         return {
-        redirect: {
-            destination: '/auth/login',
-            permanent: false,
-        },
+          redirect: {
+              destination: '/auth/login',
+              permanent: false,
+          },
         }
+    }else{
+        Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
 
     // GET BANK DATA
@@ -267,11 +301,14 @@ export async function getServerSideProps(ctx:NextPageContext) {
     try {
         const getBank = await Api.get(Api.apiUrl+"bank_member?perpage=20")
         if(getBank.status===200){
-        dataBank=getBank.data.result.data;
+            dataBank=getBank.data.result.data;
+        
         }else{
-        dataBank=[];
+            dataBank=[];
         }
-    } catch (err) {}
+    } catch (err) {
+        console.log("CONSOLE",err);
+    }
     return { 
         props:{
             dataBank
