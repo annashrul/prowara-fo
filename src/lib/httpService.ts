@@ -14,7 +14,7 @@ export default {
   delete: axios.delete,
   // apiUrl: "http://192.168.100.10:6704/",
   // apiClient: "http://localhost:6704/",
-  apiUrl: "http://localhost:6704/",
+  apiUrl: "http://192.168.100.10:6704/",
   apiClient: "http://192.168.100.10:6704/"
   // apiClient: "https://api.prowara.com/"
 };
