@@ -6,24 +6,21 @@ import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import Api from 'lib/httpService'
-import {iPaket, iOpt, iBankPt, iMemberUid} from 'lib/interface'
+import {iMemberUid} from 'lib/interface'
 import Helper from 'lib/helper'
-import Nominal from 'components/deposit/nominal';
-import ListBank from 'components/deposit/ListBank';
-import Preview from 'components/deposit/preview';
 import Modal from 'components/pin'
 import Step1 from 'components/transfer/poin/step1';
 import Step2 from 'components/transfer/poin/step2';
+import { handleGet, handlePost } from 'lib/handleAction';
 
 interface iTfPoin{}
 
 const TransferPoin: React.FC<iTfPoin> =()=> {
     const { addToast } = useToasts();
     const router = useRouter();
-    const min_nominal=50;
+    const min_nominal=10;
     const [step,setStep]=useState(1);
     const [nominal,setNominal]=useState(0);
-    const [id,setId]=useState('');
     const [user,setUser]=useState<iMemberUid>();
     const [openPin,setOpenPin]=useState(false);
 
@@ -41,54 +38,14 @@ const TransferPoin: React.FC<iTfPoin> =()=> {
 
 
     const checkMember=async(userId:string)=>{
-        Swal.fire({
-            title: 'Silahkan tunggu...',
-            html: "Memproses permintaan.",
-            willOpen: () => {
-                Swal.showLoading()
-            },
-            showConfirmButton:false,
-            willClose: () => {}
-      })
-
-      try {
-        const submitRegister=await Api.get(Api.apiClient+`member/uid/${userId}`);
-        setTimeout(
-            function () {
-                Swal.close();
-                if(submitRegister.data.status==='success'){
-                    const datum = submitRegister.data.result;
-                    
-                    setUser(datum);
-                    setStep(step+1);
-                }
-          },800)
-      } catch (err) {
-        setTimeout(
-            function () {
-                Swal.close()
-                // save token to localStorage
-                if (err.message === 'Network Error') {
-                  addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                  })
-                }else{
-                    addToast(err.response.data.msg, {
-                        appearance: 'error',
-                        autoDismiss: true,
-                      })
-                }
-          },800)
-      
-      }
+        await handleGet(Api.apiClient+`member/uid/${userId}`,(datum)=>{
+            setUser(datum);
+            setStep(step+1);
+        });
     }
 
 
-    const getBank=(datum:iBankPt)=>{
-        setBank(datum)
-        setStep(step+1);
-    }
+    
 
     const doStep=(step:number)=>{
         setStep(step);
@@ -112,77 +69,20 @@ const TransferPoin: React.FC<iTfPoin> =()=> {
     }
 
     const doCheckout= async (pin:string)=>{
-      Swal.fire({
-            title: 'Silahkan tunggu...',
-            html: "Memproses permintaan.",
-            willOpen: () => {
-                Swal.showLoading()
-            },
-            showConfirmButton:false,
-            willClose: () => {}
-      })
-
-      try {
         const checkoutData={
-          member_pin:pin,
-          penerima:user?.id,
-          amount:nominal
+            member_pin:pin,
+            penerima:user?.id,
+            amount:nominal
         }
-        
-        const submitRegister=await Api.post(Api.apiClient+'transaction/transfer', checkoutData)
-
-        setTimeout(
-            function () {
-                Swal.close()
-                const datum = submitRegister.data;
-                if(datum.status==='success'){
-                  addToast("Berhasil memproses permintaan.", {
-                    appearance: 'success',
-                    autoDismiss: true,
-                  })
-                  setOpenPin(false);
-                  //  Go to invoice page
-                  router.push(`/`);
-                }else{
-                  Swal.fire({
-                            title   : 'Perhatian !!!',
-                            html    :`${datum.msg}`,
-                            icon    : 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor  : '#3085d6',
-                            confirmButtonText   : `Oke`,
-                        }).then(async (result) => {
-                            if (result.value) {
-                                setOpenPin(false);
-                                //  Go to invoice page
-                                router.push(`/`);
-                            }
-                        })
-                }
-          },800)
-      } catch (err) {
-
-        setTimeout(
-            function () {
-                Swal.close()
-                // save token to localStorage
-                if (err.message === 'Network Error') {
-                  addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                  })
-                    
-                }else{
-                    addToast(err.response.data.msg, {
-                        appearance: 'error',
-                        autoDismiss: true,
-                      })
-      
-                }
-          },800)
-      
-      }
-  }
+        await handlePost(Api.apiClient+'transaction/transfer', checkoutData,(isStatus,msg)=>{
+            if(!isStatus){
+                setOpenPin(false);
+                router.push(`/`);
+            }else{
+                setOpenPin(false);
+            }
+        })
+    }
 
     return (
         <Layout title="Transfer Poin">

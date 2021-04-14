@@ -11,80 +11,46 @@ import Helper from 'lib/helper'
 import Modal from 'components/pin'
 import Step1 from 'components/transfer/pin/step1';
 import Step2 from 'components/transfer/pin/step2';
+import { handleGet, handlePost } from 'lib/handleAction';
 
 interface iTfPin{}
 
 const TransferPin: React.FC<iTfPin> =()=> {
     const { addToast } = useToasts();
     const router = useRouter();
-    const min_nominal=50;
+    const min_nominal=0;
     const [step,setStep]=useState(1);
     const [nominal,setNominal]=useState(0);
     const [user,setUser]=useState<iMemberUid>();
     const [openPin,setOpenPin]=useState(false);
 
     const doNominal=(nominal:number,userId:string)=>{
-        if(nominal===0||isNaN(nominal)) addToast("Nominal tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
-        else if(nominal<min_nominal) addToast(`Minimal deposit adalah ${Helper.numFormat(`${min_nominal}`)}`, {appearance: 'warning',autoDismiss: true});
-        else if(userId==='') addToast(`User ID tidak boleh kosong!`, {appearance: 'warning',autoDismiss: true});
+        if(nominal===0||isNaN(nominal)) {
+            addToast("Nominal tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
+        }
+        else if(nominal<min_nominal) {
+            addToast(`Minimal deposit adalah ${Helper.numFormat(`${min_nominal}`)}`, {appearance: 'warning',autoDismiss: true});
+        }
+        else if(userId==='') {
+            addToast(`User ID tidak boleh kosong!`, {appearance: 'warning',autoDismiss: true});
+        }
         else{
             setNominal(nominal);
             checkMember(userId);
         }
+           
     }
-
-    
 
 
     const checkMember=async(userId:string)=>{
-        Swal.fire({
-            title: 'Silahkan tunggu...',
-            html: "Memproses permintaan.",
-            willOpen: () => {
-                Swal.showLoading()
-            },
-            showConfirmButton:false,
-            willClose: () => {}
-      })
-
-      try {
-        const submitRegister=await Api.get(Api.apiClient+`member/uid/${userId}`);
-        setTimeout(
-            function () {
-                Swal.close();
-                if(submitRegister.data.status==='success'){
-                    const datum = submitRegister.data.result;
-                    
-                    setUser(datum);
-                    setStep(step+1);
-                }
-          },800)
-      } catch (err) {
-        setTimeout(
-            function () {
-                Swal.close()
-                // save token to localStorage
-                if (err.message === 'Network Error') {
-                  addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                  })
-                }else{
-                    addToast(err.response.data.msg, {
-                        appearance: 'error',
-                        autoDismiss: true,
-                      })
-                }
-          },800)
-      
-      }
+        await handleGet(Api.apiClient+`member/uid/${userId}`,(datum)=>{
+            setUser(datum);
+            setStep(step+1);
+        });
     }
 
 
-    const getBank=(datum:iBankPt)=>{
-        setBank(datum)
-        setStep(step+1);
-    }
+    
 
     const doStep=(step:number)=>{
         setStep(step);
@@ -108,84 +74,92 @@ const TransferPin: React.FC<iTfPin> =()=> {
     }
 
     const doCheckout= async (pin:string)=>{
-      Swal.fire({
-            title: 'Silahkan tunggu...',
-            html: "Memproses permintaan.",
-            willOpen: () => {
-                Swal.showLoading()
-            },
-            showConfirmButton:false,
-            willClose: () => {}
-      })
-
-      try {
         const checkoutData={
-          member_pin:pin,
-          penerima:user?.id,
-          amount:nominal
+            pin_member:pin,
+            uid:user?.id,
+            qty:nominal
         }
-        
-        const submitRegister=await Api.post(Api.apiClient+'transaction/transfer', checkoutData)
+        await handlePost(Api.apiClient+'pin/transfer',checkoutData,(isStatus,msg)=>{
+            if(!isStatus){
+                setOpenPin(false);
+                router.push(`/`);
+            }else{
+                setOpenPin(false);
+            }
+        })
 
-        setTimeout(
-            function () {
-                Swal.close()
-                const datum = submitRegister.data;
-                if(datum.status==='success'){
-                  addToast("Berhasil memproses permintaan.", {
-                    appearance: 'success',
-                    autoDismiss: true,
-                  })
-                  setOpenPin(false);
-                  //  Go to invoice page
-                  router.push(`/`);
-                }else{
-                  Swal.fire({
-                            title   : 'Perhatian !!!',
-                            html    :`${datum.msg}`,
-                            icon    : 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor  : '#3085d6',
-                            confirmButtonText   : `Oke`,
-                        }).then(async (result) => {
-                            if (result.value) {
-                                setOpenPin(false);
-                                //  Go to invoice page
-                                router.push(`/`);
-                            }
-                        })
-                }
-          },800)
-      } catch (err) {
+    //   Swal.fire({
+    //         title: 'Silahkan tunggu...',
+    //         html: "Memproses permintaan.",
+    //         willOpen: () => {
+    //             Swal.showLoading()
+    //         },
+    //         showConfirmButton:false,
+    //         willClose: () => {}
+    //   })
 
-        setTimeout(
-            function () {
-                Swal.close()
-                // save token to localStorage
-                if (err.message === 'Network Error') {
-                  addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                  })
+    //   try {
+    //     const submitRegister=await Api.post(Api.apiClient+'pin/transfer', checkoutData)
+
+    //     setTimeout(
+    //         function () {
+    //             Swal.close()
+    //             const datum = submitRegister.data;
+    //             if(datum.status==='success'){
+    //               addToast("Berhasil memproses permintaan.", {
+    //                 appearance: 'success',
+    //                 autoDismiss: true,
+    //               })
+    //               setOpenPin(false);
+    //               //  Go to invoice page
+    //               router.push(`/`);
+    //             }else{
+    //               Swal.fire({
+    //                         title   : 'Perhatian !!!',
+    //                         html    :`${datum.msg}`,
+    //                         icon    : 'warning',
+    //                         showCancelButton: false,
+    //                         confirmButtonColor  : '#3085d6',
+    //                         confirmButtonText   : `Oke`,
+    //                     }).then(async (result) => {
+    //                         if (result.value) {
+    //                             setOpenPin(false);
+    //                             //  Go to invoice page
+    //                             router.push(`/`);
+    //                         }
+    //                     })
+    //             }
+    //       },800)
+    //   } catch (err) {
+
+    //     setTimeout(
+    //         function () {
+    //             Swal.close()
+    //             // save token to localStorage
+    //             if (err.message === 'Network Error') {
+    //               addToast("Tidak dapat tersambung ke server!", {
+    //                 appearance: 'error',
+    //                 autoDismiss: true,
+    //               })
                     
-                }else{
-                    addToast(err.response.data.msg, {
-                        appearance: 'error',
-                        autoDismiss: true,
-                      })
+    //             }else{
+    //                 addToast(err.response.data.msg, {
+    //                     appearance: 'error',
+    //                     autoDismiss: true,
+    //                   })
       
-                }
-          },800)
+    //             }
+    //       },800)
       
-      }
+    //   }
   }
 
     return (
-        <Layout title="Transfer Poin">
+        <Layout title="Transfer Pin">
             <div className="container mt-6 lg:px-6 md:px-3">
                 <div className="flex justify-between">
                     <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
-                        Transfer Poin
+                        Transfer Pin
                     </h2>
                 </div>
             </div>

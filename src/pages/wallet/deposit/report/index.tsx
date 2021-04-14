@@ -11,12 +11,12 @@ import moment from 'moment'
 import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import { } from '@windmill/react-ui'
+import { handleGet } from "lib/handleAction";
 
 interface iReportInvestment {}
 
 
 const ReportDeposit: React.FC<iReportInvestment> = () =>{
-    const { addToast } = useToasts();
     const [arrDatum,setArrDatum]= useState<Array<iDeposit>>([]);
     const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
@@ -25,49 +25,14 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
     }, []);
    
     const handleLoadData = async(val:string)=>{
-        NProgress.start();
-        try {
-            let url = Api.apiClient+`transaction/deposit`;
-            if(val!==null){
-                url+=`?${val}`;
-            }
-            const getData=await Api.get(url)
-            NProgress.done()
-            if(getData.data.status==='success'){
-                const datum = getData.data.result;
-                setArrDatum(datum.data);
-                setArrData(datum);
-            }else{
-                addToast("Kesalahan pada server.", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                })
-            }
-        
-        } catch (err) {
-            NProgress.done()
-            // save token to localStorage
-            if (err.message === 'Network Error') {
-                addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                })
-                
-            }else{
-                if(err.response.data.msg!==undefined){
-                addToast(err.response.data.msg, {
-                    appearance: 'error',
-                    autoDismiss: true,
-                    })
-                }else{
-                addToast("Kesalahan pada server.", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                    })
-                }
-    
-            }
+        let url = Api.apiClient+`transaction/deposit`;
+        if(val!==null){
+            url+=`?${val}`;
         }
+        await handleGet(url,(datum)=>{
+            setArrDatum(datum.data);
+            setArrData(datum);
+        });
     }
 
     const handleSearch=()=>{
@@ -126,7 +91,7 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
                                     }
                                     return (
                                         <tr key={i} className={i%2===0?`bg-gray-700`:''}>
-                                            <td className="py-3 px-6 text-center">{i+1 + (1 * (arrData===undefined?0:arrData.current_page-1))}</td>
+                                            <td className="py-3 px-6 text-center">{i+1 + (10 * (arrData===undefined?0:arrData.current_page-1))}</td>
                                             <td className="py-3 px-6 text-left text-sm"><span className="text-white">{item.kd_trx}</span> <br/> {item.fullname}</td>
                                             <td className="py-3 px-6 text-left text-sm">{item.bank_name} <br/>{item.acc_name} - ( <span className="text-sm">{item.acc_no}</span> )</td>
                                             <td className="py-3 px-6 text-right text-old-gold-700">{Helper.numFormat(item.amount)}</td>
