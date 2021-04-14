@@ -166,3 +166,10 @@ export interface iPagin{
       saldo_awal:number;
     }
 }
+
+export interface iWidget{
+  total_pin: number;
+  saldo: number;
+  modal: number;
+  sponsor: number;
+}

@@ -120,7 +120,6 @@ export async function getServerSideProps(ctx:NextPageContext) {
             datum=[];
         }
     } catch (err) {
-      console.log(err.response.data)
     }
 
 

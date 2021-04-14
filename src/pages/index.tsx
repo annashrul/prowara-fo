@@ -7,7 +7,8 @@ import Berita from 'components/Dashboard/Berita'
 import Widget from 'components/Dashboard/Card';
 import Slot from 'components/Dashboard/Slot';
 import Api from 'lib/httpService';
-import Helper from 'lib/helper'
+import Helper from 'lib/helper';
+import {iWidget} from 'lib/interface';
 
 interface iDashboard{
   widget:iWidget;
@@ -24,7 +25,7 @@ const Dashboard: React.FC<iDashboard> = ({widget}) => {
           <Widget
             c1={`${Helper.numFormat(`${widget.saldo}`)}`}
             c2={widget.total_pin + " Tiket"}
-            c3={`${widget.paket_berjalan}`}
+            c3={`${Helper.numFormat(`${widget.modal}`)}`}
             c4={`${widget.sponsor}`}
           />
         
@@ -38,12 +39,6 @@ const Dashboard: React.FC<iDashboard> = ({widget}) => {
   );
 }
 
-interface iWidget{
-  total_pin: number;
-  saldo: number;
-  paket_berjalan: number;
-  sponsor: number;
-}
 
 export async function getServerSideProps(ctx:NextPageContext) {
   // Parse

@@ -45,16 +45,12 @@ const Cards: React.FC<iCards> = ({bank,atas_nama,nominal,admin,total,goBack,hand
                                 </p>
                                 <p className="text-old-gold font-bold">{admin}</p>
                             </div>
-                            {
-                                total!==''?(
-                                    <div className="flex justify-between px-2 py-2">
-                                        <p className="flex text-gray-700 dark:text-gray-200">
-                                            Total Transfer
-                                        </p>
-                                        <p className="text-old-gold font-bold">{total}</p>
-                                    </div>
-                                ):null
-                            }
+                            <div className="flex justify-between px-2 py-2">
+                                <p className="flex text-gray-700 dark:text-gray-200">
+                                    Total Transfer
+                                </p>
+                                <p className="text-old-gold font-bold">{Helper.rupiahFormat(`${total}`)}</p>
+                            </div>
                         </div>
                         <button onClick={(event)=>{event.preventDefault();goBack(2);}} className="w-full md:w-1/2 bg-base-red-600 hover:bg-base-red-700  text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
                             Kembali

@@ -36,7 +36,6 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
             if(getData.data.status==='success'){
                 const datum = getData.data.result;
                 setArrDatum(datum.data);
-                console.log(datum);
                 setArrData(datum);
             }else{
                 addToast("Kesalahan pada server.", {
@@ -72,7 +71,6 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
     }
 
     const handleSearch=()=>{
-        console.log(any);
         handleLoadData(`page=1&q=${btoa(any)}`);
     }
     const handlePage=(pagenum:number)=>{

@@ -6,13 +6,14 @@ import Nomine from 'components/Common/nominal'
 
 interface iCards {
     handleClick:(nominal:number)=>void;
+    min_nominal:number;
 }
-const Cards: React.FC<iCards> = ({handleClick}) => {
+const Cards: React.FC<iCards> = ({handleClick,min_nominal}) => {
     const [poin,setPoin] = React.useState(0)
     const cbPoin=(num:string)=>{
         setPoin(parseInt(num));
     }
-    const nominalPoin=['100000','200000','300000','400000','500000','600000']
+    const nominalPoin=['50','100','200','250','300','500']
     return (
         <>
             <div className="h-auto mt-16 w-full flex flex-row md:flex-col justify-center items-center mb-20">
@@ -34,7 +35,7 @@ const Cards: React.FC<iCards> = ({handleClick}) => {
                             onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
                             value={poin}
                             />
-                        <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Deposit: 50000 Poin</h6>
+                        <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Deposit: {min_nominal} Poin</h6>
                         <button onClick={(event)=>{event.preventDefault();handleClick(poin);}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
                             Lanjut
                         </button>

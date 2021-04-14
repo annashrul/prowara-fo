@@ -75,7 +75,6 @@ const Invoice: React.FC<iInvoice> =({dataBank,datum})=> {
             function () {
                 Swal.close()
                 // save token to localStorage
-                console.log(err.response.data);
                 if (err.message === 'Network Error') {
                   addToast("Tidak dapat tersambung ke server!", {
                     appearance: 'error',
@@ -232,14 +231,12 @@ export async function getServerSideProps(ctx:NextPageContext) {
     let datum=[];
     try {
         const getDetail = await Api.get(Api.apiUrl+"transaction/paket/"+decodeKode)
-        console.log("getDetail",getDetail);
         if(getDetail.status===200){
             datum=getDetail.data.result;
         }else{
             datum=[];
         }
     } catch (err) {
-      console.log(err)
     }
 
      // GET BANK DATA

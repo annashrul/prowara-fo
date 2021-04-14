@@ -2,7 +2,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const coo: string=Cookies.get('_prowara')!;
-console.log("COKIES",coo);
 if(coo!==undefined) {
   axios.defaults.headers.common["Authorization"] = atob(coo);
 }
@@ -17,5 +16,5 @@ export default {
   // apiClient: "http://localhost:6704/",
   apiUrl: "http://192.168.100.10:6704/",
   apiClient: "http://192.168.100.10:6704/"
-  // apiClient: "http://api.prowara.com/"
+  // apiClient: "https://api.prowara.com/"
 };

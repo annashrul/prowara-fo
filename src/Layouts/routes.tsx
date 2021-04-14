@@ -23,6 +23,17 @@ const Routes=[
         icon: Forms
     },
     {
+      
+        link:'/wallet/deposit',
+        title:'Deposit',
+        icon: Forms
+    },
+    {
+        link:'/wallet/withdrawal',
+        title:'Penarikan',
+        icon: Forms
+    },
+    {
         link:'/transaksi',
         title:'Riwayat Transaksi',
         icon: Forms
@@ -33,18 +44,8 @@ const Routes=[
         icon: Forms
     },
     {
-        link:'/wallet/deposit',
-        title:'Deposit',
-        icon: Forms
-    },
-    {
         link:'/wallet/deposit/report',
         title:'Riwayat Deposit',
-        icon: Forms
-    },
-    {
-        link:'/wallet/withdrawal',
-        title:'Penarikan',
         icon: Forms
     },
     {
