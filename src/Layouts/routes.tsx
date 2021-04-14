@@ -18,6 +18,11 @@ const Routes=[
         icon: Forms
     },
     {
+        link:'/order/tiket',
+        title:'Order Tiket',
+        icon: Forms
+    },
+    {
         link:'/transaksi',
         title:'Riwayat Transaksi',
         icon: Forms
