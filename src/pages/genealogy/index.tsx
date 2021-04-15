@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
@@ -7,91 +7,39 @@ import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import ProfileCard from "components/genealogy/ProfileCard";
 import profiles from "./data.json";
+import { arrayToTree } from "performant-array-to-tree";
+import { useToasts } from "react-toast-notifications";
 interface iIndexGenealogy {
   // profiles: Array<iProfiles>;
 }
 
 
+
+// const treeItems = arrayToTree(JSON.parse(JSON.stringify(array)),{ dataField: null, childrenField: "children"  });
+// console.log("treeItems",treeItems);
+// console.log("profiles",profiles);
+
 const Index: React.FC<iIndexGenealogy> = () =>{
-    // const { addToast } = useToasts();
-    // const [datumInvestment,setDatumInvestment]= useState<Array<iInvestment>>([]);
-    // const [arrData,setArrData]= useState({});
-    // const [any,setAny]=useState("");
-    // useEffect(() => {
-    //     console.log("componentDidMount")
-    //     handleLoadData("page=1");
-    // }, []);
-
-   
-    // const handleLoadData = async(val:string)=>{
-    //     NProgress.start();
-    //     try {
-    //         let url = Api.apiClient+`transaction/history/investment`;
-    //         if(val!==null){
-    //             url+=`?${val}`;
-    //         }
-    //         const getData=await Api.get(url)
-    //         NProgress.done()
-    //         if(getData.data.status==='success'){
-    //             const datum = getData.data.result;
-    //             setDatumInvestment(datum.data);
-    //             setArrData({
-    //                 current_page:datum.current_page,
-    //                 total:datum.total,
-    //                 per_page:datum.per_page,
-    //                 summary:{
-    //                     trx_in:datum.summary.trx_in,
-    //                     trx_out:datum.summary.trx_out,
-    //                     saldo_awal: datum.summary.saldo_awal
-    //                 }
-    //             });
-    //         }else{
-    //             addToast("Kesalahan pada server.", {
-    //                 appearance: 'error',
-    //                 autoDismiss: true,
-    //             })
-    //         }
-        
-    //     } catch (err) {
-    //         NProgress.done()
-    //         // save token to localStorage
-    //         if (err.message === 'Network Error') {
-    //             addToast("Tidak dapat tersambung ke server!", {
-    //                 appearance: 'error',
-    //                 autoDismiss: true,
-    //             })
-                
-    //         }else{
-    //             if(err.response.data.msg!==undefined){
-    //             addToast(err.response.data.msg, {
-    //                 appearance: 'error',
-    //                 autoDismiss: true,
-    //                 })
-    //             }else{
-    //             addToast("Kesalahan pada server.", {
-    //                 appearance: 'error',
-    //                 autoDismiss: true,
-    //                 })
-    //             }
-    
-    //         }
-    //     }
-    // }
-
-    // const handleSearch=()=>{
-    //     console.log(any);
-    //     handleLoadData(`page=1&q=${btoa(any)}`);
-    // }
-    // const handlePage=(pagenum:string)=>{
-    //     console.log(pagenum);
-    //     if(any!==''){
-    //         handleLoadData(`page=${pagenum}&q=${btoa(any)}`);
-    //     }
-    // }
-
-    // let totTrxIn=0;
-    // let totTrxOut=0;
-    // console.log(arrData);
+  let array = 
+[
+  {id:1 ,parentId : null ,name:'Name 1', role:'ROLE 1'},
+  {id:2 ,parentId : 1 ,name:'Name 2', role:'ROLE 2'},
+  {id:3 ,parentId : 1 ,name:'Name 3', role:'ROLE 3'},
+  {id:8 ,parentId : 1 ,name:'Name 8', role:'ROLE 8'}
+]
+;
+  const [theArrayOfObjects, setTheArrayOfObjects] = useState(array);
+  const { addToast } = useToasts();
+  const treeData = arrayToTree(theArrayOfObjects,{ dataField: null, childrenField: "children"  });
+    const doMore = (val:string)=>{
+      console.log(val);
+      addToast(val, {appearance: 'warning',autoDismiss: true});
+      // array.push({id:parseInt(val,10)+1 ,parentId : parseInt(val,10) ,name:'Name '+val, role:'ROLE '+val});
+  
+      setTheArrayOfObjects(prevState => [...prevState, {id:parseInt(val,10)+1 ,parentId : parseInt(val,10) ,name:'Name '+val, role:'ROLE '+val}]);
+      console.log(theArrayOfObjects);
+      console.log("arrayToTree(theArrayOfObjects,{ dataField: null, childrenField: 'children'  })",arrayToTree(theArrayOfObjects,{ dataField: null, childrenField: "children"  }));
+    }
     return (
       <Layout title="Genealogy">
         <div className="container mt-6 lg:px-6 md:px-3 mx-auto xs:px-2 sm:px-2 grid mb-20">
@@ -103,14 +51,15 @@ const Index: React.FC<iIndexGenealogy> = () =>{
           <div className="flex flex-col justify-center items-center">
             <div className="">
               <div className="items-center justify-center flex">
-                {profiles && profiles.map((profile, idX) => (
+                {treeData && treeData.map((res, idX) => (
                   <ProfileCard
                     key={idX}
-                    {...profile}
-                    id={profile.id}
-                    name={profile.name}
-                    role={profile.role}
-                    profiles={JSON.parse(JSON.stringify(profile.profiles))}
+                    {...res}
+                    id={parseInt(String(res.id),10)}
+                    name={res.name}
+                    role={res.role}
+                    res={res.children}
+                    callBack={(val)=>doMore(val)}
                      />
                 ))}
               </div>
