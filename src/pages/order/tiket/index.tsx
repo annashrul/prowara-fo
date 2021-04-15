@@ -9,7 +9,6 @@ import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import { } from '@windmill/react-ui'
 import { useRouter } from 'next/router'
-import Swal from 'sweetalert2'
 import Modal from 'components/pin'
 import CardBank from 'components/payment/CardBank';
 import { handleGet, handlePost } from "lib/handleAction";
@@ -25,7 +24,7 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
     const [bank,setBank]=useState('-');
     const [step,setStep]=useState(1);
     const [qty,setQty] = React.useState(0);
-    const [no,setNo] = React.useState(0)
+    const [no,setNo] = React.useState(0);
     const [openPin,setOpenPin]=useState(false);
      useEffect(() => {
     }, []);
@@ -54,7 +53,7 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
    
 
     const doVerif=()=>{
-        Helper.mySwalWithCallback('Pastikan data telah sesuai.',()=>{setOpenPin(true);})
+        setOpenPin(true);
     }
 
     const doCheckout= async (pin:string)=>{

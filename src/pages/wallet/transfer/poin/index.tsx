@@ -52,9 +52,8 @@ const TransferPoin: React.FC<iTfPoin> =()=> {
     }
 
     const doVerif=()=>{
-        Helper.mySwalWithCallback('Pastikan data telah sesuai.',()=>{
-            setOpenPin(true);
-        });
+        setOpenPin(true);
+
     }
 
     const doCheckout= async (pin:string)=>{

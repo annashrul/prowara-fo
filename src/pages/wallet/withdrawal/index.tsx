@@ -2,11 +2,10 @@ import React,{useState,useEffect} from 'react';
 import Layout from 'Layouts'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
+import Api from 'lib/httpService'
 import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
-import Swal from 'sweetalert2'
 
-import Api from 'lib/httpService'
 import {iBankMember} from 'lib/interface'
 import Helper from 'lib/helper'
 import ListBank from 'components/withdrawal/listBank';
@@ -50,8 +49,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
     }
 
     const doVerif=()=>{
-        Helper.mySwalWithCallback('Pastikan data telah sesuai.',()=>{setOpenPin(true);})
-        
+        setOpenPin(true);
     }
 
     const doCheckout= async (pin:string)=>{

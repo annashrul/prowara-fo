@@ -52,9 +52,7 @@ const TransferPin: React.FC<iTfPin> =()=> {
     }
 
     const doVerif=()=>{
-        Helper.mySwalWithCallback('Pastikan data telah sesuai.',()=>{
-            setOpenPin(true);
-        });
+        setOpenPin(true);
         
     }
 

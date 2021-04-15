@@ -3,18 +3,23 @@ import Layout from 'Layouts'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
 
+import Report from 'components/Dashboard/report'
 import Berita from 'components/Dashboard/Berita'
 import Widget from 'components/Dashboard/Card';
 import Slot from 'components/Dashboard/Slot';
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import {iWidget} from 'lib/interface';
+import {iContent, iTransaksi, iWidget} from 'lib/interface';
+import { handleGet } from 'lib/handleAction';
 
 interface iDashboard{
   widget:iWidget;
+  berita:Array<iContent>;
+  report:Array<iTransaksi>;
 }
 
-const Dashboard: React.FC<iDashboard> = ({widget}) => {
+const Dashboard: React.FC<iDashboard> = ({widget,berita,report}) => {
+
   return (
       <Layout title="Dashboard">
         <div className="container mt-6 lg:px-6 md:px-3 mx-auto xs:px-2 sm:px-2 grid mb-20">
@@ -33,7 +38,10 @@ const Dashboard: React.FC<iDashboard> = ({widget}) => {
           <Slot/>
 
           {/* BOTTOM SECTION */}
-          <Berita/>
+          <div className="flex gap-4">
+            <Berita dataBerita={berita}/>
+            <Report dataReport={report}/>
+          </div>
         </div>
       </Layout>
   );
@@ -58,7 +66,6 @@ export async function getServerSideProps(ctx:NextPageContext) {
   let datum=[];
   try {
     const getData = await Api.get(Api.apiUrl+"site/memberarea")
-
     if(getData.status===200){
       datum=getData.data.result;
     }else{
@@ -66,13 +73,24 @@ export async function getServerSideProps(ctx:NextPageContext) {
     }
   } catch (err) {}
 
+  let berita:any=[];
+  await handleGet(Api.apiUrl+'content/berita',(res)=>{
+    berita=res.data;
+  },false)
+
+  let report:any=[];
+  await handleGet(Api.apiUrl+'transaction/history?page=1',(res)=>{
+    report=res.data;
+  },false)
 
   // Destroy
   // nookies.destroy(ctx, 'cookieName')
 
   return { props:{
       cookies,
-      widget:datum
+      widget:datum,
+      berita,
+      report
     }
   }
 }

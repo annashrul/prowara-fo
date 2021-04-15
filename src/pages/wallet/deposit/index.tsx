@@ -48,7 +48,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
     }
 
     const doVerif=()=>{
-        Helper.mySwalWithCallback(`Pastikan data telah sesuai.`,()=>{setOpenPin(true);})
+        setOpenPin(true);
     }
 
     const doCheckout= async (pin:string)=>{
