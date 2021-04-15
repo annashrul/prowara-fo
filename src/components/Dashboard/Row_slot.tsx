@@ -60,7 +60,7 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                     {datum?.contract} Hari
                 </td>
                 <td className="px-4 py-3 text-sm">
-                    {Helper.numFormat(`${parseFloat(datum?.amount)*(parseFloat(datum?.daily_earning)/100)}`)}
+                    {parseFloat(datum?.amount)*(parseFloat(datum?.daily_earning)/100)} Poin
                 </td>
                 <td className="px-4 py-3 text-sm">
                     {Helper.formatDate(`${datum?.start_date}`,false)}
@@ -78,8 +78,8 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                                 <span 
                                     className="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100" 
                                     onClick={(event)=>{event.preventDefault();handleToast();}}>
-                                <abbr title="Transaksi akan berjalan sesuai dengan tanggal dimulai.">Pending<i className="fa fa-warning"/></abbr>
-                            </span>
+                                    <abbr title="Transaksi akan berjalan sesuai dengan tanggal dimulai.">Pending<i className="fa fa-warning"/></abbr>
+                                </span>
                         ):datum.status===2?(
                             <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
                                 Selesai

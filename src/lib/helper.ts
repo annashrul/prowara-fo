@@ -5,7 +5,6 @@ import Swal from 'sweetalert2'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import Api from 'lib/httpService'
-import Router from 'next/router'
 
 const decode=(str:string)=>{return atob(str);}
 

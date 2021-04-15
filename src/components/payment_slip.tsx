@@ -19,6 +19,7 @@ const Otp: React.FC<iOtp> = ({open,closeModal,callBack}) => {
     if(images==='-'){
       addToast("Silahkan pilih file terlebih dahulu.", {appearance: 'error',autoDismiss: true,})
     }else{
+      console.log(images);
       callBack(images);
     }
    
@@ -39,7 +40,7 @@ const Otp: React.FC<iOtp> = ({open,closeModal,callBack}) => {
                 <h3 className="text-center mt-3 mb-6">Untuk mempercepat proses verifikasi, silahkan upload bukti transfer anda.</h3>
             </div>
             <File64
-              maxSize={2000}
+              maxSize={12000}
               fileType= 'png,jpg'
               ids='payment_slip'
               showPreview={true}

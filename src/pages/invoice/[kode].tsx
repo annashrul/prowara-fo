@@ -1,10 +1,11 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import Layout from 'Layouts'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import { Card, CardBody, Button } from '@windmill/react-ui'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2';
+import { useToasts } from 'react-toast-notifications'
 
 import Api from 'lib/httpService'
 import Helper from 'lib/helper';
@@ -19,26 +20,156 @@ interface iInvoice{
 const Invoice: React.FC<iInvoice> =({kode,datum})=> {
   const router = useRouter();
   const [open,setOpen]=useState(false);
-
+  const { addToast } = useToasts();
   useEffect(() => {
-      if (Helper.isEmptyObj(datum)) {
-        Swal.fire({
-            title   : 'Perhatian!',
-            html    :`Invoice dengan nomor #${kode} tidak ditemukan atau telah selesai.`,
-            icon    : 'warning',
-            showCancelButton: false,
-            confirmButtonColor  : '#D4AF37',
-            confirmButtonText   : `Oke`,
-        }).then(async (result) => {
-            if (result.value) {
-              router.push('/')
-            }
-        })
-      }
-    }, []);
+    if (Helper.isEmptyObj(datum)) {
+      Swal.fire({
+          title   : 'Perhatian!',
+          html    :`Invoice dengan nomor #${kode} tidak ditemukan atau telah selesai.`,
+          icon    : 'warning',
+          showCancelButton: false,
+          confirmButtonColor  : '#D4AF37',
+          confirmButtonText   : `Oke`,
+      }).then(async (result) => {
+          if (result.value) {
+            router.push('/')
+          }
+      })
+    }
+  }, []);
+
   const doUpload=async(img:string)=>{
-  
+    Swal.fire({
+            title: 'Silahkan tunggu...',
+            html: "Memproses permintaan.",
+            willOpen: () => {
+                Swal.showLoading()
+            },
+            showConfirmButton:false,
+            willClose: () => {}
+      })
+
+      try {
+        
+        const doUpload=await Api.put(Api.apiClient+`transaction/deposit/${btoa(kode)}`, {bukti:img})
+
+        setTimeout(
+            function () {
+                Swal.close()
+                const datum = doUpload.data;
+                if(datum.status==='success'){
+                  addToast("Berhasil memproses permintaan.", {
+                    appearance: 'success',
+                    autoDismiss: true,
+                  })
+                  setOpen(false);
+                  //  Go to invoice page
+                  router.reload();
+                }else{
+                  addToast(datum.msg, {
+                    appearance: 'error',
+                    autoDismiss: true,
+                  })
+                }
+          },800)
+      } catch (err) {
+        setTimeout(
+            function () {
+                Swal.close()
+                // save token to localStorage
+                if (err.message === 'Network Error') {
+                  addToast("Tidak dapat tersambung ke server!", {
+                    appearance: 'error',
+                    autoDismiss: true,
+                  })
+                    
+                }else{
+                  if(err.response.data.msg!==undefined){
+                    addToast(err.response.data.msg, {
+                        appearance: 'error',
+                        autoDismiss: true,
+                      })
+                  }else{
+                    addToast("Kesalahan pada server.", {
+                        appearance: 'error',
+                        autoDismiss: true,
+                      })
+                  }
+      
+                }
+          },800)
+      
+      }
+
   }
+
+  const doCancel=async()=>{
+    Helper.mySwalWithCallback("Apakah anda yakin akan membatalkan transaksi?",async ()=>{
+      Swal.fire({
+            title: 'Silahkan tunggu...',
+            html: "Memproses permintaan.",
+            willOpen: () => {
+                Swal.showLoading()
+            },
+            showConfirmButton:false,
+            willClose: () => {}
+      })
+
+      try {
+        
+        const doUpload=await Api.post(Api.apiClient+`transaction/deposit/${btoa(kode)}`, {status:2})
+
+        setTimeout(
+            function () {
+                Swal.close()
+                const datum = doUpload.data;
+                if(datum.status==='success'){
+                  addToast("Berhasil membatalkan transaksi.", {
+                    appearance: 'success',
+                    autoDismiss: true,
+                  })
+                  setOpen(false);
+                  //  Go to invoice page
+                  router.push('/');
+                }else{
+                  addToast(datum.msg, {
+                    appearance: 'error',
+                    autoDismiss: true,
+                  })
+                }
+          },800)
+      } catch (err) {
+        setTimeout(
+            function () {
+                Swal.close()
+                // save token to localStorage
+                if (err.message === 'Network Error') {
+                  addToast("Tidak dapat tersambung ke server!", {
+                    appearance: 'error',
+                    autoDismiss: true,
+                  })
+                    
+                }else{
+                  if(err.response.data.msg!==undefined){
+                    addToast(err.response.data.msg, {
+                        appearance: 'error',
+                        autoDismiss: true,
+                      })
+                  }else{
+                    addToast("Kesalahan pada server.", {
+                        appearance: 'error',
+                        autoDismiss: true,
+                      })
+                  }
+      
+                }
+          },800)
+      
+      }
+    })
+  }
+
+
 
   return (
     <Layout title={`Invoice`}>
@@ -50,7 +181,7 @@ const Invoice: React.FC<iInvoice> =({kode,datum})=> {
             </div>
         </div>
         <div className="h-auto mt-8 w-full flex flex-col lg:m-w-96 justify-center items-center mb-20">
-            <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  mx-24 w-2/3">
+            <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  lg:mx-24 lg:w-2/3">
                 <div className="py-4 px-8 mt-3 text-gray-700 dark:text-gray-200 flex flex-col items-center justify-items-center">
                     <div className="p-3 text-center">
                       <h3 className="text-lg">Silahkan transfer sebesar:</h3>
@@ -90,9 +221,14 @@ const Invoice: React.FC<iInvoice> =({kode,datum})=> {
                       </p>
                     </div>
                     <div className="py-4 mt-8 text-right">
-                        <Button className="bg-base-blue hover:bg-base-blue-600 w-full sm:w-auto mr-6">Upload Bukti Transfer</Button>
-                        <Button className="bg-base-red hover:bg-base-red-600 w-full sm:w-auto mr-6">Batalkan Transaksi</Button>
-                        <Button className="bg-old-gold hover:bg-old-gold-600 w-full sm:w-auto" onClick={()=>{router.push('/')}}>Kembali</Button>
+                      {
+                        datum.payment_slip==='-'?
+                        <Button className="bg-base-blue hover:bg-base-blue-600 w-full sm:w-auto mr-6" onClick={()=>{setOpen(true)}}>Upload Bukti Transfer</Button>
+                        :
+                        <Button className="bg-base-blue hover:bg-base-blue-600 w-full sm:w-auto mr-6 cursor-not-allowed">Bukti transfer terkirim.</Button>
+                      }
+                        <Button className="bg-base-red hover:bg-base-red-600 w-full mt-4 lg:mt-0 sm:w-auto mr-6" onClick={doCancel}>Batalkan Transaksi</Button>
+                        <Button className="bg-old-gold hover:bg-old-gold-600 w-full mt-4 lg:mt-0 sm:w-auto" onClick={()=>{router.push('/')}}>Kembali</Button>
                     </div>
                 </div>
             </div>
@@ -102,9 +238,9 @@ const Invoice: React.FC<iInvoice> =({kode,datum})=> {
         </div>
 
         <PaymentSlip
-          open={true}
-          closeModal={()=>{}}
-          callBack={()=>{}}
+          open={open}
+          closeModal={()=>{setOpen(false)}}
+          callBack={doUpload}
         />
 
     </Layout>

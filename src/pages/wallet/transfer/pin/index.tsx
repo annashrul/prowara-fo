@@ -60,7 +60,7 @@ const TransferPin: React.FC<iTfPin> =()=> {
 
     const doCheckout= async (pin:string)=>{
         const checkoutData={
-            pin_member:pin,
+            member_pin:pin,
             uid:user?.id,
             qty:nominal
         }
