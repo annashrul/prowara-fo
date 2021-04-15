@@ -2,7 +2,10 @@ import React, { useState,useEffect } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar'
 import SEO, { SEOProps } from 'components/SEO';
-
+import { NextPageContext } from 'next'
+import nookies from 'nookies'
+import Helper from 'lib/helper'
+import Api from 'lib/httpService'
 
 
 const LayoutPage: React.FC<SEOProps> = ({children, ...rest }) => {
@@ -31,36 +34,20 @@ const LayoutPage: React.FC<SEOProps> = ({children, ...rest }) => {
 
 
 // export async function getServerSideProps(ctx:NextPageContext) {
-//   const cookies = nookies.get(ctx)
-//   if(!cookies._prowara){
-//       return {
-//         redirect: {
-//             destination: '/auth/login',
-//             permanent: false,
-//         },
-//       }
-//   }else{
-//       Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
-//   }
-//   let dataWidget={};
-//   try {
-//       const getData = await Api.get(Api.apiUrl+"site/memberarea")
-//       if(getData.status===200){
-//           dataWidget=getData.data.result;
-//       }else{
-//           dataWidget=[];
-//       }
-//       console.log("DATA",dataWidget);
-
-//   } catch (err) {
-//       console.log("CONSOLE",err);
-//   }
-
+  // const cookies = nookies.get(ctx)
+  // if(cookies._prowara){
+  //     return {
+  //       redirect: {
+  //           destination: '/auth/login',
+  //           permanent: false,
+  //       },
+  //     }
+  // }else{
+  //     Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
+  // }
   
-
-
 //   return { 
-//       props:{dataWidget,dataBank}
+//       props:{}
 //   }
 // }
 export default LayoutPage;

@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import Modal from 'components/pin'
 import CardBank from 'components/payment/CardBank';
+import { handleGet, handlePost } from "lib/handleAction";
 
 interface iOrderTiket {
     dataWidget:iWidget;
@@ -53,118 +54,19 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
    
 
     const doVerif=()=>{
-        Swal.fire({
-            title   : 'Perhatian !!!',
-            html    :`Pastikan data telah sesuai.`,
-            icon    : 'warning',
-            showCancelButton: true,
-            confirmButtonColor  : '#3085d6',
-            cancelButtonColor   : '#d33',
-            confirmButtonText   : `Verifikasi`,
-            cancelButtonText    : 'Batal',
-        }).then(async (result) => {
-            if (result.value) {
-              setOpenPin(true);
-            }
-        })
+        Helper.mySwalWithCallback('Pastikan data telah sesuai.',()=>{setOpenPin(true);})
     }
 
     const doCheckout= async (pin:string)=>{
-      Swal.fire({
-            title: 'Silahkan tunggu...',
-            html: "Memproses permintaan.",
-            willOpen: () => {
-                Swal.showLoading()
-            },
-            showConfirmButton:false,
-            willClose: () => {}
-      })
-
-      try {
         const checkoutData={
             qty:qty,
             member_pin:pin,
             id_bank_destination:bank,
             metode_pembayaran:bank==='saldo'?'saldo':'transfer'
-          }
-          
-          const submitRegister=await Api.post(Api.apiClient+'transaction/pin', checkoutData)
-  
-          setTimeout(
-              function () {
-                  Swal.close()
-                  const datum = submitRegister.data;
-                  if(datum.status==='success'){
-                    addToast("Berhasil memproses permintaan.", {
-                      appearance: 'success',
-                      autoDismiss: true,
-                    })
-                    setOpenPin(false);
-                    router.push(`/`);
-                  }else{
-                    Swal.fire({
-                              title   : 'Perhatian !!!',
-                              html    :`${datum.msg}`,
-                              icon    : 'warning',
-                              showCancelButton: false,
-                              confirmButtonColor  : '#3085d6',
-                              confirmButtonText   : `Oke`,
-                          }).then(async (result) => {
-                              if (result.value) {
-                                  setOpenPin(false);
-                                  router.push(`/`);
-                              }
-                          })
-                  }
-            },800)
-      } catch (err) {
-
-        setTimeout(
-            function () {
-                Swal.close()
-                // save token to localStorage
-                if (err.message === 'Network Error') {
-                  addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                  })
-                    
-                }else{
-                    console.log(err.response.data.msg);
-                  if(err.response.data.msg!==undefined){
-                    if(err.response.data.msg=="Masih ada transaksi yang belum selesai."){
-                        Swal.fire({
-                            title   : 'Perhatian !!!',
-                            html    :`${err.response.data.msg}`,
-                            icon    : 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor  : '#3085d6',
-                            confirmButtonText   : `Oke`,
-                        }).then(async (result) => {
-                            if (result.value) {
-                                setOpenPin(false);
-                                //  Go to invoice page
-                                router.push(`/invoice/${btoa(err.response.data.result.kd_trx)}`);
-                            }
-                        })
-
-                    }else{
-                        addToast(err.response.data.msg, {
-                            appearance: 'error',
-                            autoDismiss: true,
-                        })
-                    }
-                  }else{
-                    addToast("Kesalahan pada server.", {
-                        appearance: 'error',
-                        autoDismiss: true,
-                      })
-                  }
-      
-                }
-          },800)
-      
-      }
+        }
+        await handlePost(Api.apiClient+'transaction/pin', checkoutData,(datum,isStatus,msg)=>{
+            Helper.mySwalWithCallback(datum.msg,()=>{setOpenPin(true);router.push(`/`);})
+        })
   }
 
     const handleBank=(i:number)=>{
@@ -361,30 +263,14 @@ export async function getServerSideProps(ctx:NextPageContext) {
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
     let dataWidget={};
-    try {
-        const getData = await Api.get(Api.apiUrl+"site/memberarea")
-        if(getData.status===200){
-            dataWidget=getData.data.result;
-        }else{
-            dataWidget=[];
-        }
-        console.log("DATA",dataWidget);
+    await handleGet(Api.apiUrl+"site/memberarea",(datum)=>{
+        dataWidget=datum;
+    },false)
 
-    } catch (err) {
-        console.log("CONSOLE",err);
-    }
-
-    let dataBank=[];
-    try {
-      const getBank = await Api.get(Api.apiUrl+"bank?perpage=20")
-
-      if(getBank.status===200){
-        dataBank=getBank.data.result.data;
-      }else{
-        dataBank=[];
-      }
-    } catch (err) {}
-
+    let dataBank:any=[];
+    await handleGet(Api.apiUrl+"bank?perpage=20",(datum)=>{
+        dataBank=datum.data;
+    },false)
 
     return { 
         props:{dataWidget,dataBank}

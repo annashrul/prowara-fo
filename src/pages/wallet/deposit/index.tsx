@@ -4,7 +4,6 @@ import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
-import Swal from 'sweetalert2'
 import Api from 'lib/httpService'
 import {iPaket, iOpt, iBankPt} from 'lib/interface'
 import Helper from 'lib/helper'
@@ -12,6 +11,7 @@ import Nominal from 'components/deposit/nominal';
 import ListBank from 'components/deposit/ListBank';
 import Preview from 'components/deposit/preview';
 import Modal from 'components/pin'
+import { handleGet, handlePost } from 'lib/handleAction';
 
 interface iInvoice{
     category: Array<iOpt>;
@@ -48,119 +48,24 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
     }
 
     const doVerif=()=>{
-        Swal.fire({
-            title   : 'Perhatian !!!',
-            html    :`Pastikan data telah sesuai.`,
-            icon    : 'warning',
-            showCancelButton: true,
-            confirmButtonColor  : '#3085d6',
-            cancelButtonColor   : '#d33',
-            confirmButtonText   : `Verifikasi`,
-            cancelButtonText    : 'Batal',
-        }).then(async (result) => {
-            if (result.value) {
-              setOpenPin(true);
-            }
-        })
+        Helper.mySwalWithCallback(`Pastikan data telah sesuai.`,()=>{setOpenPin(true);})
     }
 
     const doCheckout= async (pin:string)=>{
-      Swal.fire({
-            title: 'Silahkan tunggu...',
-            html: "Memproses permintaan.",
-            willOpen: () => {
-                Swal.showLoading()
-            },
-            showConfirmButton:false,
-            willClose: () => {}
-      })
-
-      try {
         const checkoutData={
-          member_pin:pin,
-          id_bank_destination:bank?.id,
-          amount:nominal
+            member_pin:pin,
+            id_bank_destination:bank?.id,
+            amount:nominal
         }
+        await handlePost(Api.apiClient+'transaction/deposit', checkoutData,(datum,isStatus,msg)=>{
+            Helper.mySwalWithCallback(datum.msg,()=>{
+                setOpenPin(false);
+                router.push(`/invoice/${btoa(datum.result.kd_trx)}`);
+            });
+            
+        })
         
-        const submitRegister=await Api.post(Api.apiClient+'transaction/deposit', checkoutData)
-
-        setTimeout(
-            function () {
-                Swal.close()
-                const datum = submitRegister.data;
-                if(datum.status==='success'){
-                  addToast("Berhasil memproses permintaan.", {
-                    appearance: 'success',
-                    autoDismiss: true,
-                  })
-                  setOpenPin(false);
-                  //  Go to invoice page
-                  router.push(`/invoice/${btoa(datum.result.kd_trx)}`);
-                }else{
-                  Swal.fire({
-                            title   : 'Perhatian !!!',
-                            html    :`${datum.msg}`,
-                            icon    : 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor  : '#3085d6',
-                            confirmButtonText   : `Oke`,
-                        }).then(async (result) => {
-                            if (result.value) {
-                                setOpenPin(false);
-                                //  Go to invoice page
-                                router.push(`/invoice/${btoa(datum.result.kd_trx)}`);
-                            }
-                        })
-                }
-          },800)
-      } catch (err) {
-
-        setTimeout(
-            function () {
-                Swal.close()
-                // save token to localStorage
-                if (err.message === 'Network Error') {
-                  addToast("Tidak dapat tersambung ke server!", {
-                    appearance: 'error',
-                    autoDismiss: true,
-                  })
-                    
-                }else{
-                  if(err.response.data.msg!==undefined){
-                    if(err.response.data.msg=="Masih ada transaksi yang belum selesai."){
-                        Swal.fire({
-                            title   : 'Perhatian !!!',
-                            html    :`${err.response.data.msg}`,
-                            icon    : 'warning',
-                            showCancelButton: false,
-                            confirmButtonColor  : '#3085d6',
-                            confirmButtonText   : `Oke`,
-                        }).then(async (result) => {
-                            if (result.value) {
-                                setOpenPin(false);
-                                //  Go to invoice page
-                                router.push(`/invoice/${btoa(err.response.data.result.kd_trx)}`);
-                            }
-                        })
-
-                    }else{
-                        addToast(err.response.data.msg, {
-                            appearance: 'error',
-                            autoDismiss: true,
-                        })
-                    }
-                  }else{
-                    addToast("Kesalahan pada server.", {
-                        appearance: 'error',
-                        autoDismiss: true,
-                      })
-                  }
-      
-                }
-          },800)
-      
-      }
-  }
+    }
 
 
 
@@ -247,53 +152,35 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
 }
 
 export async function getServerSideProps(ctx:NextPageContext) {
-    // Parse
     const cookies = nookies.get(ctx)
     if(!cookies._prowara){
-        return {
-          redirect: {
-              destination: '/auth/login',
-              permanent: false,
-          },
-        }
+        return {redirect: {destination: '/auth/login',permanent: false}}
     }else{
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
-
     // manipulate PAKET
-    let kate=[];
+    let kate:any=[];
     let total_tiket=0;
     const options: iOpt[] =[];
-    try {
-        const getKategori = await Api.get(Api.apiUrl+"category/membership")
-        if(getKategori.status===200){
-            kate=getKategori.data.result.data;
-            total_tiket=getKategori.data.result.total_tiket;
-        }else{
-            kate=[];
-        }
+    await handleGet(Api.apiUrl+"category/membership",(datum)=>{
+        kate=datum.data;
+        total_tiket=datum.total_tiket;
+    },false)
+    if(kate.length>0){
         kate.map((item: iPaket)=>{
             return options.push({
                 value: item.id,
                 label: item.title
             })
         })
-    } catch (err) {}
-
+    }
     // END PAKET
 
     // GET BANK DATA
-    let dataBank=[];
-    try {
-        const getBank = await Api.get(Api.apiUrl+"bank?perpage=20")
-
-        if(getBank.status===200){
-        dataBank=getBank.data.result.data;
-        }else{
-        dataBank=[];
-        }
-    } catch (err) {}
-
+    let dataBank:any=[];
+    await handleGet(Api.apiUrl+"bank?perpage=20",(datum)=>{
+        dataBank=datum.data;
+    },false)
     return { 
         props:{
             kategori:kate,

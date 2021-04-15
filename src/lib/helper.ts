@@ -1,6 +1,11 @@
 import Cookies from "js-cookie";
 import atob from 'atob';
 import moment from 'moment';
+import Swal from 'sweetalert2'
+import { NextPageContext } from 'next'
+import nookies from 'nookies'
+import Api from 'lib/httpService'
+import Router from 'next/router'
 
 const decode=(str:string)=>{return atob(str);}
 
@@ -108,6 +113,51 @@ export const formatDate=(val:string,isfull:boolean)=>{
   return moment(val).format(format);
 }
 
+export const mySwalWithCallback=(msg:string,callback:()=>void)=>{
+  Swal.fire({
+      title   : 'Perhatian !!!',
+      html    :`${msg}`,
+      icon    : 'warning',
+      showCancelButton: true,
+      confirmButtonColor  : '#3085d6',
+      cancelButtonColor   : '#d33',
+      confirmButtonText   : `Oke`,
+      cancelButtonText    : 'Batal',
+  }).then(async (result) => {
+      if (result.value) {
+        callback();
+      }
+  })
+}
+export const mySwal=(msg:string)=>{
+  Swal.fire({
+      title   : 'Perhatian !!!',
+      html    :`${msg}`,
+      icon    : 'warning',
+      showCancelButton: true,
+      confirmButtonColor  : '#3085d6',
+      cancelButtonColor   : '#d33',
+      confirmButtonText   : `Oke`,
+      cancelButtonText    : 'Batal',
+  });
+}
+
+export const handleRoute=(ctx:NextPageContext)=>{
+    const cookies = nookies.get(ctx)
+    if(cookies._prowara){
+        // Router.push('/auth/login');
+        return {
+          redirect: {
+              destination: '/auth/login',
+              permanent: false,
+          },
+        }
+    }else{
+        Api.axios.defaults.headers.common["Authorization"] = decode(cookies._prowara);
+    }
+}
+
+
 export default {
   numFormat,
   setCookie,
@@ -116,5 +166,8 @@ export default {
   isEmptyObj,
   formatDate,
   calculateCountdown,
-  rupiahFormat
+  rupiahFormat,
+  mySwalWithCallback,
+  mySwal,
+  handleRoute
 };
