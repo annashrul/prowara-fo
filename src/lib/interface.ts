@@ -203,6 +203,7 @@ export interface iConfigWallet{
   isActive_wd: boolean;
   isActive_dp: boolean;
   saldo: string;
+  tiket: string;
   trx_wd: number;
   trx_dp: string;
   schedule_dp: string;

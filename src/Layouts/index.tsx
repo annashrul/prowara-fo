@@ -1,11 +1,7 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState} from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar'
 import SEO, { SEOProps } from 'components/SEO';
-import { NextPageContext } from 'next'
-import nookies from 'nookies'
-import Helper from 'lib/helper'
-import Api from 'lib/httpService'
 
 
 const LayoutPage: React.FC<SEOProps> = ({children, ...rest }) => {
@@ -21,7 +17,7 @@ const LayoutPage: React.FC<SEOProps> = ({children, ...rest }) => {
       }
         <div className="flex flex-col flex-1 w-1/2" style={{zoom:'90%'}}>
           {
-            title!=='Login'&& <Header pin={pin} toggleSidebar={() => setOpen(!open)} />
+            title!=='Login'&& <Header toggleSidebar={() => setOpen(!open)} />
           }
             
             <main className="h-full overflow-y-auto">
@@ -33,23 +29,6 @@ const LayoutPage: React.FC<SEOProps> = ({children, ...rest }) => {
 };
 
 
-// export async function getServerSideProps(ctx:NextPageContext) {
-  // const cookies = nookies.get(ctx)
-  // if(cookies._prowara){
-  //     return {
-  //       redirect: {
-  //           destination: '/auth/login',
-  //           permanent: false,
-  //       },
-  //     }
-  // }else{
-  //     Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
-  // }
-  
-//   return { 
-//       props:{}
-//   }
-// }
 export default LayoutPage;
 
 

@@ -160,33 +160,33 @@ const Invoice: React.FC<iInvoice> =({dataBank,datum})=> {
                     <div className="flex flex-col ">
                         <h4 className="text-gray-700 dark:text-gray-200 font-semibold text-lg tracking-wide mb-2">Detail Pembelian Paket</h4>
                     </div>
-                    <div className="mt-5 overflow-auto p-3">
+                    <div className="mt-5 overflow-auto">
                        <table className="w-full whitespace-no-wrap">
                         <tbody className="divide-y dark:divide-gray-700 0">
                             <tr className="text-gray-500 dark:text-gray-400">
-                                <td className="px-2 py-3 text-base w-2/5">Paket </td>
-                                <td className="px-2 py-3 text-base w-1/5">:</td>
-                                <td className="px-2 py-3 text-left w-2/5 ml-10 text-base">{datum.title}</td>
+                                <td className="text-base w-2/5">Paket </td>
+                                <td className="py-3 text-base w-1/5">:</td>
+                                <td className="py-3 text-left w-2/5 ml-10 text-base">{datum.title}</td>
                             </tr>
                             <tr className="text-gray-500 dark:text-gray-400">
-                                <td className="px-2 py-3 text-base w-2/5">Tiket digunakan </td>
-                                <td className="px-2 py-3 text-base w-1/5">:</td>
-                                <td className="px-2 py-3 text-left w-2/5 ml-10 text-base">{datum.pin_required} Tiket</td>
+                                <td className="py-3 text-base w-2/5">Tiket digunakan </td>
+                                <td className="py-3 text-base w-1/5">:</td>
+                                <td className="py-3 text-left w-2/5 ml-10 text-base">{datum.pin_required} Tiket</td>
                             </tr>
                             <tr className="text-gray-500 dark:text-gray-400">
-                                <td className="px-2 py-3 text-base w-2/5">Modal </td>
-                                <td className="px-2 py-3 text-base w-1/5">:</td>
-                                <td className="px-2 py-3 text-left w-2/5 ml-10 text-base">{Helper.numFormat(`${datum.price}`)}</td>
+                                <td className="py-3 text-base w-2/5">Modal </td>
+                                <td className="py-3 text-base w-1/5">:</td>
+                                <td className="py-3 text-left w-2/5 ml-10 text-base">{Helper.numFormat(`${datum.price}`)}</td>
                             </tr>
                             <tr className="text-gray-500 dark:text-gray-400">
-                                <td className="px-2 py-3 text-base w-2/5">Kontrak </td>
-                                <td className="px-2 py-3 text-base w-1/5">:</td>
-                                <td className="px-2 py-3 text-left w-2/5 ml-10 text-base">{datum.contract} Hari</td>
+                                <td className="py-3 text-base w-2/5">Kontrak </td>
+                                <td className="py-3 text-base w-1/5">:</td>
+                                <td className="py-3 text-left w-2/5 ml-10 text-base">{datum.contract} Hari</td>
                             </tr>
                             <tr className="text-gray-500 dark:text-gray-400">
-                                <td className="px-2 py-3 text-base w-2/5">Share Profit </td>
-                                <td className="px-2 py-3 text-base w-1/5">:</td>
-                                <td className="px-2 py-3 text-left w-2/5 ml-10 text-base">{Helper.numFormat(`${datum.contract*datum.profit_sharing}`)}</td>
+                                <td className="py-3 text-base w-2/5">Share Profit </td>
+                                <td className="py-3 text-base w-1/5">:</td>
+                                <td className="py-3 text-left w-2/5 ml-10 text-base">{Helper.numFormat(`${datum.contract*datum.profit_sharing}`)}</td>
                             </tr>
                         </tbody>
                       </table>

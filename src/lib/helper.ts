@@ -164,6 +164,8 @@ export const handleRoute=(ctx:NextPageContext)=>{
 }
 
 
+
+
 export default {
   removeHtml,
   numFormat,
@@ -176,5 +178,6 @@ export default {
   rupiahFormat,
   mySwalWithCallback,
   mySwal,
-  handleRoute
+  handleRoute,
+  
 };

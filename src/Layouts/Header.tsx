@@ -1,11 +1,10 @@
 import React from 'react';
 
 interface HeaderProps {
-  pin:number,
   toggleSidebar: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({pin,toggleSidebar}) => {
+const Header: React.FC<HeaderProps> = ({toggleSidebar}) => {
   return (
     <header className="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
       <div className="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
@@ -29,10 +28,7 @@ const Header: React.FC<HeaderProps> = ({pin,toggleSidebar}) => {
               <template x-if="dark" />
             </button>
           </li>
-          <li className="relative">
-            <span className="inline-flex px-2 text-xs font-medium leading-5 rounded-full text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100">Pin : {pin}</span>
-            <template x-if="isProfileMenuOpen" />
-          </li>
+          
           {/* Profile menu */}
           <li className="relative">
             <button className="align-middle rounded-full focus:shadow-outline-purple focus:outline-none" aria-label="Account" aria-haspopup="true">

@@ -23,13 +23,13 @@ const Routes=[
         icon: Forms
     },
     {
-        link:'/wallet/transfer/poin',
-        title:'Transfer Poin',
+        link:'/order/tiket/transfer',
+        title:'Transfer Tiket',
         icon: Forms
     },
     {
-        link:'/wallet/transfer/pin',
-        title:'Transfer Pin',
+        link:'/wallet/transfer/poin',
+        title:'Transfer Poin',
         icon: Forms
     },
     {
