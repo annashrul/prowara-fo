@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import Api from 'lib/httpService'
 import Helper from 'lib/helper';
 import CardBank from 'components/payment/CardBank';
+import PaymentSlip from 'components/payment_slip';
 
 interface iInvoice{
     kode:string;
@@ -16,8 +17,9 @@ interface iInvoice{
 }
 
 const Invoice: React.FC<iInvoice> =({kode,datum})=> {
-  console.log('datum',Helper.isEmptyObj(datum));
   const router = useRouter();
+  const [open,setOpen]=useState(false);
+
   useEffect(() => {
       if (Helper.isEmptyObj(datum)) {
         Swal.fire({
@@ -34,6 +36,9 @@ const Invoice: React.FC<iInvoice> =({kode,datum})=> {
         })
       }
     }, []);
+  const doUpload=async(img:string)=>{
+  
+  }
 
   return (
     <Layout title={`Invoice`}>
@@ -52,10 +57,11 @@ const Invoice: React.FC<iInvoice> =({kode,datum})=> {
                       <Card colored className="bg-old-gold mt-6">
                         <CardBody>
                           <p className="text-white text-xl">
-                            {datum.grand_total}
+                            {Helper.rupiahFormat(`${parseInt(datum.grand_total)+datum.kd_unique}`)}
                           </p>
                         </CardBody>
                       </Card>
+                      <div className="text-xs mt-4"><b>Note: Silahkan transfer sesuai dengan nominal yang tertera untuk mempercepat proses verifikasi.</b></div>
                       <hr className="mt-6 mb-3"/>
 
                       <h3 className="mt-3 mb-4 text-lg">Pembayaran dapat dilakukan ke rekening berikut :</h3>
@@ -78,7 +84,7 @@ const Invoice: React.FC<iInvoice> =({kode,datum})=> {
                       <hr className="mt-6 mb-3"/>
 
                       <p>
-                        Pastikan anda transfer sebelum tanggal {datum.limit_tf} atau transaksi anda otomatis dibatalkan oleh sistem. 
+                        Pastikan anda transfer sebelum tanggal {Helper.formatDate(datum.limit_tf,false)} atau transaksi anda otomatis dibatalkan oleh sistem. 
                         <br/>
                         Proses verifikasi akan memakan waktu 10-15 menit. Untuk mempercepat proses verifikasi silahkan sertakan bukti transfer.
                       </p>
@@ -94,6 +100,12 @@ const Invoice: React.FC<iInvoice> =({kode,datum})=> {
 
             
         </div>
+
+        <PaymentSlip
+          open={true}
+          closeModal={()=>{}}
+          callBack={()=>{}}
+        />
 
     </Layout>
 );

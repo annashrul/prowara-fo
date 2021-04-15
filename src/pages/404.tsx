@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Layout from 'Layouts';
+import File64 from 'components/Common/File64'
 
 const ErrorStyle = styled.div`
   width: 100%;
@@ -27,6 +28,7 @@ export default function Error(): JSX.Element {
             <small>The page you were looking for doesn&apos;t exist</small>
               Take me home
         </ErrorStyle>
+            <File64/>
     </Layout>
   );
 }
