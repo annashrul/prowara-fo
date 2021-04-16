@@ -2,8 +2,7 @@
 import http from "./httpService";
 import Cookies from "js-cookie";
 import {iUser} from './interface'
-
-const tokenKey = "token";
+import Helper from "./helper";
 
 // http.setJwt (getJwt());
 
@@ -16,8 +15,10 @@ function setToken(datum: string) {
   Cookies.set('_prowara', btoa(datum), { expires: 7 });
 
 }
-export function logout() {
-  localStorage.removeItem(tokenKey);
+export function doLogout() {
+  Helper.removeCookie('__uid');
+  Helper.removeCookie('_prowara');
+  Helper.removeCookie('_regist');
 }
 
 function getUser() {
@@ -38,7 +39,7 @@ function getToken() {
 
 export default {
   http,
-  logout,
+  doLogout,
   setUser,
   getUser,
   getToken,

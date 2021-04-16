@@ -5,30 +5,32 @@ import nookies from 'nookies'
 import Api from 'lib/httpService'
 import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
+import { Alert } from '@windmill/react-ui'
 
-import {iBankMember} from 'lib/interface'
+import {iBankMember,iConfigWallet} from 'lib/interface'
 import Helper from 'lib/helper'
 import ListBank from 'components/withdrawal/listBank';
-import Preview from 'components/deposit/preview';
+import Preview from 'components/withdrawal/preview';
 import Modal from 'components/pin'
-import { handlePost } from 'lib/handleAction';
+import { handleGet, handlePost } from 'lib/handleAction';
 
 interface iTrxWithdrawal{
     dataBank?:Array<iBankMember>;
+    config:iConfigWallet
 }
 
-const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
+const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
 
     const { addToast } = useToasts();
     const router = useRouter();
-    const min_nominal=50000;
+    const min_nominal:number=parseInt(config.wd_min,10);
     const [step,setStep]=useState(1);
     const [oldPoin,setOldPoin] = React.useState(0)
     const [poin,setPoin] = React.useState(0)
     const [bank,setBank]=useState<iBankMember>();
     const [openPin,setOpenPin]=useState(false);
      useEffect(() => {
-        setOldPoin(100000);
+        setOldPoin(parseInt(config.saldo));
     }, []);
     const handleCheck=()=>{
         if(poin===0) addToast("poin tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
@@ -58,7 +60,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
             id_bank:bank?.id,
             amount:poin
           }
-          await handlePost(Api.apiClient+'transaction/withdrawal', checkoutData,(datum,isStatus,msg)=>{
+          await handlePost(Api.apiClient+'transaction/withdrawal', checkoutData,(datum)=>{
             Helper.mySwalWithCallback(datum.msg,()=>{
                 router.push('/')
             });
@@ -86,7 +88,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
                 closeModal={()=>setOpenPin(false)}
                 callBack={(val)=>doCheckout(val)}
             />
-            <div className="mx-4 p-4 mt-4">
+            <div className="mx-4 p-4 mt-4 mb-6">
                 <div className="flex items-center">
                     <div className="flex items-center relative">
                         <div className={"rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-old-gold-600 "+(step===1?"bg-old-gold-600 text-white":"text-old-gold-600 ")}>
@@ -126,6 +128,13 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
                     </div>
                 </div>
             </div>
+            
+            <div className={!config.isActive_wd?"flex flex-col items-center":"hidden"}>
+                <Alert type="warning">Penarikan poin hanya dapat dilakukan pada hari {config.schedule_wd} dari pukul {config.schedule_time_wd}.</Alert>
+            </div>
+            <div className={parseInt(config.trx_wd,10)!==0?"flex flex-col items-center mt-3":"hidden"}>
+                <Alert type="info">Masih ada penarikan poin dalam antrian. Silahkan tunggu konfirmasi dari admin.</Alert>
+            </div>
             {
                 step===1?(
                     <div className="h-auto mt-16 w-full flex flex-row md:flex-col justify-center items-center mb-20">
@@ -133,13 +142,13 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
                             <div className="py-8 px-8">
                                 <div className="rounded shadow border p-6 w-full">
                                     
-                                    <p className="text-gray-200 text-sm text-center">poin anda</p>
-                                    <p className="text-gray-200 text-3xl text-center">{oldPoin}</p>
+                                    <p className="text-gray-200 text-sm text-center">Poin saat ini</p>
+                                    <p className="text-gray-200 text-3xl text-center">{Helper.numFormat(`${oldPoin}`)}</p>
                                     <button onClick={(event)=>{
                                         event.preventDefault();
                                         handleOldPoin();
-                                    }} className="w-full  text-gray-700 dark:text-gray-200 px-8 py-2 mt-2 border">
-                                        tarik semua poin
+                                    }} className="w-full  text-gray-700 dark:text-gray-200 px-8 py-2 mt-2 border border-gray-600 hover:bg-gray-600">
+                                        Tarik semua poin
                                     </button>
                                 </div>
                                 <h6 className="mt-8 text-yellow-400 text-sm">poin:</h6>
@@ -150,10 +159,17 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
                                     onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
                                     value={poin}
                                     />
-                                <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Deposit: 50000 Poin</h6>
-                                <button onClick={(event)=>{event.preventDefault();handleCheck();}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
-                                    Lanjut
-                                </button>
+                                <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Deposit: {Helper.numFormat(`${min_nominal}`)}</h6>
+                                {
+                                    config.isActive_wd && parseInt(config.trx_wd,10)===0?
+                                    <button onClick={(event)=>{event.preventDefault();handleCheck();}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
+                                        Lanjut
+                                    </button>
+                                    :
+                                    <button className="w-full bg-gray-400 cursor-not-allowed hover:bg-gray-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
+                                        Lanjut
+                                    </button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -165,8 +181,8 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank})=> {
                         bank={bank?.bank_name}
                         atas_nama={bank?.acc_name}
                         nominal={`${poin}`}
-                        admin="0"
-                        total={""}
+                        admin={poin*(parseInt(config.wd_charge,10)/100)}
+                        total={poin-(poin*(parseInt(config.wd_charge,10)/100))}
                         handleClick={doVerif}
                         goBack={(val:number)=>doStep(val)}
                     />
@@ -206,9 +222,16 @@ export async function getServerSideProps(ctx:NextPageContext) {
     } catch (err) {
         console.log("CONSOLE",err);
     }
+
+    // Get Config
+    let config:any;
+    await handleGet(Api.apiUrl+"transaction/wallet/config",(datum)=>{
+        config=datum;
+    },false)
     return { 
         props:{
-            dataBank
+            dataBank,
+            config
         }
     }
 }

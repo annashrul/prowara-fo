@@ -14,7 +14,7 @@ const Cards: React.FC<iCards> = ({selected,loading,handleClick,datum}) => {
     const load=[];
     for(let i=0;i<4;i++){
         load.push(
-            <div className="md:flex shadow-2xl h-40 w-full min-w-96">
+            <div className="flex shadow-2xl h-40 w-full md:min-w-96">
                     <div className=" md:w-1/2">
                         <Skeleton style="h-full w-full  object-cover rounded-lg rounded-r-none pb-5/6 border border-gray-200  border-r-0"/>
                     </div>
@@ -41,9 +41,9 @@ const Cards: React.FC<iCards> = ({selected,loading,handleClick,datum}) => {
           loading?load
           :(
                 <button onClick={(event)=>{event.preventDefault();handleClick(datum?.id)}} className="focus:outline-none">
-                    <div className="md:flex shadow-2xl h-40 w-full">
-                        <img className={"h-full w-full md:w-1/3  object-cover rounded-lg rounded-r-none pb-5/6 "+(selected?"border-4 border-old-gold  border-r-0":"border-4 border-gray-200  border-r-0")} loading="lazy" src={datum?.gambar} alt="bag" />
-                        <div className={"w-full md:w-2/3 px-4 py-3 bg-white dark:bg-gray-700 rounded-lg rounded-l-none text-left "+(selected?"border-4 border-old-gold  border-l-0":"border-4 border-gray-200  border-l-0")}>
+                    <div className="flex shadow-2xl h-30 lg:h-40 w-full">
+                        <img className={"md:h-full w-1/3 md:w-1/3 object-scale-down	 rounded-lg rounded-r-none pb-5/6 "+(selected?"border-4 border-old-gold  border-r-0":"border-4 border-gray-200  border-r-0")} loading="lazy" src={datum?.gambar} alt="bag" />
+                        <div className={"w-full md:w-2/3 px-4 py-1 bg-white dark:bg-gray-700 rounded-lg rounded-l-none text-left "+(selected?"border-4 border-old-gold  border-l-0":"border-4 border-gray-200  border-l-0")}>
                             <div className="flex flex-col">
                                 <h2 className="text-xl text-gray-700 dark:text-gray-200 font-medium mr-auto">{datum?.title}</h2>
                                 <div className="flex flex-row justify-between">

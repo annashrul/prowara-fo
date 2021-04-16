@@ -109,14 +109,6 @@ export interface iDeposit{
   payment_slip:string,
   created_at:string,
 }
-// export interface iProfiles{
-//   picture: string;
-//   children:Array<iProfiles>;
-//   id:number,
-//   name:string,
-//   role:string,
-//   profiles:Array<iProfiles>,
-// }
 export interface iNetwork{
   id:string,
   name:string,
@@ -212,16 +204,19 @@ export interface iConfigWallet{
   wd_modal_charge: any;
   dp_min: string;
   tf_min: string;
+  wd_min:string;
   isActive_wd: boolean;
   isActive_dp: boolean;
   saldo: string;
   tiket: string;
-  trx_wd: number;
+  trx_wd: string;
   trx_dp: string;
   schedule_dp: string;
   schedule_time_dp: string;
   schedule_wd: string;
   schedule_time_wd: string;
+  wd_charge: string;
+  tf_charge: string;
 }
 
 

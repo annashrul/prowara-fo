@@ -5,7 +5,6 @@ import Swal from 'sweetalert2'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import Api from 'lib/httpService'
-import Router from 'next/router'
 
 const removeHtml=(str:string)=>{
   // var parser = new DOMParser();
@@ -55,7 +54,7 @@ const rupiahFormat=(angka:string)=>{
 
 const numFormat=(angka:string)=>{
     if(angka===undefined) return 0;
-    const number_string = angka?.toString().replace(/[^,\d]/g, '');
+    const number_string = angka;
     const split = number_string.split('.');
     const sisa = split[0].length % 3;
     let rupiah = split[0].substr(0, sisa);

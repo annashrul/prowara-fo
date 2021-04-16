@@ -36,7 +36,7 @@ const ProfileCard: React.FC<iProfileCard> = ({ id, name, picture,  res = [], cal
         </div>
         <div className="text-gray-600">
           <p className="text-white font-semibold">{name}</p>
-          <p><span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-800 my-1 bg-old-gold-500 font-semibold uppercase last:mr-0 mr-1">
+          <p><span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-800 my-1 bg-old-gold-500 last:mr-0 mr-1">
             {id}
             </span>
           </p>

@@ -17,4 +17,4 @@ export default {
   noData:'https://www.napro.id//assets/images/placeholder-no-data.png',
   // apiUrl: "https://api.prowara.com/",
   // apiClient: "https://api.prowara.com/"
-};
+}

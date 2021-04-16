@@ -1,15 +1,8 @@
 import React, { useState, useEffect} from "react";
 import Layout from 'Layouts'
-import { NextPageContext } from 'next'
-import nookies from 'nookies'
 
-import Report from 'components/Dashboard/report'
-import Berita from 'components/Dashboard/Berita'
-import Widget from 'components/Dashboard/Card';
-import Slot from 'components/Dashboard/Slot';
 import Api from 'lib/httpService';
-import Helper from 'lib/helper';
-import {iContent, iTransaksi, iWidget} from 'lib/interface';
+import {iContent} from 'lib/interface';
 import { handleGet } from 'lib/handleAction';
 import Link from 'next/link'
 
@@ -42,7 +35,7 @@ const ListBerita: React.FC<iBerita> = () => {
                     arrDatum?.length>0?arrDatum.map((item:iContent,i:number)=>{
                         return(
                             <div key={i} className="bg-gray-800 w-128 mb-5 h-60 rounded shadow-md flex card text-grey-darkest">
-                                <img className="w-1/2 h-full rounded-l-sm" src={item.picture} alt="Room Image"  onError={(e)=>{e.target.onerror = null; e.target.src="https://bit.ly/2EApSiC"}}/>
+                                <img className="w-1/2 h-full rounded-l-sm" src={item.picture} alt="Room Image"  />
                                 <div className="w-full flex flex-col">
                                     <div className="p-4 pb-0 flex-1">
                                         <h3 className="font-light mb-1 text-gray-200">{item.category}</h3>

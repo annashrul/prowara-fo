@@ -62,7 +62,10 @@ const Invoice: React.FC<iInvoice> =({dataBank,datum})=> {
                   })
                   setOpen(false);
                   //  Go to invoice page
+                  bank==='saldo'?
+                  router.push(`/`):
                   router.push(`/invoice/${btoa(datum.result)}`);
+
                 }else{
                   addToast(datum.msg, {
                     appearance: 'error',
@@ -113,7 +116,7 @@ const Invoice: React.FC<iInvoice> =({dataBank,datum})=> {
               Beli Paket
           </h2>
         </div>
-        <div className="h-auto mt-8 w-full flex flex-row gap-8 mb-20">
+        <div className="h-auto mt-8 w-full flex flex-col lg:flex-row gap-8 mb-20">
             <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  w-full">
                 <div className="py-1 px-8 mt-6">
                     <div className="flex flex-col ">

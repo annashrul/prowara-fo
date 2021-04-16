@@ -7,9 +7,7 @@ import Helper from 'lib/helper';
 import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import ProfileCard from "components/genealogy/ProfileCard";
-// import profiles from "./data.json";
 import { arrayToTree } from "performant-array-to-tree";
-// import { useToasts } from "react-toast-notifications";
 import { handleGet } from "lib/handleAction";
 import Skeleton from "components/Common/Skeleton";
 import { iNetwork, iUser } from "lib/interface";
@@ -17,7 +15,6 @@ import httpService from "lib/httpService";
 import moment from "moment";
 import { useToasts } from "react-toast-notifications";
 interface iIndexGenealogy {
-  // profiles: Array<iProfiles>;
   userData: iUser;
 }
 
@@ -27,7 +24,6 @@ const Index: React.FC<iIndexGenealogy> = ({userData}) =>{
   const [datumNetwork,setDatumNetwork]= useState<Array<iNetwork>>([]);
   useEffect(() => {
     loadNetwork(`isfirst=true`,btoa(userData.referral));
-    // loadNetwork(`isfirst=true`,`UFc1NzExODY4ODI1`);
 }, []);
 
 

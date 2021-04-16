@@ -16,7 +16,7 @@ interface iTfPoin{config:iConfigWallet}
 const TransferPoin: React.FC<iTfPoin> =({config})=> {
     const { addToast } = useToasts();
     const router = useRouter();
-    const min_nominal=10;
+    const min_nominal=parseFloat(config.tf_min);
     const [step,setStep]=useState(1);
     const [nominal,setNominal]=useState(0);
     const [user,setUser]=useState<iMemberUid>();
@@ -53,7 +53,7 @@ const TransferPoin: React.FC<iTfPoin> =({config})=> {
             penerima:user?.id,
             amount:nominal
         }
-        await handlePost(Api.apiClient+'transaction/transfer', checkoutData,(datum,isStatus,msg)=>{
+        await handlePost(Api.apiClient+'transaction/transfer', checkoutData,(datum)=>{
             Helper.mySwalWithCallback(datum.msg,()=>{
                 setOpenPin(false);
                 router.push(`/`);
@@ -110,19 +110,6 @@ const TransferPoin: React.FC<iTfPoin> =({config})=> {
                         </div>
                         <div className="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-old-gold-600">Detail Transfer</div>
                     </div>
-                    {
-                        step===3?<div className="flex-auto border-t-2 transition duration-500 ease-in-out border-old-gold-600" />:<div className="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-300" />
-                    }
-                    <div className="flex items-center relative">
-                        <div className={"rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-old-gold-600 "+(step===3?"bg-old-gold-600 text-white":"text-old-gold-600 ")}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="feather feather-database ">
-                            <ellipse cx={12} cy={5} rx={9} ry={3} />
-                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                        </svg>
-                        </div>
-                        <div className="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-old-gold-600">Konfirmasi</div>
-                    </div>
                 </div>
             </div>
             {
@@ -136,8 +123,8 @@ const TransferPoin: React.FC<iTfPoin> =({config})=> {
                     <Step2
                         penerima={user?.fullname}
                         jumlah_transfer={`${nominal}`}
-                        admin="0"
-                        total_transfer={`${nominal}`}
+                        admin={`${nominal*(parseInt(config.wd_charge,10)/100)}`}
+                        total_transfer={`${nominal+ (nominal*(parseInt(config.wd_charge,10)/100))}`}
                         handleClick={doVerif}
                         goBack={(val:number)=>doStep(val)}
                     />
@@ -157,7 +144,6 @@ export async function getServerSideProps(ctx:NextPageContext) {
 
     let config: any = {};
     await handleGet(Api.apiUrl+"transaction/wallet/config", (res) => {
-        console.log('response config',res);
         config = res;
     }, false)
     

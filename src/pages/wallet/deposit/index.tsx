@@ -5,22 +5,24 @@ import nookies from 'nookies'
 import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
 import Api from 'lib/httpService'
-import {iPaket, iOpt, iBankPt} from 'lib/interface'
+import {iPaket, iOpt, iBankPt, iConfigWallet} from 'lib/interface'
 import Helper from 'lib/helper'
 import Nominal from 'components/deposit/nominal';
 import ListBank from 'components/deposit/ListBank';
 import Preview from 'components/deposit/preview';
 import Modal from 'components/pin'
 import { handleGet, handlePost } from 'lib/handleAction';
+import { Alert } from '@windmill/react-ui'
 
 interface iInvoice{
     category: Array<iOpt>;
     options: Array<iOpt>;
     total_tiket:number;
     dataBank?:Array<iBankPt>;
+    config:iConfigWallet;
 }
 
-const Invoice: React.FC<iInvoice> =({dataBank})=> {
+const Invoice: React.FC<iInvoice> =({dataBank,config})=> {
     const { addToast } = useToasts();
     const router = useRouter();
     const min_nominal=50;
@@ -57,7 +59,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
             id_bank_destination:bank?.id,
             amount:nominal
         }
-        await handlePost(Api.apiClient+'transaction/deposit', checkoutData,(datum,isStatus,msg)=>{
+        await handlePost(Api.apiClient+'transaction/deposit', checkoutData,(datum)=>{
             Helper.mySwalWithCallback(datum.msg,()=>{
                 setOpenPin(false);
                 router.push(`/invoice/${btoa(datum.result.kd_trx)}`);
@@ -66,7 +68,6 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
         })
         
     }
-
 
 
     return (
@@ -83,7 +84,7 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                 closeModal={()=>setOpenPin(false)}
                 callBack={(val)=>doCheckout(val)}
             />
-            <div className="mx-4 p-4 mt-4">
+            <div className="mx-4 p-4 mt-4 mb-5">
                 <div className="flex items-center">
                     <div className="flex items-center relative">
                         <div className={"rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-old-gold-600 "+(step===1?"bg-old-gold-600 text-white":"text-old-gold-600 ")}>
@@ -123,9 +124,17 @@ const Invoice: React.FC<iInvoice> =({dataBank})=> {
                     </div>
                 </div>
             </div>
+            <div className={!config.isActive_dp?"flex flex-col items-center":"hidden"}>
+                <Alert type="warning">Deposit hanya dapat dilakukan pada hari {config.schedule_dp} dari pukul {config.schedule_time_dp}.</Alert>
+            </div>
+            <div className={config.trx_dp!=='-'?"flex flex-col items-center mt-3":"hidden"}>
+                <Alert type="info">Masih ada transaksi aktif, silahkan selesaikan transaksi sebelumnya <button className="bg-old-gold-700 hover:bg-old-gold-800 px-2 py-1" onClick={()=>router.push(`/invoice/${btoa(config.trx_dp)}`)}>Selesaikan</button></Alert>
+            </div>
+
             {
                 step===1?(
                     <Nominal
+                        isActive={config.isActive_dp}
                         min_nominal={min_nominal}
                         handleClick={(nominal)=>doNominal(nominal)}
                     />
@@ -181,12 +190,20 @@ export async function getServerSideProps(ctx:NextPageContext) {
     await handleGet(Api.apiUrl+"bank?perpage=20",(datum)=>{
         dataBank=datum.data;
     },false)
+
+    // Get Config
+    let config:any;
+    await handleGet(Api.apiUrl+"transaction/wallet/config",(datum)=>{
+        config=datum;
+    },false)
+
     return { 
         props:{
             kategori:kate,
             total_tiket,
             options,
-            dataBank
+            dataBank,
+            config
         }
     }
 }

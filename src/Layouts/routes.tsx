@@ -1,4 +1,4 @@
-import {Home,Forms} from 'icons';
+import {Home,users,Invest,Ticket,poinTf,tiketTf,Deposit,Withdraw,History} from 'icons';
 
 
 const Routes=[
@@ -10,58 +10,57 @@ const Routes=[
     {
         link:'/mitra/new',
         title:'Tambah Mitra',
-        icon: Forms
+        icon: users
     },
     {
         link:'/investment/create',
         title:'Order Paket',
-        icon: Forms
+        icon: Invest
     },
     {
-        link:'/order/tiket',
+        link:'/tiket/order',
         title:'Order Tiket',
-        icon: Forms
+        icon: Ticket
     },
     {
-        link:'/order/tiket/transfer',
+        link:'/tiket/transfer',
         title:'Transfer Tiket',
-        icon: Forms
+        icon: tiketTf
+    },
+    {
+        link:'/wallet/deposit',
+        title:'Deposit',
+        icon: Deposit
     },
     {
         link:'/wallet/transfer/poin',
         title:'Transfer Poin',
-        icon: Forms
-    },
-    {
-      
-        link:'/wallet/deposit',
-        title:'Deposit',
-        icon: Forms
+        icon: poinTf
     },
     {
         link:'/wallet/withdrawal',
         title:'Penarikan',
-        icon: Forms
+        icon: Withdraw
     },
     {
         link:'/transaksi',
         title:'Riwayat Transaksi',
-        icon: Forms
+        icon: History
     },
     {
         link:'/investment/report',
         title:'Riwayat Investment',
-        icon: Forms
+        icon: History
     },
     {
         link:'/wallet/deposit/report',
         title:'Riwayat Deposit',
-        icon: Forms
+        icon: History
     },
     {
         link:'/wallet/withdrawal/report',
         title:'Riwayat Penarikan',
-        icon: Forms
+        icon: History
     },
   
 

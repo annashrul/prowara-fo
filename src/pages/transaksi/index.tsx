@@ -48,6 +48,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
     }
 
     const handleEvent=(event:string,picker:any)=>{
+        console.log(event);
         const from = moment(picker.startDate._d).format('YYYY-MM-DD');
         const to = moment(picker.endDate._d).format('YYYY-MM-DD');
         setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
@@ -103,8 +104,8 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
                                             <div className="m-2 text-xs font-semibold text-gray-200">{moment(item.created_at).format("yyyy-MM-DD hh:mm")}</div>
                                         </div>
                                         <div>
-                                            <div className="text-right m-2 text-xs font-semibold text-green-200">{Helper.numFormat(item.trx_in)}</div>
-                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">{Helper.numFormat(item.trx_out)}</div>
+                                            <div className="text-right m-2 text-xs font-semibold text-green-200">+ {Helper.numFormat(item.trx_in)}</div>
+                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">- {Helper.numFormat(item.trx_out)}</div>
                                         </div>
                                     </div>
                                 </div>

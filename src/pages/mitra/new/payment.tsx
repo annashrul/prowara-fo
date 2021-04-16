@@ -131,15 +131,6 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
               Pilih Bank Tujuan
             </h5>
             <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 mt-1 p-5">
-              <CardBank 
-                selected={bank==='saldo'}
-                id={'saldo'}
-                title="Saldo"
-                acc_name={`${Helper.numFormat(`100`)}`}
-                acc_no="Sisa Poin :"
-                logo="/wallet.webp"
-                handleClick={(id:string)=>setBank(id)}
-              />
               {
                 dataBank?.map((item:iBankPt,i:number)=>{
                   return (
@@ -162,7 +153,7 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
               <Button
                 style="mt-5 text-gray-700 dark:text-gray-200 px-5 py-3 text-sm"
                 title="Edit data mitra"
-                color="royal-blue"
+                color="base-blue"
                 size="sm"
                 handleClick={()=>router.push("/mitra/new")}
               />
@@ -187,7 +178,6 @@ const Payment: React.FC<iCards> = ({dataRegister,dataBank}) => {
 export async function getServerSideProps(ctx:NextPageContext) {
   // Parse
   const cookies = nookies.get(ctx)
-  const userData = JSON.parse(Helper.decode(cookies.__uid));
   if(!cookies._prowara){
     return {
       redirect: {
@@ -204,6 +194,7 @@ export async function getServerSideProps(ctx:NextPageContext) {
       },
     }
   }
+  const userData = JSON.parse(Helper.decode(cookies.__uid));
   const dataRegister = JSON.parse(Helper.decode(cookies._regist));
 
   // GET BANK DATA

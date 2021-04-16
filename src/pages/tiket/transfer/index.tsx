@@ -60,11 +60,11 @@ const TransferTiket: React.FC<iTfTiket> =({config})=> {
 
     const doCheckout= async (pin:string)=>{
         const checkoutData={
-            pin_member:pin,
+            member_pin:pin,
             uid:user?.id,
             qty:nominal
         }
-        await handlePost(Api.apiClient+'pin/transfer',checkoutData,(datum,isStatus,msg)=>{
+        await handlePost(Api.apiClient+'pin/transfer',checkoutData,(datum)=>{
             Helper.mySwalWithCallback(datum.msg,()=>{
                 setOpenPin(false);
                 router.push(`/`);

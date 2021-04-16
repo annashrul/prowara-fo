@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react'
-import { Modal, ModalBody, ModalFooter, Button, ModalHeader } from '@windmill/react-ui'
+import { Modal, ModalBody, ModalFooter, Button } from '@windmill/react-ui'
 import { useToasts } from 'react-toast-notifications'
 import {iBankMember,iConfigWallet} from 'lib/interface'
 import Api from 'lib/httpService'
@@ -70,7 +70,7 @@ const ModalWD: React.FC<iModalWD> = ({open,closeModal,amount,id_slot}) => {
             type:1,
             id_slot:id_slot
         }
-        await handlePost(Api.apiClient+'transaction/withdrawal',data,(datum,isStatus,msg)=>{
+        await handlePost(Api.apiClient+'transaction/withdrawal',data,(datum)=>{
             console.log(datum);
             Helper.mySwalWithCallback(datum.msg,()=>{
                 router.push("/");

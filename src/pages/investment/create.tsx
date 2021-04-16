@@ -119,8 +119,8 @@ const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
             </div>
             </div>
         </div>
-        <div className="h-auto mt-8 w-full flex flex-col justify-center items-center mb-20">
-            <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  mx-24">
+        <div className="h-auto mt-8 w-full flex lg:flex-col justify-center items-center mb-20">
+            <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  lg:mx-24">
                 <div className="py-4 px-8 mt-3">
                     <div className="flex flex-col mb-8">
                         <h4 className="text-gray-700 dark:text-gray-200 font-semibold text-lg tracking-wide mb-2">Pilih Paket</h4>
@@ -153,12 +153,11 @@ const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
             
                                             )
                                         })
-
                                     }
                                 </div>
                             )
                             :(
-                                <div className="flex flex-grow w-96"><div className='w-full text-gray-700 dark:text-gray-200 text-center text-xl'>Paket Tidak Tersedia.</div></div>
+                                <div className="flex flex-grow lgLw-96"><div className='w-full text-gray-700 dark:text-gray-200 text-center text-xl'>Paket Tidak Tersedia.</div></div>
                             )
                         }
                         

@@ -1,5 +1,4 @@
 import React, { useState, useEffect                                                              } from "react";
-import { useToasts } from 'react-toast-notifications'
 import "react-intl-tel-input/dist/main.css";
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
@@ -53,6 +52,7 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
         }
     }
     const handleEvent=(event:any,picker:any)=>{
+        console.log(event);
         const from = moment(picker.startDate._d).format('YYYY-MM-DD');
         const to = moment(picker.endDate._d).format('YYYY-MM-DD');
         setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
@@ -94,7 +94,7 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                     </div>
                 <br/>
                
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                     {
                         loading?<Skeleton/>:datumInvestment?.length>0?datumInvestment.map((item:iInvestment,i:number)=>{
                             return(
@@ -109,13 +109,13 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                                             <div className="m-2 text-xs font-semibold text-gray-200">{moment(item.created_at).format("yyyy-MM-DD hh:mm")}</div>
                                         </div>
                                         <div>
-                                            <div className="text-right m-2 text-xs font-semibold text-green-200">{Helper.numFormat(item.trx_in)}</div>
-                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">{Helper.numFormat(item.trx_out)}</div>
+                                            <div className="text-right m-2 text-xs font-semibold text-green-200">+ {Helper.numFormat(item.trx_in)}</div>
+                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">- {Helper.numFormat(item.trx_out)}</div>
                                         </div>
                                     </div>
                                 </div>
                             );
-                        }):<img src={`${httpService.noData}`}/>
+                        }):<img className="w-full" src={`${httpService.noData}`}/>
                     }
 
                     </div>

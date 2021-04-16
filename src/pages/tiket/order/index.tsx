@@ -63,7 +63,7 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
             id_bank_destination:bank,
             metode_pembayaran:bank==='saldo'?'saldo':'transfer'
         }
-        await handlePost(Api.apiClient+'transaction/pin', checkoutData,(datum,isStatus,msg)=>{
+        await handlePost(Api.apiClient+'transaction/pin', checkoutData,(datum)=>{
             Helper.mySwalWithCallback(datum.msg,()=>{setOpenPin(true);router.push(`/`);})
         })
   }
@@ -135,7 +135,7 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
                             <div className="py-8 px-8">
                                 <div className="rounded shadow border p-6 w-full">
                                     
-                                    <p className="text-gray-200 text-sm text-center">tiket anda</p>
+                                    <p className="text-gray-200 text-sm text-center">Tiket saat ini:</p>
                                     <p className="text-gray-200 text-3xl text-center">{dataWidget.total_pin}</p>
                                     
                                 </div>

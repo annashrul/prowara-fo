@@ -68,7 +68,6 @@ const Cards: React.FC<iCards> = () => {
             },800)
         }
   }
-
   return (
         <div className="w-full overflow-hidden rounded-lg shadow-xs">
           <div className="w-full overflow-x-auto">
@@ -91,9 +90,9 @@ const Cards: React.FC<iCards> = () => {
                       <Row datum={({} as iSlot)} isLoading={true}/>
                       :
 
-                        datumSlot?.length===0?(
+                        datumSlot===undefined?(
                             <tr>
-                              <td colSpan={7}>
+                              <td colSpan={8}>
                                 <div  className="text-center text-white p-4 text-md">
                                   Anda belum mempunyai paket aktif, silahkan <Button title="beli paket" color="orange" size="sm"/> terlebiih dahulu.
                                 </div>
@@ -111,7 +110,7 @@ const Cards: React.FC<iCards> = () => {
               </tbody>
             </table>
           </div>
-          <div className="mt-3">
+          <div className={"mt-3 "+(datumSlot===undefined?"hidden":'block')}>
             <Pagination
                 totalResults={pagination===undefined?0:pagination.total}
                 resultsPerPage={pagination===undefined?0:pagination.per_page}

@@ -2,19 +2,15 @@
 
 
 import React from 'react';
-import Nomine from 'components/Common/nominal'
 
 interface iStep1 {
     handleClick:(nominal:number,userId:string)=>void;
-    min_nominal:number;
+    min_nominal?:number;
 }
-const Step1: React.FC<iStep1> = ({handleClick,min_nominal}) => {
+const Step1: React.FC<iStep1> = ({handleClick}) => {
     const [poin,setPoin] = React.useState(0)
     const [id,setId] = React.useState('')
-    const cbPoin=(num:string)=>{
-        setPoin(parseInt(num));
-    }
-    const nominalPoin=['1','2','3','4','5','6']
+    
     return (
         <>
             <div className="h-auto mt-16 w-full flex flex-row md:flex-col justify-center items-center mb-20">
@@ -29,7 +25,6 @@ const Step1: React.FC<iStep1> = ({handleClick,min_nominal}) => {
                             onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
                             value={poin}
                             />
-                        <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Transfer: {min_nominal} Poin</h6>
                         <h6 className="mt-8 text-yellow-400 text-sm">User ID:</h6>
                         <input 
                             type="text" 
