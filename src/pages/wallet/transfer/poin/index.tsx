@@ -53,7 +53,7 @@ const TransferPoin: React.FC<iTfPoin> =({config})=> {
             penerima:user?.id,
             amount:nominal
         }
-        await handlePost(Api.apiClient+'transaction/transfer', checkoutData,(datum,isStatus,msg)=>{
+        await handlePost(Api.apiClient+'transaction/transfer', checkoutData,(datum)=>{
             Helper.mySwalWithCallback(datum.msg,()=>{
                 setOpenPin(false);
                 router.push(`/`);

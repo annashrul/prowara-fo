@@ -109,12 +109,15 @@ export interface iDeposit{
   payment_slip:string,
   created_at:string,
 }
-export interface iProfiles{
-  id:number,
+export interface iNetwork{
+  id:string,
   name:string,
-  role:string,
+  parentId:string,
   picture:string,
-  profiles:Array<iProfiles>,
+  hasChild:boolean,
+  join_date:string,
+  children:Array<iNetwork>;
+  profiles:Array<iNetwork>,
 }
 
 export interface iWithdrawal{

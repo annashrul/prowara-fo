@@ -4,8 +4,6 @@ import Cookies from "js-cookie";
 import {iUser} from './interface'
 import Helper from "./helper";
 
-const tokenKey = "token";
-
 // http.setJwt (getJwt());
 
 

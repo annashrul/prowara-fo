@@ -286,7 +286,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
   const onCompareOtp = ()=>{  
     bcrypt.compare(otpDummy!==undefined?otpDummy:otpInput, otp, function(err, res) {
       if(!err){
-        setValidPhone(true)
+        setValidPhone(res)
         setCounter(0)
       }
     });

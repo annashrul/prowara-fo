@@ -3,7 +3,7 @@ import Api from 'lib/httpService';
 import Swal from 'sweetalert2'
 import helper from './helper';
 
-export const handleGet = async (url:string,callback:(data:any)=>void,isLoading:boolean=true,isDetail:boolean=false)=>{
+export const handleGet = async (url:string,callback:(data:any)=>void,isLoading:boolean=true)=>{
     
     if(isLoading)NProgress.start();
     try {

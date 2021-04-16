@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 interface iCards {
     dataBerita:Array<iContent>;
+    myElement?: HTMLImageElement;
 }
 const Cards: React.FC<iCards> = ({dataBerita}) => {
 

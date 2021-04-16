@@ -1,15 +1,19 @@
-import { iProfiles } from 'lib/interface';
+// import { iProfiles } from 'lib/interface';
+import { iNetwork } from 'lib/interface';
+import moment from 'moment';
 import React from 'react';
 import { useToasts } from 'react-toast-notifications';
 // import ProfileList from './ProfileList';
 interface iProfileCard {
-  id: number;
+  id: string;
   name: string;
-  role: string;
-  res: Array<iProfiles>;
+  picture: string;
+  hasChild: boolean;
+  join_date: string;
+  res: Array<iNetwork>;
   callBack:(pin:string)=>void;
 }
-const ProfileCard: React.FC<iProfileCard> = ({ id, name, role, res = [], callBack }) => {
+const ProfileCard: React.FC<iProfileCard> = ({ id, name, picture,  res = [], callBack }) => {
   const { addToast } = useToasts();
   console.log("from card",res);
   const handleMore=(idData:string)=>{
@@ -26,12 +30,16 @@ const ProfileCard: React.FC<iProfileCard> = ({ id, name, role, res = [], callBac
           <img
             className="block rounded-full m-auto shadow-md"
             alt={name}
-            src={`https://randomuser.me/api/portraits/men/${id}.jpg`}
+            src={picture}
+            onError={(e)=>{onerror = null; e.currentTarget.src="https://dummyimage.com/302x302/94a3b8/ffffff"}}
           />
         </div>
         <div className="text-gray-600">
-          <p>{name}</p>
-          <p>{role}</p>
+          <p className="text-white font-semibold">{name}</p>
+          <p><span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-800 my-1 bg-old-gold-500 last:mr-0 mr-1">
+            {id}
+            </span>
+          </p>
           {res.length <= 0 && 
           <button
             className="inline-flex items-center justify-center w-7 h-7 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-full focus:shadow-outline hover:bg-indigo-800"
@@ -42,7 +50,7 @@ const ProfileCard: React.FC<iProfileCard> = ({ id, name, role, res = [], callBac
           }
         </div>
       </div>
-      {res.length > 0 && 
+      {res.length > 0  && 
         // <ProfileList data={res} />
         <ul className="flex flex-row mt-10 justify-center">
       {/* <PseudoBorder mTop="-mt-10" /> */}
@@ -66,10 +74,12 @@ const ProfileCard: React.FC<iProfileCard> = ({ id, name, role, res = [], callBac
                 {...datum}
                 id={datum.id}
                 name={datum.name}
-                role={datum.role}
-                res={[]}
+                picture={datum.picture}
+                hasChild={datum.hasChild}
+                join_date={moment(datum.join_date).format('YYYY-MM-DD')}
+                res={JSON.parse(JSON.stringify(datum.children))}
                 callBack={(val)=>handleMore(val)}
-                // {...profile}
+                // {...res}
                 />
               </div>
             </li>

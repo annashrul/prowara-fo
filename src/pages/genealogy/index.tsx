@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-intl-tel-input/dist/main.css";
+import atob from 'atob';
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
@@ -7,75 +8,87 @@ import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import ProfileCard from "components/genealogy/ProfileCard";
 import { arrayToTree } from "performant-array-to-tree";
+import { handleGet } from "lib/handleAction";
+import Skeleton from "components/Common/Skeleton";
+import { iNetwork, iUser } from "lib/interface";
+import httpService from "lib/httpService";
+import moment from "moment";
 import { useToasts } from "react-toast-notifications";
 interface iIndexGenealogy {
-  // profiles: Array<iProfiles>;
+  userData: iUser;
 }
 
-
-
-// const treeItems = arrayToTree(JSON.parse(JSON.stringify(array)),{ dataField: null, childrenField: "children"  });
-// console.log("treeItems",treeItems);
-// console.log("profiles",profiles);
-
-const Index: React.FC<iIndexGenealogy> = () =>{
-  let array = 
-[
-  {id:1 ,parentId : null ,name:'Name 1', role:'ROLE 1'},
-  {id:2 ,parentId : 1 ,name:'Name 2', role:'ROLE 2'},
-  {id:3 ,parentId : 1 ,name:'Name 3', role:'ROLE 3'},
-  {id:8 ,parentId : 1 ,name:'Name 8', role:'ROLE 8'}
-]
-;
-  const [theArrayOfObjects, setTheArrayOfObjects] = useState(array);
-  const { addToast } = useToasts();
-  const treeData = arrayToTree(theArrayOfObjects,{ dataField: null, childrenField: "children"  });
-    const doMore = (val:string)=>{
-      console.log(val);
-      addToast(val, {appearance: 'warning',autoDismiss: true});
-      // array.push({id:parseInt(val,10)+1 ,parentId : parseInt(val,10) ,name:'Name '+val, role:'ROLE '+val});
+const Index: React.FC<iIndexGenealogy> = ({userData}) =>{
+  const [loading,setLoading]=useState(true);
   
-      setTheArrayOfObjects(prevState => [...prevState, {id:parseInt(val,10)+1 ,parentId : parseInt(val,10) ,name:'Name '+val, role:'ROLE '+val}]);
-      console.log(theArrayOfObjects);
-      console.log("arrayToTree(theArrayOfObjects,{ dataField: null, childrenField: 'children'  })",arrayToTree(theArrayOfObjects,{ dataField: null, childrenField: "children"  }));
+  const [datumNetwork,setDatumNetwork]= useState<Array<iNetwork>>([]);
+  useEffect(() => {
+    loadNetwork(`isfirst=true`,btoa(userData.referral));
+}, []);
+
+
+const loadNetwork = async (val: string, id:string) => {
+    setLoading(true)
+    let url = Api.apiClient+`member/network/${id}`;
+    if(val!==null){
+        url+=`?${val}`;
     }
+    await handleGet(url,(datum)=>{
+        setDatumNetwork(datum);
+        setLoading(false);
+    })
+   
+}
+  const { addToast } = useToasts();
+    const doMore = async (val:string)=>{
+      setLoading(true)
+      let url = Api.apiClient+`member/network/${btoa(val)}`;
+      await handleGet(url,(datum)=>{
+        if(datum.length>0){
+          setDatumNetwork(datumNetwork.concat(datum));
+          setLoading(false);
+        } else {
+          addToast("Jaringan untuk "+val+" tidak ada!", {appearance: 'warning',autoDismiss: true});
+          setLoading(false);
+        }
+      })
+      // console.log("datumNetwork push",datumNetwork);
+    }
+    console.log(datumNetwork);
     return (
       <Layout title="Genealogy">
         <div className="container mt-6 lg:px-6 md:px-3 mx-auto xs:px-2 sm:px-2 grid mb-20">
           <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Genealogy
           </h2>
-          {/* CARD SECTION */}
           {/* component */}
           <div className="flex flex-col justify-center items-center">
             <div className="">
               <div className="items-center justify-center flex">
-                {treeData && treeData.map((res, idX) => (
+                {datumNetwork && datumNetwork?.length>0?arrayToTree(datumNetwork?.length>0?datumNetwork:[],{ dataField: null, childrenField: "children"  }).map((res, idX) => (
                   <ProfileCard
                     key={idX}
                     {...res}
-                    id={parseInt(String(res.id),10)}
+                    id={String(res.id)}
                     name={res.name}
-                    role={res.role}
+                    picture={res.picture}
+                    hasChild={res.hasChild}
+                    join_date={moment(res.join_date).format('YYYY-MM-DD')}
                     res={res.children}
                     callBack={(val)=>doMore(val)}
                      />
-                ))}
+                )):<img src={`${httpService.noData}`}/>}
               </div>
             </div>
-            {/* <a
-              className="text-md underline text-gray-500 hover:text-gray-700 cursor-pointer bottom-0 absolute"
-              href="https://codesandbox.io/s/github/ravisankarchinnam/tailwindcss-react-flowchart"
-            >
-              Next.js version
-            </a> */}
           </div>
+            {loading?<Skeleton/>:null}
         </div>
       </Layout>
     );
 }
 export async function getServerSideProps(ctx:NextPageContext) {
     const cookies = nookies.get(ctx)
+    const userData = JSON.parse(atob(cookies.__uid));
     if(!cookies._prowara){
         return {
           redirect: {
@@ -88,7 +101,9 @@ export async function getServerSideProps(ctx:NextPageContext) {
     }
 
     return { 
-        props:{}
+      props:{
+        userData
+      }
     }
 }
 

@@ -2,11 +2,9 @@ import React from 'react';
 import Layout from 'Layouts'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
-import { useRouter } from 'next/router'
 
 import Api from 'lib/httpService'
 import Helper from 'lib/helper';
-import { handleGet } from 'lib/handleAction';
 import { iContent } from 'lib/interface';
 import moment from 'moment'
 
@@ -15,8 +13,7 @@ interface iInvoice{
     datum:iContent
 }   
 
-const DetailBerita: React.FC<iInvoice> =({kode,datum})=> {
-    const router = useRouter()
+const DetailBerita: React.FC<iInvoice> =({datum})=> {
     return (
     <Layout title={`Invoice`}>
         <div className="container mt-6 lg:px-6 md:px-3">
@@ -32,7 +29,7 @@ const DetailBerita: React.FC<iInvoice> =({kode,datum})=> {
                         </div>
                         
                     </div>
-                    <img className="w-full bg-contain" src={datum.picture} onError={(e)=>{e.target.onerror = null; e.target.src="https://3.bp.blogspot.com/-Chu20FDi9Ek/WoOD-ehQ29I/AAAAAAAAK7U/mc4CAiTYOY8VzOFzBKdR52aLRiyjqu0MwCLcBGAs/s1600/DSC04596%2B%25282%2529.JPG"}}/>
+                    <img className="w-full bg-contain" src={datum.picture}/>
                     <div className="px-3 pb-2">
                         <div className="mt-5 mb-5 border-b-8 pb-5">
                             <span className="text-xl text-white font-bold mb-5">{datum.title}</span><br/>
