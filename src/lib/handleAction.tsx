@@ -13,16 +13,17 @@ export const handleGet = async (url:string,callback:(data:any)=>void,isLoading:b
         // console.log("DATUM",getData);
         callback(datum);
     } catch (err) {
-        console.log("errror",err.response);
         if(isLoading)NProgress.done()
         if (err.message === 'Network Error') {
             helper.mySwal('Tidak dapat tersambung ke server!');
         }else{
-            if(err.response.data){
-                helper.mySwal('Terjadi Kesalahan!');
-            }
-            if(err.response.data.msg!==undefined){
-                helper.mySwal(err.response.data.msg);
+          
+            if(err.response!==undefined){
+                if(err.response.data.msg!==undefined){
+                        helper.mySwal(err.response.data.msg);
+                }else{
+                    helper.mySwal('Terjadi Kesalahan!');
+                }
             }
         }
         
@@ -64,17 +65,18 @@ export const handlePost = async(url:string,data:any,callback:(datum:any,isStatus
                 if (err.message === 'Network Error') {
                     helper.mySwal('Tidak dapat tersambung ke server!');
                 }else{
-                    if(err.response.data){
-                        helper.mySwal('Terjadi Kesalahan!');
-                    }
-                    if(err.response.data.msg!==undefined){
-                        if(err.response.data.msg=="Masih ada transaksi yang belum selesai."){
-                            helper.mySwalWithCallback(err.response.data.msg,()=>{
-                                callback(undefined,true,`/invoice/${btoa(err.response.data.result.kd_trx)}`)
-                            })
-                        }
-                        else{
-                            helper.mySwal(err.response.data.msg);
+                    if(err.response!==undefined){
+                        if(err.response.data.msg!==undefined){
+                            if(err.response.data.msg=="Masih ada transaksi yang belum selesai."){
+                                helper.mySwalWithCallback(err.response.data.msg,()=>{
+                                    callback(undefined,true,`/invoice/${btoa(err.response.data.result.kd_trx)}`)
+                                })
+                            }
+                            else{
+                                helper.mySwal(err.response.data.msg);
+                            }
+                        }else{
+                            helper.mySwal('Terjadi Kesalahan!');
                         }
                     }
                 }

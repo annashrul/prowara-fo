@@ -13,6 +13,11 @@ const Routes=[
         icon: users
     },
     {
+        link:'/genealogy',
+        title:'Genealogy',
+        icon: users
+    },
+    {
         link:'/investment/create',
         title:'Order Paket',
         icon: Invest
