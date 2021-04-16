@@ -154,6 +154,7 @@ export interface iSlot{
   status: number;
   created_at: Date;
   updated_at: Date;
+  status_wd:number;
 }
 
 export interface iPagin{
@@ -180,6 +181,35 @@ export interface iMemberUid{
   referral: string;
   status: number;
   foto: string;
+}
+
+
+export interface iContent{
+  id: string;
+  title: string;
+  id_category: string;
+  category: string;
+  caption: string;
+  type_no: number;
+  video: string;
+  picture: string;
+  created_at: string;
+}
+
+export interface iConfigWallet{
+  wd_modal_charge: any;
+  dp_min: string;
+  tf_min: string;
+  wd_min:string;
+  isActive_wd: boolean;
+  isActive_dp: boolean;
+  saldo: string;
+  trx_wd: string;
+  trx_dp: string;
+  schedule_dp: string;
+  schedule_time_dp: string;
+  schedule_wd: string;
+  schedule_time_wd: string;
 }
 
 

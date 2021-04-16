@@ -1,9 +1,10 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {iSlot} from 'lib/interface';
 import Helper from 'lib/helper'
 import Skeleton from 'components/Common/Skeleton'
 import { Badge } from '@windmill/react-ui'
 import { useToasts } from 'react-toast-notifications'
+import ModalWD from 'components/withdrawal/modal_wd';
 
 
 interface iCards {
@@ -12,6 +13,7 @@ interface iCards {
 }
 const Cards: React.FC<iCards> = ({datum,isLoading}) => {
     const { addToast } = useToasts();
+    const [openWD,setOpenWD]=useState(false);
 
     const handleToast=()=>addToast("Transaksi akan berjalan sesuai dengan tanggal dimulai.", {appearance: 'warning',autoDismiss: true})
     const load=[];
@@ -47,6 +49,12 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
     }
   return (
       <>
+      <ModalWD 
+            open={openWD}
+            closeModal={()=>setOpenWD(false)}
+            amount={datum?.amount}
+            id_slot={datum?.id}
+        />
       {
           isLoading?load:(
             <tr className="text-gray-700 dark:text-gray-400">
@@ -94,7 +102,7 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                 <td className="px-4 py-3 text-sm">
                     {
                         datum.status===2?(
-                            <Badge>Tarik Modal</Badge>
+                            datum.status_wd===0?(<Badge className="cursor-pointer" onClick={(event)=>{event.preventDefault();setOpenWD(true);}}>Tarik Modal</Badge>):(datum.status_wd===1?<p className="text-yellow-200 font-bold">Pending</p>:<p className="text-green-100 font-bold">Berhasil</p>)
                         ):"#"
                     }
                 </td>

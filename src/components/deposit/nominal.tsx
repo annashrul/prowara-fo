@@ -7,8 +7,9 @@ import Nomine from 'components/Common/nominal'
 interface iCards {
     handleClick:(nominal:number)=>void;
     min_nominal:number;
+    isActive:boolean;
 }
-const Cards: React.FC<iCards> = ({handleClick,min_nominal}) => {
+const Cards: React.FC<iCards> = ({handleClick,min_nominal,isActive}) => {
     const [poin,setPoin] = React.useState(0)
     const cbPoin=(num:string)=>{
         setPoin(parseInt(num));
@@ -36,9 +37,16 @@ const Cards: React.FC<iCards> = ({handleClick,min_nominal}) => {
                             value={poin}
                             />
                         <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Deposit: {min_nominal} Poin</h6>
-                        <button onClick={(event)=>{event.preventDefault();handleClick(poin);}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
-                            Lanjut
-                        </button>
+                        {
+                            isActive?
+                                <button onClick={(event)=>{event.preventDefault();handleClick(poin);}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
+                                    Lanjut
+                                </button>
+                                :
+                                <button className="w-full bg-gray-400 cursor-not-allowed hover:bg-gray-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
+                                    Lanjut
+                                </button>
+                        }
                     </div>
                 </div>
             </div>

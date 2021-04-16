@@ -1,27 +1,23 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar'
 import SEO, { SEOProps } from 'components/SEO';
-import { NextPageContext } from 'next'
-import nookies from 'nookies'
-import Helper from 'lib/helper'
-import Api from 'lib/httpService'
-
 
 const LayoutPage: React.FC<SEOProps> = ({children, ...rest }) => {
   const [open,setOpen]=useState(false);
-  const [pin,setPin]=useState(0);
+  const [openProfile,setopenProfile]=useState(false);
   const {title}=rest;
+  console.log(openProfile);
 
   return (
-    <div className={`flex h-screen bg-gray-50 dark:bg-gray-900`}>
+    <div className={`flex h-screen bg-gray-50 dark:bg-gray-900`} onClick={()=>setopenProfile(false)}>
       <SEO {...rest} />
       {
         title!=='Login'&& <Sidebar isOpen={open} toggleSidebar={() => setOpen(!open)} />
       }
         <div className="flex flex-col flex-1 w-1/2" style={{zoom:'90%'}}>
           {
-            title!=='Login'&& <Header pin={pin} toggleSidebar={() => setOpen(!open)} />
+            title!=='Login'&& <Header openProfile={openProfile} toggleProfile={(toggle:boolean)=>setopenProfile(!openProfile)} toggleSidebar={() => setOpen(!open)} />
           }
             
             <main className="h-full overflow-y-auto">

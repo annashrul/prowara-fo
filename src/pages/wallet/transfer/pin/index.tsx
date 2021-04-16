@@ -52,9 +52,7 @@ const TransferPin: React.FC<iTfPin> =()=> {
     }
 
     const doVerif=()=>{
-        Helper.mySwalWithCallback('Pastikan data telah sesuai.',()=>{
-            setOpenPin(true);
-        });
+        setOpenPin(true);
         
     }
 
@@ -64,7 +62,7 @@ const TransferPin: React.FC<iTfPin> =()=> {
             uid:user?.id,
             qty:nominal
         }
-        await handlePost(Api.apiClient+'pin/transfer',checkoutData,(datum,isStatus,msg)=>{
+        await handlePost(Api.apiClient+'pin/transfer',checkoutData,(datum)=>{
             Helper.mySwalWithCallback(datum.msg,()=>{
                 setOpenPin(false);
                 router.push(`/`);

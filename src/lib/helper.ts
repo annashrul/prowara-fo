@@ -6,6 +6,16 @@ import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import Api from 'lib/httpService'
 
+const removeHtml=(str:string)=>{
+  // var parser = new DOMParser();
+  // return parser.parseFromString(str,'text/html')
+  const regex = /(&#39;|&nbsp;|<([^>]+)>)/gi;
+  let cek = str.replace(regex, '');
+  return cek.replace('/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/g','')
+
+  // return str.replace(/(<([^>]+)>)/gi, "");
+}
+
 const decode=(str:string)=>{return atob(str);}
 
 const setCookie=(name:string,data:string)=>{
@@ -117,11 +127,9 @@ export const mySwalWithCallback=(msg:string,callback:()=>void)=>{
       title   : 'Perhatian !!!',
       html    :`${msg}`,
       icon    : 'warning',
-      showCancelButton: true,
+      allowOutsideClick: false,
       confirmButtonColor  : '#3085d6',
-      cancelButtonColor   : '#d33',
       confirmButtonText   : `Oke`,
-      cancelButtonText    : 'Batal',
   }).then(async (result) => {
       if (result.value) {
         callback();
@@ -133,11 +141,9 @@ export const mySwal=(msg:string)=>{
       title   : 'Perhatian !!!',
       html    :`${msg}`,
       icon    : 'warning',
-      showCancelButton: true,
+      allowOutsideClick: false,
       confirmButtonColor  : '#3085d6',
-      cancelButtonColor   : '#d33',
       confirmButtonText   : `Oke`,
-      cancelButtonText    : 'Batal',
   });
 }
 
@@ -158,6 +164,7 @@ export const handleRoute=(ctx:NextPageContext)=>{
 
 
 export default {
+  removeHtml,
   numFormat,
   setCookie,
   removeCookie,

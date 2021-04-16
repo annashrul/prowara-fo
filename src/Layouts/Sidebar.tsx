@@ -23,7 +23,7 @@ const Sidebar: React.FC<iSidebar> = ({isOpen,toggleSidebar}) => {
                         {
                             Route.map((item,x)=>{
                                 return <Menu
-                                key={x}
+                                    key={x}
                                     icon={item.icon}
                                     title={item.title}
                                     link={item.link}

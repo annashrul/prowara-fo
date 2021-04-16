@@ -16,4 +16,4 @@ export default {
   apiClient: "http://192.168.100.10:6704/"
   // apiUrl: "https://api.prowara.com/",
   // apiClient: "https://api.prowara.com/"
-};
+}
