@@ -31,7 +31,6 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar,openProfile,toggleProfile}
             </button>
           </li>
           
-
           {/* Profile menu */}
           <li className="relative">
             <button className="align-middle rounded-full focus:shadow-outline-purple focus:outline-none" aria-label="Account" aria-haspopup="true" onClick={()=>{toggleProfile(!openProfile)}}>

@@ -1,21 +1,19 @@
 import React,{useState} from 'react';
 import Layout from 'Layouts'
 import { NextPageContext } from 'next'
-import nookies from 'nookies'
 import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
-import Swal from 'sweetalert2'
 import Api from 'lib/httpService'
-import {iMemberUid} from 'lib/interface'
+import {iConfigWallet, iMemberUid} from 'lib/interface'
 import Helper from 'lib/helper'
 import Modal from 'components/pin'
 import Step1 from 'components/transfer/poin/step1';
 import Step2 from 'components/transfer/poin/step2';
 import { handleGet, handlePost } from 'lib/handleAction';
 
-interface iTfPoin{}
+interface iTfPoin{config:iConfigWallet}
 
-const TransferPoin: React.FC<iTfPoin> =()=> {
+const TransferPoin: React.FC<iTfPoin> =({config})=> {
     const { addToast } = useToasts();
     const router = useRouter();
     const min_nominal=10;
@@ -66,24 +64,21 @@ const TransferPoin: React.FC<iTfPoin> =()=> {
     return (
         <Layout title="Transfer Poin">
             <div className="container mt-6 lg:px-6 md:px-3">
-            <div className="flex justify-between">
-          <div>
-            <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
-              Pendaftaran Mitra Baru
-            </h2>
-          </div>
-          <div>
-            <div className="flex items-center justify-between mt-6 w-full p-2 lg:rounded-full md:rounded-full bg-white dark:bg-gray-700 dark:hover:bg-gray-800 border border-gray-700	 rounded-lg">
-              <div className="lg:flex md:flex items-center">
-                <div className="flex flex-col px-3">
-                  <div className="text-xs leading-3 text-gray-700 dark:text-gray-300 w-full">Tiket Anda :</div>
-                  <div className="text-sm leading-3 text-center text-gray-700 dark:text-gray-300 mt-2 font-bold w-full">{10}</div>
-
+                <div className="flex justify-between">
+                    <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
+                        Transfer Poin
+                    </h2>
+                    <div>
+                        <div className="flex items-center justify-between mt-6 w-full p-2 lg:rounded-full md:rounded-full bg-white dark:bg-gray-700 dark:hover:bg-gray-800 border border-gray-700	 rounded-lg">
+                            <div className="lg:flex md:flex items-center">
+                                <div className="flex flex-col px-3">
+                                    <div className="text-xs leading-3 text-gray-700 dark:text-gray-300 w-full">Poin Anda Saat Ini:</div>
+                                    <div className="text-sm leading-3 text-center text-gray-700 dark:text-gray-300 mt-2 font-bold w-full">{config.saldo}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
             </div>
             <Modal 
                 open={openPin}
@@ -159,8 +154,16 @@ const TransferPoin: React.FC<iTfPoin> =()=> {
 
 export async function getServerSideProps(ctx:NextPageContext) {
     Helper.handleRoute(ctx);
+
+    let config: any = {};
+    await handleGet(Api.apiUrl+"transaction/wallet/config", (res) => {
+        console.log('response config',res);
+        config = res;
+    }, false)
+    
+
     return { 
-        props:{}
+        props:{config}
     }
 }
 

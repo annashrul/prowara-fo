@@ -4,16 +4,18 @@ import { NextPageContext } from 'next'
 import { useToasts } from 'react-toast-notifications'
 import { useRouter } from 'next/router'
 import Api from 'lib/httpService'
-import {iMemberUid} from 'lib/interface'
+import {iConfigWallet, iMemberUid} from 'lib/interface'
 import Helper from 'lib/helper'
 import Modal from 'components/pin'
 import Step1 from 'components/transfer/pin/step1';
 import Step2 from 'components/transfer/pin/step2';
 import { handleGet, handlePost } from 'lib/handleAction';
 
-interface iTfPin{}
+interface iTfTiket{
+    config:iConfigWallet
+}
 
-const TransferPin: React.FC<iTfPin> =()=> {
+const TransferTiket: React.FC<iTfTiket> =({config})=> {
     const { addToast } = useToasts();
     const router = useRouter();
     const min_nominal=0;
@@ -76,8 +78,18 @@ const TransferPin: React.FC<iTfPin> =()=> {
             <div className="container mt-6 lg:px-6 md:px-3">
                 <div className="flex justify-between">
                     <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
-                        Transfer Pin
+                        Transfer Tiket
                     </h2>
+                    <div>
+                        <div className="flex items-center justify-between mt-6 w-full p-2 lg:rounded-full md:rounded-full bg-white dark:bg-gray-700 dark:hover:bg-gray-800 border border-gray-700	 rounded-lg">
+                            <div className="lg:flex md:flex items-center">
+                                <div className="flex flex-col px-3">
+                                    <div className="text-xs leading-3 text-gray-700 dark:text-gray-300 w-full">Tiket Anda Saat Ini :</div>
+                                    <div className="text-sm leading-3 text-center text-gray-700 dark:text-gray-300 mt-2 font-bold w-full">{config.tiket}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <Modal 
@@ -154,9 +166,15 @@ const TransferPin: React.FC<iTfPin> =()=> {
 
 export async function getServerSideProps(ctx:NextPageContext) {
     Helper.handleRoute(ctx);
+    let config: any = {};
+    await handleGet(Api.apiUrl+"transaction/wallet/config", (res) => {
+        console.log('response config',res);
+        config = res;
+    }, false)
+
     return { 
-        props:{}
+        props:{config}
     }
 }
 
-export default TransferPin;
+export default TransferTiket;

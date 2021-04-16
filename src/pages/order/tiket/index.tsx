@@ -200,7 +200,7 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
                         <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  md:mx-60">
                             <div className="py-8 px-8">
                                 <div className="w-full">
-                                <div className="flex justify-between px-2 py-2">
+                                    <div className="flex justify-between px-2 py-2">
                                         <p className="flex text-gray-700 dark:text-gray-200">
                                             Metode Pembayaran
                                         </p>

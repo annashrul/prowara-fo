@@ -134,7 +134,7 @@ const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
                                 options={options} />
                         </label>
                     </div>
-                    <div className="max-h-96 overflow-auto p-3">
+                    <div className="max-h-96 overflow-auto">
                         {
                             loading?<div className="grid grid-cols-1 md:grid-cols-2 gap-4"><Card loading={loading} handleClick={(id)=>setPaket(id)} datum={({} as iPaket)}/></div>:
                             datumPaket?.length>0?(

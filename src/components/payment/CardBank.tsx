@@ -14,7 +14,7 @@ const Bank: React.FC<iBank> = ({selected,handleClick,title,acc_no,acc_name,logo,
   return (
         <button
           onClick={(event)=>{event.preventDefault();handleClick(id)}}
-          className={"relative block p-px overflow-hidden rounded shadow-sm hover:scale-105 group hover:shadow-xl focus:outline-none "+(selected?"w-full border-4 border-old-gold":"w-full border-2 border-gray-400")}
+          className={"relative  block mb-5 p-px overflow-hidden rounded shadow-sm hover:scale-105 group hover:shadow-xl focus:outline-none "+(selected?"w-full border-4 border-old-gold":"w-full border-4 border-gray-400")}
         >
           <div className="relative flex items-start p-5 pb-8 bg-white dark:bg-gray-700 dark:hover:bg-gray-800 rounded-sm">
             <div className="mr-2 lg:mr-4 w-1/3 h-10">

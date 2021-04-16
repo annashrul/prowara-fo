@@ -11,6 +11,7 @@ import { } from '@windmill/react-ui'
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import { handleGet } from "lib/handleAction";
+import httpService from "lib/httpService";
 
 interface iReportTransaksi {}
 
@@ -91,7 +92,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
                     {
                         arrDatum?.length>0?arrDatum.map((item:iTransaksi,i:number)=>{
                             return(
-                                <div key={i} className="w-full mx-auto border-t border-b border-r rounded">
+                                <div key={i} className="w-full mx-auto border-t border-b border-r border-gray-600 rounded">
                                     <div className="p-4 border-l-4 border-teal rounded flex justify-between">
                                         <div>
                                             <div className="m-2 uppercase text-xs font-semibold text-gray-200">{item.fullname}</div>
@@ -108,7 +109,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
                                     </div>
                                 </div>
                             );
-                        }):"tidak ada data"
+                        }) : <img src={httpService.noData}/>
                     }
 
                 </div>
