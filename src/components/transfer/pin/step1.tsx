@@ -2,19 +2,15 @@
 
 
 import React from 'react';
-import Nomine from 'components/Common/nominal'
 
 interface iStep1 {
     handleClick:(nominal:number,userId:string)=>void;
-    min_nominal:number;
+    min_nominal?:number;
 }
-const Step1: React.FC<iStep1> = ({handleClick,min_nominal}) => {
+const Step1: React.FC<iStep1> = ({handleClick}) => {
     const [poin,setPoin] = React.useState(0)
     const [id,setId] = React.useState('')
-    const cbPoin=(num:string)=>{
-        setPoin(parseInt(num));
-    }
-    const nominalPoin=['1','2','3','4','5','6']
+    
     return (
         <>
             <div className="h-auto mt-16 w-full flex flex-row md:flex-col justify-center items-center mb-20">
