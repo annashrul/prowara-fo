@@ -8,7 +8,6 @@ const LayoutPage: React.FC<SEOProps> = ({children, ...rest }) => {
   const [open,setOpen]=useState(false);
   const [openProfile,setOpenProfile]=useState(false);
   const {title}=rest;
-  console.log(openProfile);
 
   return (
     <div className={`flex h-screen bg-gray-50 dark:bg-gray-900`} >

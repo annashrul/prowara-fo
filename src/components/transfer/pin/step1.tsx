@@ -29,7 +29,6 @@ const Step1: React.FC<iStep1> = ({handleClick,min_nominal}) => {
                             onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
                             value={poin}
                             />
-                        <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Transfer: {min_nominal} Poin</h6>
                         <h6 className="mt-8 text-yellow-400 text-sm">User ID:</h6>
                         <input 
                             type="text" 

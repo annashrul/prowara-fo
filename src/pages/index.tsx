@@ -38,7 +38,7 @@ const Dashboard: React.FC<iDashboard> = ({widget,berita,report}) => {
           <Slot/>
 
           {/* BOTTOM SECTION */}
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-col lg:flex-row">
             <Berita dataBerita={berita}/>
             <Report dataReport={report}/>
           </div>

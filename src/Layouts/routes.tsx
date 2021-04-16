@@ -18,25 +18,24 @@ const Routes=[
         icon: Invest
     },
     {
-        link:'/order/tiket',
+        link:'/tiket/order',
         title:'Order Tiket',
         icon: Ticket
+    },
+    {
+        link:'/tiket/transfer',
+        title:'Transfer Tiket',
+        icon: tiketTf
+    },
+    {
+        link:'/wallet/deposit',
+        title:'Deposit',
+        icon: Deposit
     },
     {
         link:'/wallet/transfer/poin',
         title:'Transfer Poin',
         icon: poinTf
-    },
-    {
-        link:'/order/tiket/transfer',
-        title:'Transfer Tiket',
-        icon: tiketTf
-    },
-    {
-      
-        link:'/wallet/deposit',
-        title:'Deposit',
-        icon: Deposit
     },
     {
         link:'/wallet/withdrawal',

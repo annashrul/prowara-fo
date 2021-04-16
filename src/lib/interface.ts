@@ -113,6 +113,7 @@ export interface iProfiles{
   id:number,
   name:string,
   role:string,
+  picture:string,
   profiles:Array<iProfiles>,
 }
 
@@ -205,12 +206,14 @@ export interface iConfigWallet{
   isActive_dp: boolean;
   saldo: string;
   tiket: string;
-  trx_wd: number;
+  trx_wd: string;
   trx_dp: string;
   schedule_dp: string;
   schedule_time_dp: string;
   schedule_wd: string;
   schedule_time_wd: string;
+  wd_charge: string;
+  tf_charge: string;
 }
 
 

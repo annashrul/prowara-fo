@@ -12,6 +12,7 @@ import IntlTelInput from "react-intl-tel-input";
 import "react-intl-tel-input/dist/main.css";
 import bcrypt from 'bcryptjs'
 import { Alert } from '@windmill/react-ui'
+import { nikParser } from 'nik-parser'
 
 import Layout from 'Layouts'
 import Api from 'lib/httpService';
@@ -165,27 +166,31 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
     else{
       const clearNo = phone.replace(/[^A-Z0-9]/ig, "");
       const phones = 62+clearNo;
-
-      const datum = {
-          fullname: data.fullname,
-          mobile_no:phones,
-          nik:data.nik,
-          sponsor:sponsor==='other'?uids:userData.referral,
-          signup_source:"Website",
-          id_paket:datumPaket.id,
-          id_bank_destination:'-',
-          datumPaket,
-          typeSponsor:sponsor,
-          namaSponsor:namaSponsor,
-          bank:{
-            bank_name:bank,
-            acc_name:data.atasnama,
-            acc_no:data.rekening
-          }
+      const checkNik = nikParser(data.nik);
+      if(!checkNik.isValid()){addToast("NIK tidak valid.", {appearance: 'warning',autoDismiss: true});return;}
+      else{
+        const datum = {
+            fullname: data.fullname,
+            mobile_no:phones,
+            nik:data.nik,
+            sponsor:sponsor==='other'?uids:userData.referral,
+            signup_source:"Website",
+            id_paket:datumPaket.id,
+            id_bank_destination:'-',
+            datumPaket,
+            typeSponsor:sponsor,
+            namaSponsor:namaSponsor,
+            bank:{
+              bank_name:bank,
+              acc_name:data.atasnama,
+              acc_no:data.rekening
+            }
+        }
+        Helper.removeCookie('_regist');
+        Helper.setCookie("_regist",JSON.stringify(datum));
+        router.push("/mitra/new/payment")
       }
-      Helper.removeCookie('_regist');
-      Helper.setCookie("_regist",JSON.stringify(datum));
-      router.push("/mitra/new/payment")
+
     }
     
   }
@@ -278,10 +283,10 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
       
   }
   
-  const onCompareOtp = ()=>{
+  const onCompareOtp = ()=>{  
     bcrypt.compare(otpDummy!==undefined?otpDummy:otpInput, otp, function(err, res) {
       if(!err){
-        setValidPhone(res)
+        setValidPhone(true)
         setCounter(0)
       }
     });
@@ -308,7 +313,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
 
   return (
     <Layout title="Tambah Mitra">
-      <div className="container mt-6 px-2 lg:px-7 mx-auto grid mb-20">
+      <div className="container mt-6 lg:px-7 mx-auto grid mb-20">
         <div className="flex justify-between">
           <div>
             <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
@@ -440,7 +445,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
                   <label className="flex mt-4 text-sm">
                     <span className="text-gray-700 dark:text-gray-400">Nomor Telepon</span>
                   </label>
-                  <div className="flex">
+                  <div className="flex flex-col lg:flex-row">
                     <div className="text-sm mt-2 flex-grow">
                         <IntlTelInput
                           disabled={validPhone}
@@ -459,18 +464,19 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
                           />
                     </div>
                     <button 
-                    className="px-8 rounded-r-lg bg-old-gold  text-gray-200  text-sm font-bold p-2 mt-2 uppercase border-yellow-500 border-t border-b border-r"
+                    className="px-8 rounded-lg lg:rounded-l-none bg-old-gold  text-gray-200  text-sm font-bold p-2 mt-2 uppercase border-yellow-500 border-t border-b border-r"
                     onClick={(event)=>{event.preventDefault();onOtpRequest();}}
                     >
                       {
-                        otp===""?validPhone?"Terverifikasi":"Check":counter>0?
+                        validPhone?"Terverifikasi":
+                        otp===""?"Check":counter>0?
                             `Kirim ulang dalam ${counter} Detik.`
                             :"Kirim ulang."
                       }
                     </button>
                   </div>
                   <div className={otp!=="" && !validPhone?"flex flex-col mt-5 items-center px-0 lg:px-32":"hidden"}>
-                    <div className="flex ">
+                    <div className="flex">
                       <div className="text-sm mt-2">
                         <input 
                           className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
@@ -574,9 +580,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
 export async function getServerSideProps(ctx:NextPageContext) {
   // Parse
   const cookies = nookies.get(ctx)
-  const userData = JSON.parse(atob(cookies.__uid));
-  const dataRegister = cookies._regist===undefined?{}:JSON.parse(Helper.decode(cookies._regist));
-
+  
   if(!cookies._prowara){
     return {
       redirect: {
@@ -585,6 +589,8 @@ export async function getServerSideProps(ctx:NextPageContext) {
       },
     }
   }
+  const dataRegister = cookies._regist===undefined?{}:JSON.parse(Helper.decode(cookies._regist));
+  const userData = JSON.parse(atob(cookies.__uid));
 
   // manipulate PAKET
   let paket=[];

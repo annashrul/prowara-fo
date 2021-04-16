@@ -25,6 +25,7 @@
     "next": "^10.0.9",
     "next-auth": "^3.13.3",
     "next-cookies": "^2.0.3",
+    "nik-parser": "^1.0.1",
     "nookies": "^2.5.2",
     "nprogress": "^0.2.0",
     "performant-array-to-tree": "^1.8.1",

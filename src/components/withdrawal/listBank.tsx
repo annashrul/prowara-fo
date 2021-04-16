@@ -30,10 +30,10 @@ const Cards: React.FC<iCards> = ({dataBank,handleClick,goBack}) => {
     }
     return (
         <>
-            <div className="h-auto mt-16  flex w-m-96 justify-center items-center mb-20">
-                <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  mx-24">
+            <div className="h-auto mt-16  flex lg:w-m-96 justify-center items-center mb-20">
+                <div className="bg-white dark:bg-gray-700 shadow-md  overflow-hidden  md:mx-24">
                     <div className="py-8 px-8">
-                        <div className="grid grid-cols-1 gap-4 w-96">
+                        <div className="grid grid-cols-1 gap-4 w-full">
                             {
                                 dataBank?.map((item:iBankMember,i:number)=>{
                                 return (

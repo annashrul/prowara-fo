@@ -10,7 +10,7 @@ import { Alert } from '@windmill/react-ui'
 import {iBankMember,iConfigWallet} from 'lib/interface'
 import Helper from 'lib/helper'
 import ListBank from 'components/withdrawal/listBank';
-import Preview from 'components/deposit/preview';
+import Preview from 'components/withdrawal/preview';
 import Modal from 'components/pin'
 import { handleGet, handlePost } from 'lib/handleAction';
 
@@ -181,8 +181,8 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
                         bank={bank?.bank_name}
                         atas_nama={bank?.acc_name}
                         nominal={`${poin}`}
-                        admin="0"
-                        total={""}
+                        admin={poin*(parseInt(config.wd_charge,10)/100)}
+                        total={poin-(poin*(parseInt(config.wd_charge,10)/100))}
                         handleClick={doVerif}
                         goBack={(val:number)=>doStep(val)}
                     />
@@ -223,7 +223,7 @@ export async function getServerSideProps(ctx:NextPageContext) {
         console.log("CONSOLE",err);
     }
 
-        // Get Config
+    // Get Config
     let config:any;
     await handleGet(Api.apiUrl+"transaction/wallet/config",(datum)=>{
         config=datum;

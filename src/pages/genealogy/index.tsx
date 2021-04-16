@@ -6,7 +6,6 @@ import Helper from 'lib/helper';
 import nookies from 'nookies'
 import { NextPageContext } from 'next'
 import ProfileCard from "components/genealogy/ProfileCard";
-import profiles from "./data.json";
 import { arrayToTree } from "performant-array-to-tree";
 import { useToasts } from "react-toast-notifications";
 interface iIndexGenealogy {

@@ -1,4 +1,7 @@
 import React from 'react';
+import {doLogout} from 'lib/auth'
+import {useRouter} from 'next/router'
+
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -6,7 +9,13 @@ interface HeaderProps {
   toggleProfile: (toggle:boolean) => void;
 }
 
+
 const Header: React.FC<HeaderProps> = ({toggleSidebar,openProfile,toggleProfile}) => {
+  const router = useRouter()
+  const actLogout=()=>{
+    doLogout();
+    router.push('/auth/login')
+  }
   return (
     <header className="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
       <div className="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
@@ -57,12 +66,12 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar,openProfile,toggleProfile}
                         </a>
                       </li>
                       <li className="flex">
-                        <a className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200" href="#">
+                        <button className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200" onClick={actLogout}>
                           <svg className="w-4 h-4 mr-3" aria-hidden="true" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                           </svg>
                           <span>Log out</span>
-                        </a>
+                        </button>
                       </li>
                     </ul>
             </div>

@@ -23,7 +23,7 @@ const Report: React.FC<iCards> = ({dataReport}) => {
                    
                 </div>
                 <div className="w-full overflow-hidden rounded-lg shadow-xs">
-                    <div className="w-full overflow-x-auto  overflow-y-auto" style={{maxHeight:'600px'}}>
+                    <div className="w-full overflow-x-auto  overflow-y-auto  p-5" style={{maxHeight:'600px'}}>
                     {
                         dataReport?.length>0?dataReport.map((item:iTransaksi,i:number)=>{
                             return(

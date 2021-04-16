@@ -94,7 +94,7 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                     </div>
                 <br/>
                
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                     {
                         loading?<Skeleton/>:datumInvestment?.length>0?datumInvestment.map((item:iInvestment,i:number)=>{
                             return(
@@ -109,13 +109,13 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                                             <div className="m-2 text-xs font-semibold text-gray-200">{moment(item.created_at).format("yyyy-MM-DD hh:mm")}</div>
                                         </div>
                                         <div>
-                                            <div className="text-right m-2 text-xs font-semibold text-green-200">{Helper.numFormat(item.trx_in)}</div>
-                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">{Helper.numFormat(item.trx_out)}</div>
+                                            <div className="text-right m-2 text-xs font-semibold text-green-200">+ {Helper.numFormat(item.trx_in)}</div>
+                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">- {Helper.numFormat(item.trx_out)}</div>
                                         </div>
                                     </div>
                                 </div>
                             );
-                        }):<img src={`${httpService.noData}`}/>
+                        }):<img className="w-full" src={`${httpService.noData}`}/>
                     }
 
                     </div>

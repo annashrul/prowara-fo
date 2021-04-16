@@ -30,7 +30,7 @@ const Cards: React.FC<iCards> = ({dataBerita}) => {
                                         <img
                                             alt="testimonial"
                                             className="inline-block object-cover object-center md:w-10 md:h-10 lg:w-16 lg:h-16 sm:w-9 xs:w-9 sm:h-9 xs:h-9 mb-4 bg-gray-100 rounded"  
-                                            src={item.picture} onError={(e)=>{e.target.onerror = null; e.target.src="https://dummyimage.com/302x302/94a3b8/ffffff"}}/>
+                                            src={item.picture} />
                                          <span className="flex flex-col flex-grow pl-4">
                                             <Link href={`/content/berita/${item.id}`}>
                                                 <span className="font-bold text-lg text-gray-700 dark:text-gray-200 -mt-4">
