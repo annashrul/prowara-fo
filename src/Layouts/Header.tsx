@@ -42,9 +42,18 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar,openProfile,toggleProfile}
           
           {/* Profile menu */}
           <li className="relative">
-            <button className="align-middle rounded-full focus:shadow-outline-purple focus:outline-none" aria-label="Account" aria-haspopup="true" onClick={()=>{toggleProfile(!openProfile)}}>
+            {/* <button className="align-middle rounded-full focus:shadow-outline-purple focus:outline-none" aria-label="Account" aria-haspopup="true" onClick={()=>{toggleProfile(!openProfile)}}>
               <img className="object-cover w-8 h-8 rounded-full" src="/logo.png" alt="" aria-hidden="true" />
             </button>
+             */}
+            <button  className="flex flex-row items-center space-x-2 w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent text-gray-700 dark:text-gray-400  md:w-auto md:inline md:mt-0 md:ml-4 focus:bg-gray-800 focus:outline-none focus:shadow-outline" onClick={()=>{toggleProfile(!openProfile)}}>
+              <span>Jane Doe</span>
+              <img className="inline h-6 rounded-full" src="https://avatars2.githubusercontent.com/u/24622175?s=60&v=4" />
+              <svg fill="currentColor" viewBox="0 0 20 20"className="inline w-4 h-4 transition-transform duration-200 transform">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+
             <div className={openProfile?'':'hidden'}>
 
                   <ul className={"absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700 "} aria-label="submenu">
