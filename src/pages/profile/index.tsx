@@ -1,73 +1,101 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import 'react-intl-tel-input/dist/main.css';
-import atob from 'atob';
 import Layout from 'Layouts';
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import nookies from 'nookies';
-import { NextPageContext } from 'next';
-// import ProfileCard from "components/genealogy/ProfileCard";
-// import profiles from "./data.json";
-// import { arrayToTree } from "performant-array-to-tree";
-// import { useToasts } from "react-toast-notifications";
 import { handleGet } from 'lib/handleAction';
-// import Skeleton from "components/Common/Skeleton";
 import { iUser } from 'lib/interface';
-// import httpService from "lib/httpService";
 import moment from 'moment';
-// import { useToasts } from 'react-toast-notifications';
 import helper from 'lib/helper';
+import { useToasts } from 'react-toast-notifications';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { NextPageContext } from 'next';
+import nookies from 'nookies';
+import atob from 'atob';
+import Cropper from 'react-easy-crop';
+import getCroppedImg from 'lib/getCropped';
 interface iIndexProfile {
-  // profiles: Array<iProfiles>;
   userData: iUser;
 }
-
+type FormValues = {
+  full_name: string;
+  pin: string;
+  picture: string;
+};
 const Index: React.FC<iIndexProfile> = ({ userData }) => {
-  // const [loading, setLoading] = useState(true);
-
-  // const [datumNetwork,setDatumNetwork]= useState<Array<iNetwork>>([]);
+  const { addToast } = useToasts();
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const { register, handleSubmit, errors, setValue } = useForm<FormValues>();
   const [memberArea, setMemberArea] = useState({ total_pin: '', saldo: '', modal: '', sponsor: '' });
+  const [memberFoto, setMemberFoto] = useState('');
+  const [croppedFoto, setCroppedFoto] = useState('');
   useEffect(() => {
     loadMemberArea();
-    // loadNetwork(`isfirst=true`,`UFc1NzExODY4ODI1`);
   }, []);
 
-  // const loadNetwork = async (val: string, id:string) => {
-  //     setLoading(true)
-  //     let url = Api.apiClient+`member/network/${id}`;
-  //     if(val!==null){
-  //         url+=`?${val}`;
-  //     }
-  //     await handleGet(url,(datum)=>{
-  //         setDatumNetwork(datum);
-  //         setLoading(false);
-  //     })
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    console.log(croppedArea, croppedAreaPixels);
+    // var that = this;
+    try {
+      let res = '';
+      const croppedImage = getCroppedImg(memberFoto, croppedAreaPixels);
+      Promise.resolve(croppedImage).then(function (value) {
+        let getRes = '';
 
-  // }
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            getRes = String(reader.result);
+            // that.setState({ cropped: reader.result });
+            setCroppedFoto(getRes);
+          };
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', String(value));
+        xhr.responseType = 'blob';
+        xhr.send();
+        res = getRes;
+      });
+      // setCroppedImage(croppedImage)
+
+      // this.setState({ cropped: res });
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
   const loadMemberArea = async () => {
-    // setLoading(true);
     let url = Api.apiClient + `site/memberarea`;
     await handleGet(url, (datum) => {
       setMemberArea(datum);
-      // setLoading(false);
     });
   };
-  // const { addToast } = useToasts();
-  // const doMore = async (val:string)=>{
-  //   setLoading(true)
-  //   let url = Api.apiClient+`member/network/${btoa(val)}`;
-  //   await handleGet(url,(datum)=>{
-  //     if(datum.length>0){
-  //       setDatumNetwork(datumNetwork.concat(datum));
-  //       setLoading(false);
-  //     } else {
-  //       addToast("Jaringan untuk "+val+" tidak ada!", {appearance: 'warning',autoDismiss: true});
-  //       setLoading(false);
-  //     }
-  //   })
-  //   // console.log("datumNetwork push",datumNetwork);
-  // }
-  console.log(userData);
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    const datum = {
+      full_name: data.full_name,
+      pin: data.pin,
+      picture: data.picture,
+    };
+    Helper.removeCookie('_regist');
+    Helper.setCookie('_regist', JSON.stringify(datum));
+    // router.push('/mitra/new/payment');
+  };
+  const handleFoto = (event: any) => {
+    //  let me = this;
+    let file = event.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      //me.modelvalue = reader.result;
+      console.log(reader.result);
+      setMemberFoto(String(reader.result));
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+  };
   return (
     <Layout title="Profile">
       <div className="md:flex no-wrap md:-mx-2 my-8">
@@ -76,7 +104,14 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
           {/* Profile Card */}
           <div className="bg-white dark:bg-gray-800 p-3 border-t-4 border-old-gold-400 rounded-b-lg">
             <div className="image overflow-hidden">
-              <img className="h-auto w-full mx-auto" src={userData.foto} />
+              <img
+                className="h-auto w-full mx-auto"
+                src={croppedFoto}
+                onError={(e) => {
+                  onerror = null;
+                  e.currentTarget.src = 'https://dummyimage.com/302x302/94a3b8/ffffff';
+                }}
+              />
             </div>
             <h1 className="text-gray-900 dark:text-gray-200 font-bold text-xl leading-8 my-1">{userData.fullname}</h1>
             <h3 className="text-gray-600 dark:text-gray-400 font-lg text-semibold leading-6">{userData.referral}</h3>
@@ -163,88 +198,68 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
           </div>
           {/* End of about section */}
           <div className="my-4" />
-          {/* Experience and education */}
-          <div className="bg-white dark:bg-gray-800 p-3 shadow-lg rounded-lg hidden">
-            <div className="grid grid-cols-2">
-              <div>
-                <div className="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-200 leading-8 mb-3">
-                  <span className="text-old-gold-500">
-                    <svg
-                      className="h-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                  </span>
-                  <span className="tracking-wide">Experience</span>
-                </div>
-                <ul className="list-inside space-y-2">
-                  <li>
-                    <div className="text-old-gold-600 dark:text-gray-200">Owner at Her Company Inc.</div>
-                    <div className="text-grey-500 dark:text-gray-200 text-xs">March 2020 - Now</div>
-                  </li>
-                  <li>
-                    <div className="text-old-gold-600">Owner at Her Company Inc.</div>
-                    <div className="text-grey-500 dark:text-gray-200 text-xs">March 2020 - Now</div>
-                  </li>
-                  <li>
-                    <div className="text-old-gold-600">Owner at Her Company Inc.</div>
-                    <div className="text-grey-500 dark:text-gray-200 text-xs">March 2020 - Now</div>
-                  </li>
-                  <li>
-                    <div className="text-old-gold-600">Owner at Her Company Inc.</div>
-                    <div className="text-grey-500 dark:text-gray-200 text-xs">March 2020 - Now</div>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <div className="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-200 leading-8 mb-3">
-                  <span className="text-old-gold-500">
-                    <svg
-                      className="h-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path fill="#fff" d="M12 14l9-5-9-5-9 5 9 5z" />
-                      <path
-                        fill="#fff"
-                        d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                      />
-                    </svg>
-                  </span>
-                  <span className="tracking-wide">Education</span>
-                </div>
-                <ul className="list-inside space-y-2">
-                  <li>
-                    <div className="text-old-gold-600">Masters Degree in Oxford</div>
-                    <div className="text-grey-500 dark:text-gray-200 text-xs">March 2020 - Now</div>
-                  </li>
-                  <li>
-                    <div className="text-old-gold-600">Bachelors Deold-gold in LPU</div>
-                    <div className="text-grey-500 dark:text-gray-200 text-xs">March 2020 - Now</div>
-                  </li>
-                </ul>
-              </div>
+          {/* Edit Profile */}
+          <div className="bg-white dark:bg-gray-800 p-3 shadow-lg rounded-lg">
+            <div className="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-200 leading-8 mb-3">
+              <span className="text-old-gold-500">
+                <svg
+                  className="h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </span>
+              <span className="tracking-wide">Edit Profile</span>
             </div>
-            {/* End of Experience and education grid */}
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block my-4 text-sm">
+                    <span className="text-gray-700 dark:text-gray-400">Foto</span>
+                    <input
+                      type="file"
+                      className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                      name="fullname"
+                      onChange={(e) => handleFoto(e)}
+                      ref={register({ required: true, maxLength: 80 })}
+                      placeholder="Nama Lengkap Mitra"
+                    />
+                  </label>
+                  <div className="flex w-full h-52 relative bg-white">
+                    <Cropper
+                      image={memberFoto}
+                      crop={crop}
+                      zoom={zoom}
+                      aspect={1 / 1}
+                      onCropChange={setCrop}
+                      onCropComplete={onCropComplete}
+                      onZoomChange={setZoom}
+                    />
+                  </div>
+                </div>
+                <div className="col-span-2">
+                  <label className="block mt-4 text-sm">
+                    <span className="text-gray-700 dark:text-gray-400">Nama Lengkap</span>
+                    <input
+                      className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                      name="fullname"
+                      ref={register({ required: true, maxLength: 80 })}
+                      placeholder="Nama Lengkap Mitra"
+                    />
+                  </label>
+                </div>
+              </div>
+            </form>
           </div>
-          {/* End of profile tab */}
+          {/* End of Edit Profile grid */}
         </div>
       </div>
     </Layout>
