@@ -51,7 +51,8 @@ const Cards: React.FC<iCards> = ({dataBerita}) => {
                             </div>
 
                         );
-                    }):""
+                    }):<div className="mt-3 pb-2 text-gray-700 dark:text-gray-400 text-center">Tidak ada data.</div>
+
                 }
                 </div>
                 

@@ -183,6 +183,7 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
                     created_at: datum.created_at
                   })
                   Sess.setToken(datum.token);
+                  Sess.http.axios.defaults.headers.common["Authorization"] = datum.token;
 
                   router.push('/');
             },800)

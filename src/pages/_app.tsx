@@ -10,6 +10,12 @@ import { ToastProvider } from 'react-toast-notifications';
 import axios from 'axios';
 import LogRocket from 'logrocket';
 LogRocket.init('9razfl/prowara');
+import Cookies from "js-cookie";
+const coo:string=Cookies.get('_prowara')!;
+console.log('COOKIE',coo);
+if(coo!==undefined) {
+  axios.defaults.headers.common["Authorization"] = atob(coo);
+}
 
 axios.defaults.headers.common['username'] = `netindo`;
 axios.defaults.headers.common['password'] = `$2b$08$hLMU6rEvNILCMaQbthARK.iCmDRO7jNbUB8CcvyRStqsHD4UQxjDO`;

@@ -19,6 +19,8 @@ export function doLogout() {
   Helper.removeCookie('__uid');
   Helper.removeCookie('_prowara');
   Helper.removeCookie('_regist');
+  http.axios.defaults.headers.common["Authorization"] = '';
+
 }
 
 function getUser() {
