@@ -57,7 +57,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
     }
 
     return (
-        <Layout title="Report Investment">
+        <Layout title="Riwayat Transaksi">
             <div className="container mt-6 px-2 lg:px-7 mx-auto grid mb-20">
                 <div className="flex justify-between">
                     <div>

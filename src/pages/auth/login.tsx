@@ -132,15 +132,6 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
             },800)
 
         }
-          // .then(res=>{
-          
-          // }).catch(err =>{
-
-          // window.location.reload();
-      // });
-
-
-    
     }
       
   }
@@ -184,8 +175,8 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
                   })
                   Sess.setToken(datum.token);
                   Sess.http.axios.defaults.headers.common["Authorization"] = datum.token;
-
-                  router.push('/');
+                  if(datum.havePin) router.push('/');
+                  else  router.push('/auth/pin/'+btoa(datum.id));
             },800)
         } catch (err) {
           setTimeout(

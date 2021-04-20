@@ -75,11 +75,11 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
 
 
     return (
-        <Layout title="Deposit Poin">
+        <Layout title="Order Tiket Aktivasi">
             <div className="container mt-6 lg:px-6 md:px-3">
                 <div className="flex justify-between">
                     <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
-                        Penarikan Poin
+                        Order Tiket Aktivasi
                     </h2>
                 </div>
             </div>

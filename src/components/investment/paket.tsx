@@ -54,7 +54,7 @@ const Cards: React.FC<iCards> = ({selected,loading,handleClick,datum}) => {
                                 </div>
                             </div>
                             <p className="text-sm text-gray-700 dark:text-gray-200 mt-1">
-                                {datum?.caption?.substr(0,120)}
+                                {(datum?.caption?.substr(0,120)).replace(/<[^>]*>?/gm, '')}
                             </p>
                         </div>
                     </div>

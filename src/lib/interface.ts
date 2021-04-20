@@ -177,6 +177,7 @@ export interface iWidget{
   saldo: number;
   modal: number;
   sponsor: number;
+  total_member:number;
 }
 
 export interface iMemberUid{

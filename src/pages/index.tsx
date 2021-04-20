@@ -7,6 +7,7 @@ import Report from 'components/Dashboard/report'
 import Berita from 'components/Dashboard/Berita'
 import Widget from 'components/Dashboard/Card';
 import Slot from 'components/Dashboard/Slot';
+import Statistic from 'components/Dashboard/statistic'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
 import {iContent, iTransaksi, iWidget} from 'lib/interface';
@@ -36,6 +37,9 @@ const Dashboard: React.FC<iDashboard> = ({widget,berita,report}) => {
         
           {/* SLOT SECTION */}
           <Slot/>
+          
+          {/* JUMLAH MEMBER */}
+          <Statistic jumlah={widget.total_member}/>
 
           {/* BOTTOM SECTION */}
           <div className="flex gap-4 flex-col lg:flex-row">
@@ -75,7 +79,7 @@ export async function getServerSideProps(ctx:NextPageContext) {
 
   let berita:any=[];
   await handleGet(Api.apiUrl+'content/berita',(res)=>{
-    berita=res.data;
+    if(res.data!==undefined) berita=res.data;
   },false)
 
   let report:any=[];

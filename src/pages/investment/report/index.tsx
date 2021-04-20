@@ -61,12 +61,12 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
     }
 
     return (
-        <Layout title="Report Investment">
+        <Layout title="Riwayat Modal">
             <div className="container mt-6 px-2 lg:px-7 mx-auto grid mb-20">
                 <div className="flex justify-between">
                     <div>
                         <h2 className="mt-6 text-2xl align-middle font-semibold text-gray-700 dark:text-gray-200">
-                            Laporan Investment
+                            Riwayat Modal
                         </h2>
                         
                     </div>

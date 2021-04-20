@@ -46,7 +46,6 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
 
     }
     const handleEvent=(event:any,picker:any)=>{
-        console.log(event);
         const from = moment(picker.startDate._d).format('YYYY-MM-DD');
         const to = moment(picker.endDate._d).format('YYYY-MM-DD');
         setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
@@ -55,7 +54,7 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
     }
 
     return (
-        <Layout title="Report Investment">
+        <Layout title="Riwayat Deposit">
             <div className="container grid  lg:px-6 mx-auto">
                 <div className="flex justify-between">
                     <div>
