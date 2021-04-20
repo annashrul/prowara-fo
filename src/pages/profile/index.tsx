@@ -182,7 +182,7 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
                 <div className="grid grid-cols-2">
                   <div className="px-4 py-2">Saldo</div>
                   <div className="px-4 py-2 font-semibold dark:text-old-gold-500">
-                    {helper.rupiahFormat(memberArea.saldo)}
+                    {helper.numFormat(`${memberArea.saldo}`)}
                   </div>
                 </div>
                 <div className="grid grid-cols-2">

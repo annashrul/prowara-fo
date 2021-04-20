@@ -88,7 +88,7 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
                   // save token to localStorage
                   if(sendOtp.data.status==='success'){
                     const datum = sendOtp.data.result;
-                    setOtp(datum.otp_anying)
+                    setOtp(datum.transaction_token)
                     setStartTimer(false);
                     setCounter(180)
                     otp!=='-'&& 
@@ -245,9 +245,9 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
                         <label className="block text-sm text-center">
                           <span className="text-gray-700 dark:text-gray-400">Masukan 4 digit kode OTP yang anda terima melalui wa/sms.</span>
                           <br/>
-                          <span className="text-white">
+                          {/* <span className="text-white">
                             {otp}
-                          </span>
+                          </span> */}
                         </label>
                         <div className="text-sm mt-2">
                             <OTPInput
