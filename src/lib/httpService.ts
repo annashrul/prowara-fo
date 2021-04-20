@@ -13,8 +13,8 @@ export default {
   put: axios.put,
   delete: axios.delete,
   apiUrl: "http://localhost:6704/",
-  // apiClient: "http://localhost:6704/",
+  apiClient: "http://localhost:6704/",
   noData:'https://www.napro.id/assets/images/placeholder-no-data.png',
   // apiUrl: "https://api.prowara.com/",
-  apiClient: "https://api.prowara.com/"
+  // apiClient: "https://api.prowara.com/"
 }

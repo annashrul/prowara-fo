@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Transition } from '@windmill/react-ui'
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 
 interface iWidget{
     title: string;
     link: string;
     icon: JSX.Element;
-    isActive?: boolean;
     routes:Array<iSub>;
 }
 interface iSub{
@@ -17,13 +17,27 @@ interface iSub{
 
 const Widget: React.FC<iWidget> = ({ title, icon, routes }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false)
+  const [isActive, setIsActive] = useState(false)
+
+  const router = useRouter();
+  const path = router.pathname;
+
+  useEffect(()=>{
+    for(let i=0;i<routes.length;i++){
+      if(path===routes[i].link){ setIsDropdownMenuOpen(true);setIsActive(true)}
+    }
+  },[])
 
   function handleDropdownMenuClick() {
     setIsDropdownMenuOpen(!isDropdownMenuOpen)
   }
 
+  const non="px-2 py-1 transition-colors duration-150 font-semibold text-gray-800 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+  const aktif="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+
   return (
     <li className="relative px-6 py-3" key={title}>
+      {isActive&&<span className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true" />}
       <button
         className="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
         onClick={handleDropdownMenuClick}
@@ -52,7 +66,7 @@ const Widget: React.FC<iWidget> = ({ title, icon, routes }) => {
         >
           {routes.map((r) => (
             <li
-              className="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              className={path===r.link?non:aktif}
               key={r.title}
             >
               <Link href={r.link}>
