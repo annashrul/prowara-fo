@@ -1,5 +1,5 @@
 const createImage = (url: string) =>
-  new Promise<any>((resolve, reject) => {
+  new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener('load', () => resolve(image));
     image.addEventListener('error', (error) => reject(error));
@@ -18,11 +18,13 @@ function getRadianAngle(degreeValue: number) {
  * @param {number} rotation - optional rotation parameter
  */
 export default async function getCroppedImg(
-  imageSrc: any,
+  imageSrc: string,
   pixelCrop: { width: number; height: number; x: number; y: number },
   rotation = 0,
 ) {
-  const image = await createImage(imageSrc);
+  const image = new Image();
+  image.src = String(await createImage(imageSrc));
+  // const image: any | { width: 0; height: 0 } = await createImage(imageSrc);
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
@@ -55,12 +57,17 @@ export default async function getCroppedImg(
   );
 
   // As Base64 string
-  // return canvas.toDataURL('image/jpeg');
+  return canvas.toDataURL('image/jpeg');
 
   // As a blob
-  return new Promise((resolve) => {
-    canvas.toBlob((file) => {
-      resolve(URL.createObjectURL(file));
-    }, 'image/jpeg');
-  });
+  // console.log(canvas.toDataURL('image/jpeg'));
+  // return new Promise((resolve) => {
+  //   canvas.toBlob(
+  //     (file) => {
+  //       resolve(URL.createObjectURL(file));
+  //     },
+  //     'image/jpeg',
+  //     1,
+  //   );
+  // });
 }

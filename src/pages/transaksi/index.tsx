@@ -47,6 +47,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
     }
 
     const handleEvent=(event:string,picker:any)=>{
+        console.log(event);
         const from = moment(picker.startDate._d).format('YYYY-MM-DD');
         const to = moment(picker.endDate._d).format('YYYY-MM-DD');
         setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
