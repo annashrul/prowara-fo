@@ -1,10 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Modal, ModalBody, ModalFooter, Button } from '@windmill/react-ui';
-import { useToasts } from 'react-toast-notifications';
-import { iBankMember } from 'lib/interface';
+// import { useToasts } from 'react-toast-notifications';
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import { handlePost, handlePut } from 'lib/handleAction';
+import { handlePut } from 'lib/handleAction';
 import router from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -23,13 +22,10 @@ type FormValues = {
   //   picture: string;
 };
 const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) => {
-  const [arrDatum, setArrDatum] = useState<Array<iBankMember>>([]);
-  const [no, setNo] = useState(100);
-  const [openPin, setOpenPin] = useState(false);
-  const { addToast } = useToasts();
+  //   const { addToast } = useToasts();
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const { register, handleSubmit, errors, setValue } = useForm<FormValues>();
+  const { register, handleSubmit } = useForm<FormValues>();
   const [memberFoto, setMemberFoto] = useState('');
   const [croppedFoto, setCroppedFoto] = useState('');
   useEffect(() => {
@@ -68,7 +64,6 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
   }, []);
 
   const toggleModal = () => {
-    setNo(100);
     closeModal();
   };
 
@@ -169,10 +164,6 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
                       onCropChange={setCrop}
                       onCropComplete={onCropComplete}
                       onZoomChange={setZoom}
-                      onMediaLoaded={(mediaSize) => {
-                        // Adapt zoom based on media size to fit max height
-                        setCrop({ x: 0, y: 0 });
-                      }}
                     />
                   </div>
                   <label className="block mt-4 text-sm">
