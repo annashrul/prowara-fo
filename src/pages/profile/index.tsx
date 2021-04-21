@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-intl-tel-input/dist/main.css';
 import Layout from 'Layouts';
 import Api from 'lib/httpService';
@@ -8,93 +8,35 @@ import { iUser } from 'lib/interface';
 import moment from 'moment';
 import helper from 'lib/helper';
 import { useToasts } from 'react-toast-notifications';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { NextPageContext } from 'next';
 import nookies from 'nookies';
 import atob from 'atob';
-import Cropper from 'react-easy-crop';
-import getCroppedImg from 'lib/getCropped';
+import ModalProfile from 'components/profile/modal_profile';
+import { Badge } from '@windmill/react-ui';
 interface iIndexProfile {
   userData: iUser;
 }
-type FormValues = {
-  full_name: string;
-  pin: string;
-  picture: string;
-};
+
 const Index: React.FC<iIndexProfile> = ({ userData }) => {
   const { addToast } = useToasts();
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const { register, handleSubmit, errors, setValue } = useForm<FormValues>();
+  const [openWD, setOpenWD] = useState(false);
   const [memberArea, setMemberArea] = useState({ total_pin: '', saldo: '', modal: '', sponsor: '' });
-  const [memberFoto, setMemberFoto] = useState('');
-  const [croppedFoto, setCroppedFoto] = useState('');
+  const [memberBank, setMemberBank] = useState({ acc_no: '', acc_name: '', bank_name: '', id: '' });
   useEffect(() => {
     loadMemberArea();
+    loadMemberBank();
   }, []);
-
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-    console.log(croppedArea, croppedAreaPixels);
-    // var that = this;
-    try {
-      let res = '';
-      const croppedImage = getCroppedImg(memberFoto, croppedAreaPixels);
-      Promise.resolve(croppedImage).then(function (value) {
-        let getRes = '';
-
-        const xhr = new XMLHttpRequest();
-        xhr.onload = () => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            getRes = String(reader.result);
-            // that.setState({ cropped: reader.result });
-            setCroppedFoto(getRes);
-          };
-          reader.readAsDataURL(xhr.response);
-        };
-        xhr.open('GET', String(value));
-        xhr.responseType = 'blob';
-        xhr.send();
-        res = getRes;
-      });
-      // setCroppedImage(croppedImage)
-
-      // this.setState({ cropped: res });
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
   const loadMemberArea = async () => {
     let url = Api.apiClient + `site/memberarea`;
     await handleGet(url, (datum) => {
       setMemberArea(datum);
     });
   };
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    const datum = {
-      full_name: data.full_name,
-      pin: data.pin,
-      picture: data.picture,
-    };
-    Helper.removeCookie('_regist');
-    Helper.setCookie('_regist', JSON.stringify(datum));
-    // router.push('/mitra/new/payment');
-  };
-  const handleFoto = (event: any) => {
-    //  let me = this;
-    let file = event.target.files[0];
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      //me.modelvalue = reader.result;
-      console.log(reader.result);
-      setMemberFoto(String(reader.result));
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
+  const loadMemberBank = async () => {
+    let url = Api.apiClient + `bank_member?id_member=${userData.id}`;
+    await handleGet(url, (datum) => {
+      setMemberBank(datum.data[0]);
+    });
   };
   return (
     <Layout title="Profile">
@@ -106,14 +48,27 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
             <div className="image overflow-hidden">
               <img
                 className="h-auto w-full mx-auto"
-                src={croppedFoto}
+                src={userData.foto}
                 onError={(e) => {
                   onerror = null;
                   e.currentTarget.src = 'https://dummyimage.com/302x302/94a3b8/ffffff';
                 }}
               />
             </div>
-            <h1 className="text-gray-900 dark:text-gray-200 font-bold text-xl leading-8 my-1">{userData.fullname}</h1>
+            <div className="flex items-center py-3">
+              <h1 className="text-gray-900 dark:text-gray-200 font-bold text-xl leading-8 my-1 mr-auto">
+                {userData.fullname}
+              </h1>
+              <Badge
+                className="cursor-pointer ml-auto"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setOpenWD(true);
+                }}
+              >
+                Edit
+              </Badge>
+            </div>
             <h3 className="text-gray-600 dark:text-gray-400 font-lg text-semibold leading-6">{userData.referral}</h3>
 
             <ul className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-lg">
@@ -176,8 +131,8 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
             <div className="text-gray-700 dark:text-gray-200">
               <div className="grid md:grid-cols-2 text-sm">
                 <div className="grid grid-cols-2">
-                  <div className="px-4 py-2">Total PIN</div>
-                  <div className="px-4 py-2 font-semibold dark:text-old-gold-500">{memberArea.total_pin} PIN</div>
+                  <div className="px-4 py-2">Total Tiket</div>
+                  <div className="px-4 py-2 font-semibold dark:text-old-gold-500">{memberArea.total_pin} Tiket</div>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="px-4 py-2">Saldo</div>
@@ -197,10 +152,10 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
             </div>
           </div>
           {/* End of about section */}
-          <div className="my-4" />
-          {/* Edit Profile */}
-          <div className="bg-white dark:bg-gray-800 p-3 shadow-lg rounded-lg">
-            <div className="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-200 leading-8 mb-3">
+          {/* Bank section */}
+
+          <div className="bg-white dark:bg-gray-800 p-3 shadow-lg rounded-lg mt-6">
+            <div className="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-200 leading-8">
               <span className="text-old-gold-500">
                 <svg
                   className="h-5"
@@ -217,51 +172,39 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
                   />
                 </svg>
               </span>
-              <span className="tracking-wide">Edit Profile</span>
+              <span className="tracking-wide">Bank Member</span>
             </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block my-4 text-sm">
-                    <span className="text-gray-700 dark:text-gray-400">Foto</span>
-                    <input
-                      type="file"
-                      className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                      name="fullname"
-                      onChange={(e) => handleFoto(e)}
-                      ref={register({ required: true, maxLength: 80 })}
-                      placeholder="Nama Lengkap Mitra"
-                    />
-                  </label>
-                  <div className="flex w-full h-52 relative bg-white">
-                    <Cropper
-                      image={memberFoto}
-                      crop={crop}
-                      zoom={zoom}
-                      aspect={1 / 1}
-                      onCropChange={setCrop}
-                      onCropComplete={onCropComplete}
-                      onZoomChange={setZoom}
-                    />
+            <div className="text-gray-700 dark:text-gray-200">
+              <div className="grid md:grid-cols-3 text-sm">
+                <div className="grid grid-cols-1">
+                  <div className="px-4 py-2 text-center">
+                    Atas Nama
+                    <br />
+                    <span className="text-gray-700 dark:text-old-gold-500">{memberBank.acc_name}</span>
                   </div>
                 </div>
-                <div className="col-span-2">
-                  <label className="block mt-4 text-sm">
-                    <span className="text-gray-700 dark:text-gray-400">Nama Lengkap</span>
-                    <input
-                      className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                      name="fullname"
-                      ref={register({ required: true, maxLength: 80 })}
-                      placeholder="Nama Lengkap Mitra"
-                    />
-                  </label>
+                <div className="grid grid-cols-1">
+                  <div className="px-4 py-2 text-center">
+                    Nama Bank
+                    <br />
+                    <span className="text-gray-700 dark:text-old-gold-500">{memberBank.bank_name}</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1">
+                  <div className="px-4 py-2 text-center">
+                    No Rekening
+                    <br />
+                    <span className="text-gray-700 dark:text-old-gold-500">{memberBank.acc_no}</span>
+                  </div>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
-          {/* End of Edit Profile grid */}
+          {/* End of bank section */}
+          <div className="my-4" />
         </div>
       </div>
+      <ModalProfile open={openWD} closeModal={() => setOpenWD(false)} userData={userData} />
     </Layout>
   );
 };
