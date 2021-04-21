@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ModalBody, ModalFooter, Button } from '@windmill/react-ui';
 // import { useToasts } from 'react-toast-notifications';
 import Api from 'lib/httpService';
@@ -7,9 +7,12 @@ import { handlePut } from 'lib/handleAction';
 import router from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import Cropper from 'react-easy-crop';
-import getCroppedImg from 'lib/getCropped';
-import { Point, Area } from 'react-easy-crop/types';
+// import Cropper from 'react-easy-crop';
+// import getCroppedImg from 'lib/getCropped';
+// import { Point, Area } from 'react-easy-crop/types';
+
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
 
 interface iModalProfile {
   open: boolean;
@@ -23,45 +26,72 @@ type FormValues = {
 };
 const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) => {
   //   const { addToast } = useToasts();
-  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  //   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+  //   const [zoom, setZoom] = useState(1);
   const { register, handleSubmit } = useForm<FormValues>();
-  const [memberFoto, setMemberFoto] = useState('');
-  const [croppedFoto, setCroppedFoto] = useState('');
+  //   const [memberFoto, setMemberFoto] = useState('');
+  //   const [croppedFoto, setCroppedFoto] = useState('');
+
+  const [image, setImage] = useState('');
+  //   const [cropData, setCropData] = useState('#');
+  const [cropper, setCropper] = useState<any>();
+
   useEffect(() => {
     // if (!croppedFoto) return; // this will stop the loop if counter is not even
     // onCropComplete;
-
-    console.log('cropped', String(croppedFoto));
+    // console.log('cropped', String(croppedFoto));
   });
-  const onCropComplete = useCallback(async (croppedArea: Area, croppedAreaPixels: Area) => {
-    console.log(croppedArea, croppedAreaPixels);
-    // console.log(croppedArea, croppedAreaPixels);
-    // var that = this;
-    // try {
-    // let res = '';
-    try {
-      const croppedImage = getCroppedImg(memberFoto, croppedAreaPixels);
-      // setCroppedFoto(croppedImage);
-      await croppedImage.then(function (result) {
-        setCroppedFoto(result);
-        console.log('crop area', result); // "Some User token"
-      });
-      //   console.log('croppedImage', croppedImage);
-      // Promise.resolve(croppedImage).then(function (value) {
-      //   setCroppedFoto(String(value));
-      //   console.log('cropped', String(value));
-      // });
-      // setCroppedImage(croppedImage)
 
-      // this.setState({ cropped: res });
-      // } catch (e) {
-      //   console.error('error', e);
-      // }
-    } catch (e) {
-      console.log(e);
+  const onChange = (e: any) => {
+    e.preventDefault();
+    let files;
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files;
+    } else if (e.target) {
+      files = e.target.files;
     }
-  }, []);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result as any);
+    };
+    reader.readAsDataURL(files[0]);
+  };
+
+  //   const getCropData = () => {
+  //     if (typeof cropper !== 'undefined') {
+  //       setCropData(cropper.getCroppedCanvas().toDataURL());
+  //       console.log(cropper.getCroppedCanvas().toDataURL());
+  //     }
+  //   };
+
+  //   const onCropComplete = useCallback(async (croppedArea: Area, croppedAreaPixels: Area) => {
+  //     console.log(croppedArea, croppedAreaPixels);
+  //     // console.log(croppedArea, croppedAreaPixels);
+  //     // var that = this;
+  //     // try {
+  //     // let res = '';
+  //     try {
+  //       const croppedImage = getCroppedImg(memberFoto, croppedAreaPixels);
+  //       // setCroppedFoto(croppedImage);
+  //       await croppedImage.then(function (result) {
+  //         setCroppedFoto(result);
+  //         console.log('crop area', result); // "Some User token"
+  //       });
+  //       //   console.log('croppedImage', croppedImage);
+  //       // Promise.resolve(croppedImage).then(function (value) {
+  //       //   setCroppedFoto(String(value));
+  //       //   console.log('cropped', String(value));
+  //       // });
+  //       // setCroppedImage(croppedImage)
+
+  //       // this.setState({ cropped: res });
+  //       // } catch (e) {
+  //       //   console.error('error', e);
+  //       // }
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   }, []);
 
   const toggleModal = () => {
     closeModal();
@@ -71,7 +101,7 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
     let datum: any = {
       full_name: data.full_name,
       pin: data.pin,
-      picture: croppedFoto,
+      picture: cropper.getCroppedCanvas().toDataURL(),
     };
     // let datum = Object.create({ full_name: '', pin: '', picture: '' });
     // datum['full_name'] = data.full_name;
@@ -97,20 +127,20 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
     console.log(datum);
     // router.push('/mitra/new/payment');
   };
-  const handleFoto = (event: any) => {
-    //  let me = this;
-    let file = event.target.files[0];
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      //me.modelvalue = reader.result;
-      console.log('from input', reader.result);
-      setMemberFoto(String(reader.result));
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
-  };
+  //   const handleFoto = (event: any) => {
+  //     //  let me = this;
+  //     let file = event.target.files[0];
+  //     let reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = function () {
+  //       //me.modelvalue = reader.result;
+  //       console.log('from input', reader.result);
+  //       setMemberFoto(String(reader.result));
+  //     };
+  //     reader.onerror = function (error) {
+  //       console.log('Error: ', error);
+  //     };
+  //   };
 
   return (
     <Modal isOpen={open} onClose={toggleModal}>
@@ -149,21 +179,29 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
                     <input
                       type="file"
                       className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                      name="full_name"
-                      onChange={(e) => handleFoto(e)}
-                      ref={register({ required: true, maxLength: 80 })}
-                      placeholder="Nama Lengkap Mitra"
+                      name="picture"
+                      onChange={(e) => onChange(e)}
                     />
                   </label>
                   <div className="flex w-full h-52 relative bg-white">
                     <Cropper
-                      image={memberFoto}
-                      crop={crop}
-                      zoom={zoom}
-                      aspect={1 / 1}
-                      onCropChange={setCrop}
-                      onCropComplete={onCropComplete}
-                      onZoomChange={setZoom}
+                      //   style={{ height: 400, width: '100%' }}
+                      //   zoomTo={2}
+                      initialAspectRatio={1}
+                      aspectRatio={1}
+                      preview=".img-preview"
+                      src={image}
+                      viewMode={1}
+                      guides={true}
+                      minCropBoxHeight={10}
+                      minCropBoxWidth={10}
+                      background={false}
+                      responsive={true}
+                      autoCropArea={1}
+                      checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
+                      onInitialized={(instance) => {
+                        setCropper(instance);
+                      }}
                     />
                   </div>
                   <label className="block mt-4 text-sm">
