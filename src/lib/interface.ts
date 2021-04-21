@@ -142,7 +142,7 @@ export interface iTransaksi{
   fullname:string,
   trx_in:string,
   trx_out:string,
-  note:number,
+  note:string,
   created_at:string,
 }
 export interface iSlot{

@@ -16,19 +16,10 @@ interface iInvoice{
 const DetailBerita: React.FC<iInvoice> =({datum})=> {
     return (
     <Layout title={`Invoice`}>
-        <div className="container mt-6 lg:px-6 md:px-3">
+        <div className="container mt-6 lg:px-6 md:px-3 mb-10">
            
             <div className="flex">
-                <div className="rounded sm:w-full mt-8 min-h-0 bg-gray-800">
-                    <div className="w-full flex justify-between p-3">
-                        <div className="flex">
-                            <div className="rounded-full h-8 w-8 bg-gray-500 flex items-center justify-center overflow-hidden">
-                                <img src="https://avatars0.githubusercontent.com/u/38799309?v=4" alt="profilepic"/>
-                            </div>
-                            <span className="pt-1 ml-2 font-bold text-sm text-white">Admin</span>
-                        </div>
-                        
-                    </div>
+                <div className="rounded w-full mt-8 min-h-0 bg-gray-800">
                     <img className="w-full bg-contain" src={datum.picture}/>
                     <div className="px-3 pb-2">
                         <div className="mt-5 mb-5 border-b-8 pb-5">
@@ -77,7 +68,6 @@ export async function getServerSideProps(ctx:NextPageContext) {
         const getDetail = await Api.get(Api.apiUrl+"content/get/"+id_berita)
         if(getDetail.status===200){
             datum=getDetail.data.result;
-            console.log("DETAIL",datum);
         }else{
             datum=[];
         }

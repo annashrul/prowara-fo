@@ -19,7 +19,6 @@ const Otp: React.FC<iOtp> = ({open,closeModal,callBack}) => {
     if(images==='-'){
       addToast("Silahkan pilih file terlebih dahulu.", {appearance: 'error',autoDismiss: true,})
     }else{
-      console.log(images);
       callBack(images);
     }
    
@@ -27,7 +26,6 @@ const Otp: React.FC<iOtp> = ({open,closeModal,callBack}) => {
   
   const onDone = async (value:iInfo,status:boolean,msg:string) => {
     if(status){
-      console.log(value);
       setImages(!Helper.isEmptyObj(value)?(value.base64 as string):'-')
     }else addToast(msg, {appearance: 'error',autoDismiss: true,})
   }

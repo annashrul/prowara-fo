@@ -52,9 +52,7 @@ const loadNetwork = async (val: string, id:string) => {
           setLoading(false);
         }
       })
-      // console.log("datumNetwork push",datumNetwork);
     }
-    console.log(datumNetwork);
     return (
       <Layout title="Genealogy">
         <div className="container mt-6 lg:px-6 md:px-3 mx-auto xs:px-2 sm:px-2 grid mb-20">

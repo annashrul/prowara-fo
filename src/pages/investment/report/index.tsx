@@ -13,6 +13,7 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import httpService from "lib/httpService";
 import Skeleton from "components/Common/Skeleton";
+import Mutasi from 'components/transaksi/mutasi_row'
 
 interface iReportInvestment {}
 
@@ -98,22 +99,14 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                     {
                         loading?<Skeleton/>:datumInvestment?.length>0?datumInvestment.map((item:iInvestment,i:number)=>{
                             return(
-                                <div key={i} className="w-full mx-auto border-t border-b border-r border-gray-600 rounded">
-                                    <div className="p-4 border-l-4 border-teal rounded flex justify-between">
-                                        <div>
-                                            <div className="m-2 uppercase text-xs font-semibold text-gray-200">{item.fullname}</div>
-                                            <div className="m-2 text-xl font-bold text-gray-200">{item.kd_trx}</div>
-                                            <div className="m-2 pb-2 text-gray-200 border-b-2 border-grey-lighter">
-                                                {item.note}
-                                            </div>
-                                            <div className="m-2 text-xs font-semibold text-gray-200">{moment(item.created_at).format("yyyy-MM-DD hh:mm")}</div>
-                                        </div>
-                                        <div>
-                                            <div className="text-right m-2 text-xs font-semibold text-green-200">+ {Helper.numFormat(item.trx_in)}</div>
-                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">- {Helper.numFormat(item.trx_out)}</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <Mutasi
+                                    key={i}
+                                    kd_trx={item.kd_trx}
+                                    note={item.note}
+                                    created_at={item.created_at}
+                                    trx_in={item.trx_in}
+                                    trx_out={item.trx_out}
+                                />
                             );
                         }):<img className="w-full" src={`${httpService.noData}`}/>
                     }

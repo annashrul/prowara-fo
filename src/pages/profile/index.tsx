@@ -176,8 +176,8 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
             <div className="text-gray-700 dark:text-gray-200">
               <div className="grid md:grid-cols-2 text-sm">
                 <div className="grid grid-cols-2">
-                  <div className="px-4 py-2">Total PIN</div>
-                  <div className="px-4 py-2 font-semibold dark:text-old-gold-500">{memberArea.total_pin} PIN</div>
+                  <div className="px-4 py-2">Total Tiket</div>
+                  <div className="px-4 py-2 font-semibold dark:text-old-gold-500">{memberArea.total_pin} Tiket</div>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="px-4 py-2">Saldo</div>

@@ -25,7 +25,7 @@ const Cards: React.FC<iCards> = ({ c1,c2,c3,c4 }) => {
             <Card
               color="orange"
               icon="google-wallet"
-              title="Pin Aktivasi"
+              title="Tiket Aktivasi"
               value={c2}
             />  
           </div>

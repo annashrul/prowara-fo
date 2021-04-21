@@ -15,7 +15,6 @@ interface iProfileCard {
 }
 const ProfileCard: React.FC<iProfileCard> = ({ id, name, picture,  res = [], callBack }) => {
   const { addToast } = useToasts();
-  console.log("from card",res);
   const handleMore=(idData:string)=>{
     if((idData)===null)addToast("id tidak ditemukan!", {appearance: 'error',autoDismiss: true,})
     else{
@@ -45,7 +44,7 @@ const ProfileCard: React.FC<iProfileCard> = ({ id, name, picture,  res = [], cal
             className="inline-flex items-center justify-center w-7 h-7 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-full focus:shadow-outline hover:bg-indigo-800"
             onClick={(event)=>{event.preventDefault();handleMore(String(id));}}
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" fillRule="evenodd"></path></svg>
           </button>
           }
         </div>

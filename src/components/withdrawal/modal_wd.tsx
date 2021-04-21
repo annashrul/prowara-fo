@@ -31,7 +31,6 @@ const ModalWD: React.FC<iModalWD> = ({open,closeModal,amount,id_slot}) => {
 
     const loadConfig=async()=>{
         await handleGet(Api.apiClient+"transaction/wallet/config",(datum)=>{
-            console.log(datum);
             setArrDatumConfig(datum);
         })
     }
@@ -71,14 +70,12 @@ const ModalWD: React.FC<iModalWD> = ({open,closeModal,amount,id_slot}) => {
             id_slot:id_slot
         }
         await handlePost(Api.apiClient+'transaction/withdrawal',data,(datum)=>{
-            console.log(datum);
             Helper.mySwalWithCallback(datum.msg,()=>{
                 router.push("/");
                 setOpenPin(false);
                 toggleModal();
             })
         });
-        console.log(data);
     }
 
 

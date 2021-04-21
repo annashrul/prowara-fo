@@ -17,9 +17,10 @@ interface iDashboard{
   widget:iWidget;
   berita:Array<iContent>;
   report:Array<iTransaksi>;
+  bonus:Array<iTransaksi>;
 }
 
-const Dashboard: React.FC<iDashboard> = ({widget,berita,report}) => {
+const Dashboard: React.FC<iDashboard> = ({widget,berita,report,bonus}) => {
 
   return (
       <Layout title="Dashboard">
@@ -43,8 +44,9 @@ const Dashboard: React.FC<iDashboard> = ({widget,berita,report}) => {
 
           {/* BOTTOM SECTION */}
           <div className="flex gap-4 flex-col lg:flex-row">
+            <Report title="Profit Harian" dataReport={bonus}/>
+            <Report title="Mutasi Poin Terbaru" dataReport={report}/>
             <Berita dataBerita={berita}/>
-            <Report dataReport={report}/>
           </div>
         </div>
       </Layout>
@@ -87,6 +89,11 @@ export async function getServerSideProps(ctx:NextPageContext) {
     report=res.data;
   },false)
 
+  let bonus:any=[];
+  await handleGet(Api.apiUrl+'transaction/history?page=1&q=Sharing Profit dari ',(res)=>{
+    bonus=res.data;
+  },false)
+
   // Destroy
   // nookies.destroy(ctx, 'cookieName')
 
@@ -94,7 +101,8 @@ export async function getServerSideProps(ctx:NextPageContext) {
       cookies,
       widget:datum,
       berita,
-      report
+      report,
+      bonus
     }
   }
 }

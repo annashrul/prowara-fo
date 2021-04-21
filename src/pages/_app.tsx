@@ -21,7 +21,6 @@ if(coo!==undefined) {
   // cek JWT Token
   const decodedToken:any = jwt_decode(atob(coo));
   const dateNow = new Date();
-  console.log("decodedToken",decodedToken.exp * 1000);
   if (decodedToken.exp * 1000 < dateNow.getTime()) {
     doLogout();
     // Redirect to login

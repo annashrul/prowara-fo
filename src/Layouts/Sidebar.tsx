@@ -23,7 +23,7 @@ const Sidebar: React.FC<iSidebar> = ({ isOpen, toggleSidebar }) => {
           </div>
           <ul className="mt-2">
             {Route.map((item, x) => {
-              if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link} isActive={false} routes={item.routes}/>
+              if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link}  routes={item.routes}/>
               else return  <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
             })}
           </ul>
@@ -50,7 +50,7 @@ const Sidebar: React.FC<iSidebar> = ({ isOpen, toggleSidebar }) => {
           <div className="text-gray-500 dark:text-gray-400">
             <ul className="mt-6">
               {Route.map((item, x) => {
-                if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link} isActive={false} routes={item.routes}/>
+                if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link}  routes={item.routes}/>
               else return  <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
               })}
             </ul>

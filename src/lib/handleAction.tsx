@@ -10,7 +10,6 @@ export const handleGet = async (url:string,callback:(data:any)=>void,isLoading:b
         const getData=await Api.get(url)
         if(isLoading)NProgress.done()
         const datum = getData.data.result;
-        // console.log("DATUM",getData);
         callback(datum);
     } catch (err) {
         if(isLoading)NProgress.done()
@@ -50,7 +49,6 @@ export const handlePost = async(url:string,data:any,callback:(datum:any,isStatus
             function () {
                 Swal.close()
                 const datum = submitData.data;
-                console.log("status",datum.status);
                 if(datum.status==='success'){
                     callback(datum,false,'Berhasil memproses permintaan.');
                 }else{

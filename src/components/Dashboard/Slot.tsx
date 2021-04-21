@@ -1,17 +1,19 @@
 
 import React,{useEffect,useState} from 'react';
-import Button from '../Common/Button'
 import { useToasts } from 'react-toast-notifications'
 
 import Api from 'lib/httpService'
 import Row from './Row_slot';
 import {iSlot,iPagin} from 'lib/interface';
 import { Pagination } from '@windmill/react-ui'
+import {useRouter} from 'next/router'
+
 
 interface iCards {
 }
 
 const Cards: React.FC<iCards> = () => {
+  const router = useRouter()
   const { addToast } = useToasts();
   const [loading,setLoading] = useState(true);
   const [datumSlot,setDatumSlot]=useState<Array<iSlot>>();
@@ -68,6 +70,9 @@ const Cards: React.FC<iCards> = () => {
             },800)
         }
   }
+  const handlePage=(pagenum:number)=>{
+        getSlot(pagenum)
+    }
   return (
         <div className="w-full overflow-hidden rounded-lg shadow-xs">
           <div className="w-full overflow-x-auto">
@@ -94,7 +99,7 @@ const Cards: React.FC<iCards> = () => {
                             <tr>
                               <td colSpan={8}>
                                 <div  className="text-center text-white p-4 text-md">
-                                  Anda belum mempunyai paket aktif, silahkan <Button title="beli paket" color="orange" size="sm"/> terlebiih dahulu.
+                                  Anda belum mempunyai paket aktif, silahkan <button className="text-old-gold-100 bg-old-gold-600 p-1 rounded-lg" onClick={()=>router.push("/investment/create")}>Beli Paket</button> terlebiih dahulu.
                                 </div>
                               </td>
                             </tr>
@@ -114,7 +119,7 @@ const Cards: React.FC<iCards> = () => {
             <Pagination
                 totalResults={pagination===undefined?0:pagination.total}
                 resultsPerPage={pagination===undefined?0:pagination.per_page}
-                onChange={(val) => {console.log(val)}}
+                onChange={handlePage}
                 label="Page navigation"
             />
           </div>

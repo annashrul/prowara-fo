@@ -12,6 +12,7 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import { handleGet } from "lib/handleAction";
 import httpService from "lib/httpService";
+import Mutasi from 'components/transaksi/mutasi_row'
 
 interface iReportTransaksi {}
 
@@ -39,16 +40,13 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
     }
 
     const handleSearch=()=>{
-        console.log(any);
         handleLoadData(`page=1&q=${btoa(any)}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
     }
     const handlePage=(pagenum:number)=>{
-        console.log(pagenum);
         handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
     }
 
     const handleEvent=(event:string,picker:any)=>{
-        console.log(event);
         const from = moment(picker.startDate._d).format('YYYY-MM-DD');
         const to = moment(picker.endDate._d).format('YYYY-MM-DD');
         setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
@@ -93,22 +91,14 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
                     {
                         arrDatum?.length>0?arrDatum.map((item:iTransaksi,i:number)=>{
                             return(
-                                <div key={i} className="w-full mx-auto border-t border-b border-r border-gray-600 rounded">
-                                    <div className="p-4 border-l-4 border-teal rounded flex justify-between">
-                                        <div>
-                                            <div className="m-2 uppercase text-xs font-semibold text-gray-200">{item.fullname}</div>
-                                            <div className="m-2 text-xl font-bold text-gray-200">{item.kd_trx}</div>
-                                            <div className="m-2 pb-2 text-gray-200 border-b-2 border-grey-lighter">
-                                                {item.note}
-                                            </div>
-                                            <div className="m-2 text-xs font-semibold text-gray-200">{moment(item.created_at).format("yyyy-MM-DD hh:mm")}</div>
-                                        </div>
-                                        <div>
-                                            <div className="text-right m-2 text-xs font-semibold text-green-200">+ {Helper.numFormat(item.trx_in)}</div>
-                                            <div className="text-right m-2 text-xs font-semibold text-orange-200">- {Helper.numFormat(item.trx_out)}</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <Mutasi
+                                        key={i}
+                                        kd_trx={item.kd_trx}
+                                        note={item.note}
+                                        created_at={item.created_at}
+                                        trx_in={item.trx_in}
+                                        trx_out={item.trx_out}
+                                    />
                             );
                         }) : <img src={httpService.noData}/>
                     }
