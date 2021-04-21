@@ -9,7 +9,26 @@ import { Windmill } from '@windmill/react-ui'
 import { ToastProvider } from 'react-toast-notifications';
 import axios from 'axios';
 import LogRocket from 'logrocket';
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
+import {doLogout} from 'lib/auth'
+
+
 LogRocket.init('9razfl/prowara');
+const coo:string=Cookies.get('_prowara')!;
+if(coo!==undefined) {
+  axios.defaults.headers.common["Authorization"] = atob(coo);
+  // cek JWT Token
+  const decodedToken:any = jwt_decode(atob(coo));
+  const dateNow = new Date();
+  console.log("decodedToken",decodedToken.exp * 1000);
+  if (decodedToken.exp * 1000 < dateNow.getTime()) {
+    doLogout();
+    // Redirect to login
+    window.location.href = '/auth/login';
+  }
+
+}
 
 axios.defaults.headers.common['username'] = `netindo`;
 axios.defaults.headers.common['password'] = `$2b$08$hLMU6rEvNILCMaQbthARK.iCmDRO7jNbUB8CcvyRStqsHD4UQxjDO`;

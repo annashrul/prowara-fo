@@ -1,6 +1,10 @@
 import React from 'react';
 import {doLogout} from 'lib/auth'
 import {useRouter} from 'next/router'
+import Link from 'next/link'
+import {iUser} from 'lib/interface'
+import Cookies from "js-cookie";
+import { useEffect } from 'react';
 
 
 interface HeaderProps {
@@ -12,6 +16,15 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({toggleSidebar,openProfile,toggleProfile}) => {
   const router = useRouter()
+  const [nama,setNama]=React.useState('-');
+  const [foto,setFoto]=React.useState('-');
+  useEffect(() => {
+    const coo: string=Cookies.get('__uid')!;
+    const datum:iUser= JSON.parse(atob(coo));
+    setNama(datum.fullname)
+    setFoto(datum.foto)
+
+	}, []);
   const actLogout=()=>{
     doLogout();
     router.push('/auth/login')
@@ -47,8 +60,8 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar,openProfile,toggleProfile}
             </button>
              */}
             <button  className="flex flex-row items-center space-x-2 w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent text-gray-700 dark:text-gray-400  md:w-auto md:inline md:mt-0 md:ml-4 focus:bg-gray-800 focus:outline-none focus:shadow-outline" onClick={()=>{toggleProfile(!openProfile)}}>
-              <span>Jane Doe</span>
-              <img className="inline h-6 rounded-full" src="https://avatars2.githubusercontent.com/u/24622175?s=60&v=4" />
+              <span>{nama}</span>
+              <img className="inline h-6 rounded-full" src={foto==='-'?"https://avatars2.githubusercontent.com/u/24622175?s=60&v=4":foto} />
               <svg fill="currentColor" viewBox="0 0 20 20"className="inline w-4 h-4 transition-transform duration-200 transform">
                 <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
@@ -58,21 +71,13 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar,openProfile,toggleProfile}
 
                   <ul className={"absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700 "} aria-label="submenu">
                       <li className="flex">
-                        <a className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200" href="#">
+                        <Link href="/profile"><a className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200" >
                           <svg className="w-4 h-4 mr-3" aria-hidden="true" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
                           <span>Profile</span>
                         </a>
-                      </li>
-                      <li className="flex">
-                        <a className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200" href="#">
-                          <svg className="w-4 h-4 mr-3" aria-hidden="true" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                          <span>Settings</span>
-                        </a>
+                        </Link>
                       </li>
                       <li className="flex">
                         <button className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200" onClick={actLogout}>
@@ -92,7 +97,4 @@ const Header: React.FC<HeaderProps> = ({toggleSidebar,openProfile,toggleProfile}
 
   );
 };
-
-
-
 export default Header;

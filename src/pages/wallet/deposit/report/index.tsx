@@ -55,7 +55,7 @@ const ReportDeposit: React.FC<iReportInvestment> = () =>{
     }
 
     return (
-        <Layout title="Report Investment">
+        <Layout title="Riwayat Deposit">
             <div className="container grid  lg:px-6 mx-auto">
                 <div className="flex justify-between">
                     <div>

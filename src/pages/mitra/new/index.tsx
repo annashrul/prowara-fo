@@ -49,7 +49,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
   const [namaSponsor,setNamaSponsor]= useState("");
   const [uids,setUids]=useState("");
   const [otp,setOtp]=useState("");
-  const [otpDummy,setOtpDummy]=useState("");
+  // const [otpDummy,setOtpDummy]=useState("");
   const [otpInput,setOtpInput]=useState("");
   const [validPhone,setValidPhone]=useState(false);
   const [counter, setCounter] = React.useState(0);
@@ -239,7 +239,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
                       const datum = sendOtp.data.result;
                       setCounter(180)
                       setOtp(datum.sender_id)
-                      setOtpDummy(datum.otp_anying)
+                      // setOtpDummy(datum.otp_anying)
                     }else{
                       addToast("Kesalahan pada server.", {
                           appearance: 'error',
@@ -284,7 +284,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
   }
   
   const onCompareOtp = ()=>{  
-    bcrypt.compare(otpDummy!==undefined?otpDummy:otpInput, otp, function(err, res) {
+    bcrypt.compare(otpInput, otp, function(err, res) {
       if(!err){
         setValidPhone(res)
         setCounter(0)
@@ -482,7 +482,7 @@ const TambahMitra: React.FC<iCards> = ({dataPaket,dataRegister,options,userData,
                           className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
                           type="number"
                           onChange={(event)=>{setOtpInput(event.target.value)}}
-                          value={otpDummy} />
+                          value={otpInput} />
                       </div>
                       <button 
                       className="px-8 rounded-r-lg bg-old-gold   text-gray-200 font-bold p-1 mt-3 uppercase border-yellow-500 border-t border-b border-r"

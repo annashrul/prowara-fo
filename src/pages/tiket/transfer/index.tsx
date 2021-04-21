@@ -74,7 +74,7 @@ const TransferTiket: React.FC<iTfTiket> =({config})=> {
     }
 
     return (
-        <Layout title="Transfer Pin">
+        <Layout title="Transfer Tiket">
             <div className="container mt-6 lg:px-6 md:px-3">
                 <div className="flex justify-between">
                     <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">

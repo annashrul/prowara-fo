@@ -56,7 +56,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
     }
 
     return (
-        <Layout title="Report Investment">
+        <Layout title="Riwayat Penarikan">
             <div className="container mt-6 lg:px-7 mx-auto grid mb-20">
                 <div className="flex justify-between">
                     <div>

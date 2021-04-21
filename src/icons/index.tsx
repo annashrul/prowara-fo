@@ -314,3 +314,19 @@ export const History=(
       <path d="M15 22H6.12a.12.12 0 01-.12-.12V2.12A.12.12 0 016.12 2H8v1.31A1.69 1.69 0 009.69 5h4.62A1.69 1.69 0 0016 3.31V2h1.88a.12.12 0 01.12.12V5h2V2.12A2.12 2.12 0 0017.88 0H6.12A2.12 2.12 0 004 2.12v19.76A2.12 2.12 0 006.12 24h11.76A2.12 2.12 0 0020 22h-5zM10 2h4v1h-4z"></path>
     </svg>
 ) 
+
+export const Genealogy=(
+  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+    <title>network_3 [#1116]</title>
+    <desc>Created with Sketch.</desc>
+    <defs />
+    <g id="Page-1" stroke="none" strokeWidth={1} >
+      <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -3280.000000)">
+        <g id="icons" transform="translate(56.000000, 160.000000)">
+          <path d="M92,3124 L96,3124 L96,3120 L92,3120 L92,3124 Z M92,3138 L96,3138 L96,3134 L92,3134 L92,3138 Z M100,3138 L104,3138 L104,3134 L100,3134 L100,3138 Z M84,3138 L88,3138 L88,3134 L84,3134 L84,3138 Z M87,3132 L85,3132 L85,3128 L93,3128 L93,3126 L95,3126 L95,3128 L103,3128 L103,3132 L101,3132 L101,3130 L95,3130 L95,3132 L93,3132 L93,3130 L87,3130 L87,3132 Z" id="network_3-[#1116]" />
+        </g>
+      </g>
+    </g>
+  </svg>
+
+)

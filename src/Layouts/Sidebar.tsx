@@ -1,6 +1,7 @@
 import React from 'react';
 import Route from './routes';
 import Menu from 'components/Common/menu';
+import SubMenu from 'components/Common/submenu';
 import { useRouter } from 'next/router';
 
 interface iSidebar {
@@ -22,9 +23,8 @@ const Sidebar: React.FC<iSidebar> = ({ isOpen, toggleSidebar }) => {
           </div>
           <ul className="mt-2">
             {Route.map((item, x) => {
-              return (
-                <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
-              );
+              if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link} isActive={false} routes={item.routes}/>
+              else return  <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
             })}
           </ul>
         </div>
@@ -50,7 +50,8 @@ const Sidebar: React.FC<iSidebar> = ({ isOpen, toggleSidebar }) => {
           <div className="text-gray-500 dark:text-gray-400">
             <ul className="mt-6">
               {Route.map((item, x) => {
-                return <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={false} />;
+                if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link} isActive={false} routes={item.routes}/>
+              else return  <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
               })}
             </ul>
           </div>

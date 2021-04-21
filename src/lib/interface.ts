@@ -15,6 +15,7 @@ export interface iPaket{
   category:string,
   gambar:string,
   caption:string,
+  minimal_price:number,
   pin_required:number,
   profit_sharing:number,
   contract:number,
@@ -177,6 +178,7 @@ export interface iWidget{
   saldo: number;
   modal: number;
   sponsor: number;
+  total_member:number;
 }
 
 export interface iMemberUid{

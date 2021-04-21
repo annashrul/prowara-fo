@@ -88,7 +88,7 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
                   // save token to localStorage
                   if(sendOtp.data.status==='success'){
                     const datum = sendOtp.data.result;
-                    setOtp(datum.otp_anying)
+                    setOtp(datum.transaction_token)
                     setStartTimer(false);
                     setCounter(180)
                     otp!=='-'&& 
@@ -132,15 +132,6 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
             },800)
 
         }
-          // .then(res=>{
-          
-          // }).catch(err =>{
-
-          // window.location.reload();
-      // });
-
-
-    
     }
       
   }
@@ -183,8 +174,9 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
                     created_at: datum.created_at
                   })
                   Sess.setToken(datum.token);
-
-                  router.push('/');
+                  Sess.http.axios.defaults.headers.common["Authorization"] = datum.token;
+                  if(datum.havePin) router.push('/');
+                  else  router.push('/auth/pin/'+btoa(datum.id));
             },800)
         } catch (err) {
           setTimeout(
@@ -253,9 +245,9 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
                         <label className="block text-sm text-center">
                           <span className="text-gray-700 dark:text-gray-400">Masukan 4 digit kode OTP yang anda terima melalui wa/sms.</span>
                           <br/>
-                          <span className="text-white">
+                          {/* <span className="text-white">
                             {otp}
-                          </span>
+                          </span> */}
                         </label>
                         <div className="text-sm mt-2">
                             <OTPInput

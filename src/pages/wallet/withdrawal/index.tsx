@@ -159,7 +159,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
                                     onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
                                     value={poin}
                                     />
-                                <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Deposit: {Helper.numFormat(`${min_nominal}`)}</h6>
+                                <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Penarikan: {Helper.numFormat(`${min_nominal}`)}</h6>
                                 {
                                     config.isActive_wd && parseInt(config.trx_wd,10)===0?
                                     <button onClick={(event)=>{event.preventDefault();handleCheck();}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
