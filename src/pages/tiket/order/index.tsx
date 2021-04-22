@@ -48,10 +48,6 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
         setStep(step+1);
      }
 
-    
-
-   
-
     const doVerif=()=>{
         setOpenPin(true);
     }
@@ -64,7 +60,12 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
             metode_pembayaran:bank==='saldo'?'saldo':'transfer'
         }
         await handlePost(Api.apiClient+'transaction/pin', checkoutData,(datum)=>{
-            Helper.mySwalWithCallback(datum.msg,()=>{setOpenPin(true);router.push(`/`);})
+            Helper.mySwalWithCallback(datum.msg,()=>{
+                setOpenPin(true);
+                bank==='saldo'?
+                  router.push(`/`):
+                  router.push(`/invoice/${btoa(datum.result)}`);
+            })
         })
   }
 
