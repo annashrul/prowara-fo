@@ -98,7 +98,6 @@ export async function getServerSideProps(ctx:NextPageContext) {
   let bonus:any=[];
   await handleGet(Api.apiUrl+'transaction/history?page=1&q=U2hhcmluZyBQcm9maXQgZGFyaSA=',(res)=>{
     bonus=res.data;
-    console.log("BONUS",bonus);
   },false)
 
   // Destroy

@@ -5,7 +5,6 @@ import Swal from 'sweetalert2'
 import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import Api from 'lib/httpService'
-
 const removeHtml=(str:string)=>{
   // var parser = new DOMParser();
   // return parser.parseFromString(str,'text/html')
@@ -161,8 +160,6 @@ export const handleRoute=(ctx:NextPageContext)=>{
         Api.axios.defaults.headers.common["Authorization"] = decode(cookies._prowara);
     }
 }
-
-
 
 
 export default {

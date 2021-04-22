@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Modal, ModalBody, ModalFooter, Button } from '@windmill/react-ui';
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
@@ -50,7 +50,6 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
     if(fname!==userData.fullname && fname!==''){
       Object.assign(datum, {'fullname': fname})
     }
-    console.log();
     if (cropper.getCroppedCanvas() !== null) {
       Object.assign(datum, {'foto': cropper.getCroppedCanvas().toDataURL()})
     }
@@ -63,7 +62,7 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
     }else{
       await handlePut(Api.apiClient + `member/${userData.id}`, datum, async (datum) => {
         addToast(datum.msg, {
-            appearance: 'error',
+            appearance: 'success',
             autoDismiss: true,
         })
    
@@ -84,6 +83,7 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
           <div className="w-full items-center justify-items-center p-0">
             {/* Edit Profile */}
             <div className="bg-white dark:bg-gray-800 p-3 shadow-lg rounded-lg">
+              
               <div className="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-200 leading-8 mb-3">
                 <span className="text-old-gold-500">
                   <svg
@@ -104,6 +104,16 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
                 <span className="tracking-wide">Edit Profile</span>
               </div>
               <div className="grid grid-cols-1">
+                <label className="block mt-4 text-sm">
+                    <span className="text-gray-700 dark:text-gray-400">Nama Lengkap</span>
+                    <input
+                      className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                      name="fullname"
+                      value={fname}
+                      onChange={(event)=>setFname(event.target.value)}
+                      placeholder="Nama Lengkap"
+                    />
+                  </label>
                 <div>
                   <label className="block my-4 text-sm">
                     <span className="text-gray-700 dark:text-gray-400">Foto</span>
@@ -133,16 +143,8 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
                       }}
                     />
                   </div>
-                  <label className="block mt-4 text-sm">
-                    <span className="text-gray-700 dark:text-gray-400">Nama Lengkap</span>
-                    <input
-                      className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                      name="fullname"
-                      value={fname}
-                      onChange={(event)=>setFname(event.target.value)}
-                      placeholder="Nama Lengkap"
-                    />
-                  </label>
+                    <span className="text-gray-700 dark:text-gray-400 text-xs mt-2">Silahkan geser kekiri/kekanan atau zoom-in/zoom-out untuk menyesuaikan gambar dengan area kotak.</span>
+                  
                 </div>
               </div>
             </div>

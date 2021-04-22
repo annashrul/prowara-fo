@@ -56,6 +56,12 @@
     "start": "next start -H 0.0.0.0 -p ${PORT:-8080}",
     "export": "npm run build && next export -o _static"
   },
+  "browser": {
+    "child_process": false,
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "devDependencies": {
     "@types/atob": "^2.1.2",
     "@types/next-auth": "^3.13.0",

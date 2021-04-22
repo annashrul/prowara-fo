@@ -14,13 +14,15 @@ import atob from 'atob';
 import ModalProfile from 'components/profile/modal_profile';
 import {Invest} from 'icons'
 import { Badge } from '@windmill/react-ui';
+import ModalResetPin from 'components/profile/modal_reset_pin';
 interface iIndexProfile {
   userData: iUser;
 }
 
 const Index: React.FC<iIndexProfile> = ({ userData }) => {
   // const { addToast } = useToasts();
-  const [openWD, setOpenWD] = useState(false);
+  const [openEditMember, setOpenEditMember] = useState(false);
+  const [openEditPin, setOpenEditPin] = useState(false);
   const [memberArea, setMemberArea] = useState({ total_pin: '', saldo: '', modal: '', sponsor: '' });
   const [memberBank, setMemberBank] = useState({ acc_no: '', acc_name: '', bank_name: '', id: '' });
   useEffect(() => {
@@ -64,7 +66,7 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
                 className="cursor-pointer ml-auto"
                 onClick={(event) => {
                   event.preventDefault();
-                  setOpenWD(true);
+                  setOpenEditMember(true);
                 }}
               >
                 Edit
@@ -90,6 +92,19 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
                 <span className="ml-auto">{moment(userData.created_at).format('LL')}</span>
               </li>
             </ul>
+
+            <div className="block items-center pt-3">
+              <h1 className="text-gray-900 dark:text-gray-200 font-bold text-xl leading-8 my-1 mr-auto">Keamanan</h1>
+              <button
+                className="px-8 bg-red-500 block w-full text-gray-200 font-bold p-1 mt-3 uppercase border-red-500 rounded-lg"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setOpenEditPin(true);
+                }}
+              >
+                Ubah PIN
+              </button>
+            </div>
           </div>
           {/* End of profile card */}
           <div className="my-4" />
@@ -192,7 +207,8 @@ const Index: React.FC<iIndexProfile> = ({ userData }) => {
           <div className="my-4" />
         </div>
       </div>
-      <ModalProfile open={openWD} closeModal={() => setOpenWD(false)} userData={userData} />
+      <ModalProfile open={openEditMember} closeModal={() => setOpenEditMember(false)} userData={userData} />
+      <ModalResetPin open={openEditPin} closeModal={() => setOpenEditPin(false)} userData={userData} />
     </Layout>
   );
 };

@@ -48,7 +48,6 @@ export const handlePost = async (
     setTimeout(function () {
       Swal.close();
       const datum = submitData.data;
-      console.log('status', datum.status);
       if (datum.status === 'success') {
         callback(datum, false, 'Berhasil memproses permintaan.');
       } else {
@@ -98,7 +97,6 @@ export const handlePut = async (
     setTimeout(function () {
       Swal.close();
       const datum = submitData.data;
-      console.log('status', datum.status);
       if (datum.status === 'success') {
         callback(datum, false, 'Berhasil memproses permintaan.');
       } else {
@@ -113,7 +111,7 @@ export const handlePut = async (
       } else {
         if (err.response !== undefined) {
           if (err.response.data.msg !== undefined) {
-            helper.mySwal(JSON.stringify(err));
+            helper.mySwal(err.response.data.msg);
           } else {
             helper.mySwal('Terjadi Kesalahan!');
           }
