@@ -144,7 +144,7 @@ const Invoice: React.FC<iInvoice> =({options,total_tiket})=> {
                                             return (
                                                 <Card
                                                     key={i}
-                                                    isActive={parseInt(item.price,10)>item.minimal_price}
+                                                    isActive={parseFloat(item.price)>item.minimal_price}
                                                     selected={item.id===paket}
                                                     handleClick={(id)=>setPaket(id)}
                                                     datum={item}

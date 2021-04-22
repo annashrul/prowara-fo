@@ -145,7 +145,7 @@ const OrderTiket: React.FC<iOrderTiket> = ({dataWidget,dataBank}) =>{
                                     type="number" 
                                     className="pb-2 pt-3 w-full text-center focus:outline-none border-b-4 border-dashed border-old-gold text-3xl  bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200  p-8" 
                                     autoFocus 
-                                    onChange={(event)=>setQty(parseInt((event.target.value).replace(/^0+/, ''),10))}
+                                    onChange={(event)=>setQty(parseFloat((event.target.value).replace(/^0+/, '')))}
                                     value={qty}
                                     />
                                 <button onClick={(event)=>{event.preventDefault();handleNextStep('param1');}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">

@@ -123,8 +123,8 @@ const TransferPoin: React.FC<iTfPoin> =({config})=> {
                     <Step2
                         penerima={user?.fullname}
                         jumlah_transfer={`${nominal}`}
-                        admin={`${nominal*(parseInt(config.wd_charge,10)/100)}`}
-                        total_transfer={`${nominal+ (nominal*(parseInt(config.wd_charge,10)/100))}`}
+                        admin={`${nominal*(parseFloat(config.wd_charge)/100)}`}
+                        total_transfer={`${nominal+ (nominal*(parseFloat(config.wd_charge)/100))}`}
                         handleClick={doVerif}
                         goBack={(val:number)=>doStep(val)}
                     />

@@ -22,7 +22,7 @@ const Step1: React.FC<iStep1> = ({handleClick}) => {
                             type="number" 
                             className="pb-2 pt-3 w-full text-center focus:outline-none border-b-4 border-dashed border-old-gold text-3xl  bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200  p-8" 
                             autoFocus 
-                            onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
+                            onChange={(event)=>setPoin(parseFloat((event.target.value).replace(/^0+/, '')))}
                             value={poin}
                             />
                         <h6 className="mt-8 text-yellow-400 text-sm">User ID:</h6>

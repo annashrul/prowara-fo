@@ -23,14 +23,14 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
 
     const { addToast } = useToasts();
     const router = useRouter();
-    const min_nominal:number=parseInt(config.wd_min,10);
+    const min_nominal:number=parseFloat(config.wd_min);
     const [step,setStep]=useState(1);
     const [oldPoin,setOldPoin] = React.useState(0)
     const [poin,setPoin] = React.useState(0)
     const [bank,setBank]=useState<iBankMember>();
     const [openPin,setOpenPin]=useState(false);
      useEffect(() => {
-        setOldPoin(parseInt(config.saldo));
+        setOldPoin(parseFloat(config.saldo));
     }, []);
     const handleCheck=()=>{
         if(poin===0) addToast("poin tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
@@ -132,7 +132,7 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
             <div className={!config.isActive_wd?"flex flex-col items-center":"hidden"}>
                 <Alert type="warning">Penarikan poin hanya dapat dilakukan pada hari {config.schedule_wd} dari pukul {config.schedule_time_wd}.</Alert>
             </div>
-            <div className={parseInt(config.trx_wd,10)!==0?"flex flex-col items-center mt-3":"hidden"}>
+            <div className={parseFloat(config.trx_wd)!==0?"flex flex-col items-center mt-3":"hidden"}>
                 <Alert type="info">Masih ada penarikan poin dalam antrian. Silahkan tunggu konfirmasi dari admin.</Alert>
             </div>
             {
@@ -156,12 +156,12 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
                                     type="number" 
                                     className="pb-2 pt-3 w-full text-center focus:outline-none border-b-4 border-dashed border-old-gold text-3xl  bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200  p-8" 
                                     autoFocus 
-                                    onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
+                                    onChange={(event)=>setPoin(parseFloat((event.target.value).replace(/^0+/, '')))}
                                     value={poin}
                                     />
                                 <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Penarikan: {Helper.numFormat(`${min_nominal}`)}</h6>
                                 {
-                                    config.isActive_wd && parseInt(config.trx_wd,10)===0?
+                                    config.isActive_wd && parseFloat(config.trx_wd)===0?
                                     <button onClick={(event)=>{event.preventDefault();handleCheck();}} className="w-full bg-old-gold hover:bg-old-gold-600 text-gray-700 dark:text-gray-200 px-8 py-4 mt-8">
                                         Lanjut
                                     </button>
@@ -181,8 +181,8 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
                         bank={bank?.bank_name}
                         atas_nama={bank?.acc_name}
                         nominal={`${poin}`}
-                        admin={poin*(parseInt(config.wd_charge,10)/100)}
-                        total={poin-(poin*(parseInt(config.wd_charge,10)/100))}
+                        admin={poin*(parseFloat(config.wd_charge)/100)}
+                        total={poin-(poin*(parseFloat(config.wd_charge)/100))}
                         handleClick={doVerif}
                         goBack={(val:number)=>doStep(val)}
                     />

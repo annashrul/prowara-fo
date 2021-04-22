@@ -12,7 +12,7 @@ interface iCards {
 const Cards: React.FC<iCards> = ({handleClick,min_nominal,isActive}) => {
     const [poin,setPoin] = React.useState(0)
     const cbPoin=(num:string)=>{
-        setPoin(parseInt(num));
+        setPoin(parseFloat(num));
     }
     const nominalPoin=['50','100','200','250','300','500']
     return (
@@ -23,7 +23,7 @@ const Cards: React.FC<iCards> = ({handleClick,min_nominal,isActive}) => {
                         <div className="grid grid-cols-2 gap-4">
                             {
                                 nominalPoin.map((item,key)=>{
-                                    return <Nomine key={key} selected={poin===parseInt(item)} Poin={item} cb={cbPoin} />
+                                    return <Nomine key={key} selected={poin===parseFloat(item)} Poin={item} cb={cbPoin} />
 
                                 })
                             }
@@ -33,7 +33,7 @@ const Cards: React.FC<iCards> = ({handleClick,min_nominal,isActive}) => {
                             type="number" 
                             className="pb-2 pt-3 w-full text-center focus:outline-none border-b-4 border-dashed border-old-gold text-3xl  bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200  p-8" 
                             autoFocus 
-                            onChange={(event)=>setPoin(parseInt((event.target.value).replace(/^0+/, ''),10))}
+                            onChange={(event)=>setPoin(parseFloat((event.target.value.replace(/^0+/, ''))))}
                             value={poin}
                             />
                         <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Deposit: {min_nominal} Poin</h6>
