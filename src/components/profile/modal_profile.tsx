@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, ModalBody, ModalFooter, Button } from '@windmill/react-ui';
-// import { useToasts } from 'react-toast-notifications';
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
 import { handlePut } from 'lib/handleAction';
 import router from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-// import Cropper from 'react-easy-crop';
-// import getCroppedImg from 'lib/getCropped';
-// import { Point, Area } from 'react-easy-crop/types';
 
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
@@ -21,26 +16,14 @@ interface iModalProfile {
 }
 type FormValues = {
   full_name: string;
-  pin: string;
+  // pin: string;
   //   picture: string;
 };
 const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) => {
-  //   const { addToast } = useToasts();
-  //   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
-  //   const [zoom, setZoom] = useState(1);
   const { register, handleSubmit } = useForm<FormValues>();
-  //   const [memberFoto, setMemberFoto] = useState('');
-  //   const [croppedFoto, setCroppedFoto] = useState('');
 
   const [image, setImage] = useState('');
-  //   const [cropData, setCropData] = useState('#');
   const [cropper, setCropper] = useState<any>();
-
-  useEffect(() => {
-    // if (!croppedFoto) return; // this will stop the loop if counter is not even
-    // onCropComplete;
-    // console.log('cropped', String(croppedFoto));
-  });
 
   const onChange = (e: any) => {
     e.preventDefault();
@@ -57,42 +40,6 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
     reader.readAsDataURL(files[0]);
   };
 
-  //   const getCropData = () => {
-  //     if (typeof cropper !== 'undefined') {
-  //       setCropData(cropper.getCroppedCanvas().toDataURL());
-  //       console.log(cropper.getCroppedCanvas().toDataURL());
-  //     }
-  //   };
-
-  //   const onCropComplete = useCallback(async (croppedArea: Area, croppedAreaPixels: Area) => {
-  //     console.log(croppedArea, croppedAreaPixels);
-  //     // console.log(croppedArea, croppedAreaPixels);
-  //     // var that = this;
-  //     // try {
-  //     // let res = '';
-  //     try {
-  //       const croppedImage = getCroppedImg(memberFoto, croppedAreaPixels);
-  //       // setCroppedFoto(croppedImage);
-  //       await croppedImage.then(function (result) {
-  //         setCroppedFoto(result);
-  //         console.log('crop area', result); // "Some User token"
-  //       });
-  //       //   console.log('croppedImage', croppedImage);
-  //       // Promise.resolve(croppedImage).then(function (value) {
-  //       //   setCroppedFoto(String(value));
-  //       //   console.log('cropped', String(value));
-  //       // });
-  //       // setCroppedImage(croppedImage)
-
-  //       // this.setState({ cropped: res });
-  //       // } catch (e) {
-  //       //   console.error('error', e);
-  //       // }
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }, []);
-
   const toggleModal = () => {
     closeModal();
   };
@@ -100,20 +47,16 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     let datum: any = {
       full_name: data.full_name,
-      pin: data.pin,
+      // pin: data.pin,
       picture: cropper.getCroppedCanvas().toDataURL(),
     };
-    // let datum = Object.create({ full_name: '', pin: '', picture: '' });
-    // datum['full_name'] = data.full_name;
-    // datum['pin'] = data.pin;
-    // datum['picture'] = croppedFoto;
 
     if (datum.full_name === '') {
       delete datum.full_name;
     }
-    if (datum.pin === '') {
-      delete datum.pin;
-    }
+    // if (datum.pin === '') {
+    //   delete datum.pin;
+    // }
     if (datum.picture === '') {
       delete datum.picture;
     }
@@ -124,23 +67,7 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
         toggleModal();
       });
     });
-    console.log(datum);
-    // router.push('/mitra/new/payment');
   };
-  //   const handleFoto = (event: any) => {
-  //     //  let me = this;
-  //     let file = event.target.files[0];
-  //     let reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = function () {
-  //       //me.modelvalue = reader.result;
-  //       console.log('from input', reader.result);
-  //       setMemberFoto(String(reader.result));
-  //     };
-  //     reader.onerror = function (error) {
-  //       console.log('Error: ', error);
-  //     };
-  //   };
 
   return (
     <Modal isOpen={open} onClose={toggleModal}>
@@ -214,7 +141,7 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
                       placeholder="Nama Lengkap"
                     />
                   </label>
-                  <label className="block mt-4 text-sm">
+                  {/* <label className="block mt-4 text-sm">
                     <span className="text-gray-700 dark:text-gray-400">PIN</span>
                     <input
                       className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -224,7 +151,7 @@ const ModalProfile: React.FC<iModalProfile> = ({ open, closeModal, userData }) =
                       ref={register({ required: false, maxLength: 6 })}
                       placeholder="6 digit PIN angka"
                     />
-                  </label>
+                  </label> */}
                 </div>
                 {/* <div className="col-span-2">
                   
