@@ -73,7 +73,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
 
                   <input 
                   className="block w-full mt-1 px-3 text-sm dark:border-gray-600 dark:bg-gray-700 focus:outline-none  dark:text-gray-300 div-input" 
-                  placeholder="tulis kode trx atau catatan disini" 
+                  placeholder="Cari dengan kode transaksi/catatan" 
                   value={any}
                   onChange={(event)=>setAny(event.target.value)}
                   onKeyPress={event=>{if(event.key==='Enter'){handleSearch();}}}

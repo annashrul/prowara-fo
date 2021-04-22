@@ -7,19 +7,23 @@ import Mutasi from 'components/transaksi/mutasi_row'
 interface iCards {
     dataReport:Array<iTransaksi>;
     title:string;
+    show:boolean;
 }
-const Report: React.FC<iCards> = ({dataReport,title}) => {
+const Report: React.FC<iCards> = ({dataReport,title,show}) => {
 
   return (
         <Card className="md:w-1/2 sm:w-full mt-8 min-h-0">
             <CardBody>
             <div className="flex  justify-between">
                     <p className="mb-4 font-semibold text-gray-700 dark:text-gray-200">{title}</p>
-                    <Link href={'/transaksi'}>
-                        <p className="mb-4 font-semibold text-gray-700 dark:text-gray-200">
-                            <button className="text-xs underline text-blue-700 dark:text-blue-200">Lihat Selengkapnya</button>
-                        </p>
-                    </Link>
+                    {
+                        show?
+                            <Link href={'/transaksi'}>
+                                <p className="mb-4 font-semibold text-gray-700 dark:text-gray-200">
+                                    <button className="text-xs underline text-blue-700 dark:text-blue-200">Lihat Selengkapnya</button>
+                                </p>
+                            </Link>:""
+                    }
                    
                 </div>
                 <div className="w-full overflow-hidden rounded-lg shadow-xs">

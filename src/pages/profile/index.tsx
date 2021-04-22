@@ -7,7 +7,7 @@ import { handleGet } from 'lib/handleAction';
 import { iUser } from 'lib/interface';
 import moment from 'moment';
 import helper from 'lib/helper';
-import { useToasts } from 'react-toast-notifications';
+// import { useToasts } from 'react-toast-notifications';
 import { NextPageContext } from 'next';
 import nookies from 'nookies';
 import atob from 'atob';
@@ -19,7 +19,7 @@ interface iIndexProfile {
 }
 
 const Index: React.FC<iIndexProfile> = ({ userData }) => {
-  const { addToast } = useToasts();
+  // const { addToast } = useToasts();
   const [openWD, setOpenWD] = useState(false);
   const [memberArea, setMemberArea] = useState({ total_pin: '', saldo: '', modal: '', sponsor: '' });
   const [memberBank, setMemberBank] = useState({ acc_no: '', acc_name: '', bank_name: '', id: '' });

@@ -44,8 +44,14 @@ const Dashboard: React.FC<iDashboard> = ({widget,berita,report,bonus}) => {
 
           {/* BOTTOM SECTION */}
           <div className="flex gap-4 flex-col lg:flex-row">
-            <Report title="Profit Harian" dataReport={bonus}/>
-            <Report title="Mutasi Poin Terbaru" dataReport={report}/>
+            <Report
+                title="Profit Harian"
+                show={false}
+                dataReport={bonus}/>
+            <Report 
+                title="Mutasi Poin Terbaru" 
+                show={true}
+                dataReport={report}/>
             <Berita dataBerita={berita}/>
           </div>
         </div>
@@ -90,8 +96,9 @@ export async function getServerSideProps(ctx:NextPageContext) {
   },false)
 
   let bonus:any=[];
-  await handleGet(Api.apiUrl+'transaction/history?page=1&q=Sharing Profit dari ',(res)=>{
+  await handleGet(Api.apiUrl+'transaction/history?page=1&q=U2hhcmluZyBQcm9maXQgZGFyaSA=',(res)=>{
     bonus=res.data;
+    console.log("BONUS",bonus);
   },false)
 
   // Destroy
