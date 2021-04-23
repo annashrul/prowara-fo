@@ -11,7 +11,7 @@ interface iCards {
 const Cards: React.FC<iCards> = ({dataBerita}) => {
 
   return (
-        <Card className="md:w-1/2 sm:w-full mt-8 min-h-0">
+        <Card className="w-full mt-4 min-h-0">
             <CardBody>
                 <div className="flex  justify-between">
                     <p className="mb-4 font-semibold text-gray-700 dark:text-gray-200">Berita Terbaru</p>

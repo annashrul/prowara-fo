@@ -35,7 +35,7 @@ const Dashboard: React.FC<iDashboard> = ({widget,berita,report,bonus}) => {
             c3={`${Helper.numFormat(`${widget.modal}`)}`}
             c4={`${widget.sponsor}`}
           />
-        
+
           {/* SLOT SECTION */}
           <Slot/>
           
@@ -43,17 +43,17 @@ const Dashboard: React.FC<iDashboard> = ({widget,berita,report,bonus}) => {
           <Statistic jumlah={widget.total_member}/>
 
           {/* BOTTOM SECTION */}
-          <div className="flex gap-4 flex-col lg:flex-row">
-            <Report
+            <div className="mt-8 sm:mt-0 sm:w-full flex flex-col md:flex-row justify-between gap-4">
+              <Report
                 title="Profit Harian"
                 show={false}
                 dataReport={bonus}/>
-            <Report 
+              <Report 
                 title="Mutasi Poin Terbaru" 
                 show={true}
                 dataReport={report}/>
-            <Berita dataBerita={berita}/>
-          </div>
+              <Berita dataBerita={berita}/>
+            </div>
         </div>
       </Layout>
   );

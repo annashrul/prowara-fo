@@ -1,4 +1,4 @@
-import {Home,users,Invest,Ticket,poinTf,tiketTf,Deposit,Withdraw,History,Genealogy} from 'icons';
+import {Home,users,Invest,Ticket,poinTf,tiketTf,Deposit,Withdraw,History,Genealogy,Download} from 'icons';
 
 
 const Routes=[
@@ -93,6 +93,12 @@ const Routes=[
                 icon: History
             }
         ]
+    },
+    {
+        link:'/mou',
+        title:'E-MoU',
+        icon: Download,
+        routes:[]
     },
     
   

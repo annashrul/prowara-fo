@@ -118,7 +118,7 @@ const ModalWD: React.FC<iModalWD> = ({open,closeModal,amount,id_slot}) => {
                     <hr/>
                     <br/>
                     <label className="transition-all">Pilih Bank</label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 gap-2">
                     {
                         arrDatum?.length>0?arrDatum.map((item:iBankMember,i:number)=>{
                             return(

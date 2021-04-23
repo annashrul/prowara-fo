@@ -14,12 +14,13 @@ const Widget: React.FC<iWidget> = ({ title, link, icon, isActive }) => {
     const gaya=isActive?
                 "inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
                 :"inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+    const target=title==="Unduh MoU"?'_blank':'_self';
 
     return (
         <li className="relative px-6 py-3">
             {isActive&&<span className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true" />}
             <Link href={link}>
-                <a className={gaya}>
+                <a className={gaya} target={target}>
                     {icon}
                     <span className="ml-4">{title}</span>
                 </a>

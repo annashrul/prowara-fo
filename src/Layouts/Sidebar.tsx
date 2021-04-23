@@ -12,6 +12,7 @@ interface iSidebar {
 const Sidebar: React.FC<iSidebar> = ({ isOpen, toggleSidebar }) => {
   const router = useRouter();
   const path = router.pathname;
+
   return (
     <>
       <aside className="overflow-y-auto bg-white dark:bg-gray-800 flex-shrink-0 w-64 z-20 mt-16 md:mt-0 hidden  md:block ">
@@ -22,10 +23,12 @@ const Sidebar: React.FC<iSidebar> = ({ isOpen, toggleSidebar }) => {
             </a>
           </div>
           <ul className="mt-2">
-            {Route.map((item, x) => {
-              if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link}  routes={item.routes}/>
-              else return  <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
-            })}
+            {
+              Route.map((item, x) => {
+                if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link}  routes={item.routes}/>
+                else return  <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
+              })
+            }
           </ul>
         </div>
       </aside>
@@ -49,10 +52,12 @@ const Sidebar: React.FC<iSidebar> = ({ isOpen, toggleSidebar }) => {
         >
           <div className="text-gray-500 dark:text-gray-400">
             <ul className="mt-6">
-              {Route.map((item, x) => {
-                if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link}  routes={item.routes}/>
-              else return  <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
-              })}
+              {
+                Route.map((item, x) => {
+                  if(item.routes.length>0) return <SubMenu key={x}  icon={item.icon} title={item.title} link={item.link}  routes={item.routes}/>
+                  else return  <Menu key={x} icon={item.icon} title={item.title} link={item.link} isActive={path === item.link} />
+                })
+              }
             </ul>
           </div>
         </aside>

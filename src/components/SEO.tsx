@@ -9,18 +9,32 @@ const SEO: React.FC<SEOProps> = ({ description, keywords, title }) => (
     <meta property="og:type" content="website" />
     <meta name="og:title" property="og:title" content={title} />
     <meta name="og:description" property="og:description" content={description} />
-    <meta property="og:site_name" content="" />
-    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="Prowara" />
+    <meta property="og:url" content="https://prowara.com" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:site" content="" />
-    <meta name="twitter:creator" content="@AhmedElywh" />
+    <meta name="twitter:creator" content="@prowara" />
     <meta name="twitter:image" content="" />
     <meta property="og:image" content="" />
+    {/* <meta httpEquiv="Content-Security-Policy"
+      content="
+      default-src     'self' https://*.prowara.com;
+      script-src      'self' https://*.prowara.com;
+      img-src         'self' https://*.prowara.com;
+      font-src        'self' https://*.prowara.com;
+      connect-src     'self' https://*.prowara.com;
+      media-src       'self' https://*.prowara.com;
+      object-src      'self' https://*.prowara.com;
+      child-src       'self' https://*.prowara.com;
+      frame-src       'self' https://*.prowara.com;
+      worker-src      'self' https://*.prowara.com;
+      form-action     'self' https://*.prowara.com;
+      block-all-mixed-content;
+      "/> */}
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" type="image/png" href="/logo.png" />
-    
   </Head>
 );
 
@@ -33,28 +47,10 @@ export interface SEOProps {
 }
 
 SEO.defaultProps = {
-  description: 'Free admin dashboard template based on Next.Js with @paljs/ui component package',
+  description: 'ProWara (Program Waralaba Rakyat) adalah konsep yang bertujuan untuk membantu serta membangkitkan Ekonomi Kerakyatan di pasca Pandemi.',
   keywords: [
-    'admin-dashboard',
-    'admin',
-    'react',
-    'reactjs',
-    'dashboard',
-    'dashboard-templates',
-    'themes',
-    'styled-components',
-    'styledcomponents',
-    'admin-template',
-    'free-admin-template',
-    'react-admin-dashboard',
-    'react-admin-panel',
-    'react-admin-component',
-    'nextjs',
-    'react-forms',
-    'react-select',
-    'react-accordion',
-    'react-chat',
-    'react-admin-template',
+    'prowara',
+    'Program Waralaba Rakyat'
   ],
 };
 
