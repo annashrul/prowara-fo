@@ -57,7 +57,7 @@ const Routes=[
             },
             {
                 link:'/wallet/transfer/poin',
-                title:'Transfer Poin',
+                title:'Transfer Poin Wallet',
                 icon: poinTf
             },
             {

@@ -71,11 +71,11 @@ const Invoice: React.FC<iInvoice> =({dataBank,config})=> {
 
 
     return (
-        <Layout title="Deposit Poin">
+        <Layout title="Deposit Poin Wallet">
             <div className="container mt-6 lg:px-6 md:px-3">
                 <div className="flex justify-between">
                     <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
-                        Deposit Poin
+                        Deposit Poin Wallet
                     </h2>
                 </div>
             </div>

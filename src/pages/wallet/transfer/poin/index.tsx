@@ -62,17 +62,17 @@ const TransferPoin: React.FC<iTfPoin> =({config})=> {
     }
 
     return (
-        <Layout title="Transfer Poin">
+        <Layout title="Transfer Poin Wallet">
             <div className="container mt-6 lg:px-6 md:px-3">
                 <div className="flex justify-between">
                     <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
-                        Transfer Poin
+                        Transfer Poin Wallet
                     </h2>
                     <div>
                         <div className="flex items-center justify-between mt-6 w-full p-2 lg:rounded-full md:rounded-full bg-white dark:bg-gray-700 dark:hover:bg-gray-800 border border-gray-700	 rounded-lg">
                             <div className="lg:flex md:flex items-center">
                                 <div className="flex flex-col px-3">
-                                    <div className="text-xs leading-3 text-gray-700 dark:text-gray-300 w-full">Poin Anda Saat Ini:</div>
+                                    <div className="text-xs leading-3 text-gray-700 dark:text-gray-300 w-full">Poin Wallet Anda Saat Ini:</div>
                                     <div className="text-sm leading-3 text-center text-gray-700 dark:text-gray-300 mt-2 font-bold w-full">{config.saldo}</div>
                                 </div>
                             </div>

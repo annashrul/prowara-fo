@@ -64,11 +64,8 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                 <td className="px-4 py-3 text-sm">
                     {Helper.numFormat(datum?.amount)}
                 </td>
-                <td className="px-4 py-3 text-xs">
-                    {datum?.contract} Hari
-                </td>
                 <td className="px-4 py-3 text-sm">
-                    {parseFloat(datum?.amount)*(parseFloat(datum?.daily_earning)/100)} Poin
+                    {parseFloat(datum?.amount)*(parseFloat(datum?.daily_earning)/100)} PW
                 </td>
                 <td className="px-4 py-3 text-sm">
                     {Helper.formatDate(`${datum?.start_date}`,false)}

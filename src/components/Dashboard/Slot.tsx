@@ -81,7 +81,6 @@ const Cards: React.FC<iCards> = () => {
                 <tr className="text-xs font-semibold text-center tracking-wide text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                   <th className="px-4 py-3">#</th>
                   <th className="px-4 py-3">Modal</th>
-                  <th className="px-4 py-3">Kontrak</th>
                   <th className="px-4 py-3">Profit Harian</th>
                   <th className="px-4 py-3">Dimulai pada</th>
                   <th className="px-4 py-3">Sisa Waktu</th>

@@ -75,11 +75,11 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
 
 
     return (
-        <Layout title="Deposit Poin">
+        <Layout title="Deposit Poin Wallet">
             <div className="container mt-6 lg:px-6 md:px-3">
                 <div className="flex justify-between">
                     <h2 className="mt-6 text-2xl align-middle	 font-semibold text-gray-700 dark:text-gray-200">
-                        Penarikan Poin
+                        Penarikan Poin Wallet
                     </h2>
                 </div>
             </div>
@@ -130,10 +130,10 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
             </div>
             
             <div className={!config.isActive_wd?"flex flex-col items-center":"hidden"}>
-                <Alert type="warning">Penarikan poin hanya dapat dilakukan pada hari {config.schedule_wd} dari pukul {config.schedule_time_wd}.</Alert>
+                <Alert type="warning">Penarikan Poin Wallet hanya dapat dilakukan pada hari {config.schedule_wd} dari pukul {config.schedule_time_wd}.</Alert>
             </div>
             <div className={parseFloat(config.trx_wd)!==0?"flex flex-col items-center mt-3":"hidden"}>
-                <Alert type="info">Masih ada penarikan poin dalam antrian. Silahkan tunggu konfirmasi dari admin.</Alert>
+                <Alert type="info">Masih ada penarikan Poin Wallet dalam antrian. Silahkan tunggu konfirmasi dari admin.</Alert>
             </div>
             {
                 step===1?(
@@ -142,16 +142,16 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
                             <div className="py-8 px-8">
                                 <div className="rounded shadow border p-6 w-full">
                                     
-                                    <p className="text-gray-200 text-sm text-center">Poin saat ini</p>
+                                    <p className="text-gray-200 text-sm text-center">Poin Wallet saat ini</p>
                                     <p className="text-gray-200 text-3xl text-center">{Helper.numFormat(`${oldPoin}`)}</p>
                                     <button onClick={(event)=>{
                                         event.preventDefault();
                                         handleOldPoin();
                                     }} className="w-full  text-gray-700 dark:text-gray-200 px-8 py-2 mt-2 border border-gray-600 hover:bg-gray-600">
-                                        Tarik semua poin
+                                        Tarik semua Poin Wallet
                                     </button>
                                 </div>
-                                <h6 className="mt-8 text-yellow-400 text-sm">poin:</h6>
+                                <h6 className="mt-8 text-yellow-400 text-sm">Poin Wallet:</h6>
                                 <input 
                                     type="number" 
                                     className="pb-2 pt-3 w-full text-center focus:outline-none border-b-4 border-dashed border-old-gold text-3xl  bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200  p-8" 

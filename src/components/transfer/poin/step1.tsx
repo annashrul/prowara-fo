@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Nomine from 'components/Common/nominal'
+import Helper from 'lib/helper'
 
 interface iStep1 {
     handleClick:(nominal:number,userId:string)=>void;
@@ -36,7 +37,7 @@ const Step1: React.FC<iStep1> = ({handleClick,min_nominal}) => {
                             onChange={(event)=>setPoin(parseFloat((event.target.value).replace(/^0+/, '')))}
                             value={poin}
                             />
-                        <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Transfer: {min_nominal} Poin</h6>
+                        <h6 className="text-yellow-400  italic text-sm mt-2">Minimal Transfer: {Helper.numFormat(`${min_nominal}`)}</h6>
                         <h6 className="mt-8 text-yellow-400 text-sm">User ID:</h6>
                         <input 
                             type="text" 

@@ -66,7 +66,7 @@ const numFormat=(angka:string)=>{
     }
 
     rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-    return rupiah+" Poin";
+    return rupiah+" PW";
 }
 
 
@@ -148,7 +148,7 @@ export const mySwal=(msg:string)=>{
 
 export const handleRoute=(ctx:NextPageContext)=>{
     const cookies = nookies.get(ctx)
-    if(cookies._prowara){
+    if(!cookies._prowara){
         // Router.push('/auth/login');
         return {
           redirect: {
