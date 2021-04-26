@@ -14,17 +14,21 @@ import { handleGet } from "lib/handleAction";
 import nookies from 'nookies'
 import httpService from "lib/httpService";
 
-interface iReportWithdrawal {}
+interface iReportWithdrawal { datum:any}
 
-const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
+const ReportWithdrawal: React.FC<iReportWithdrawal> = (datum) =>{
     const [arrDatum,setArrDatum]= useState<Array<iWithdrawal>>([]);
     const [arrData,setArrData]= useState<iPagin>();
-    const [any,setAny]=useState("");
+    const [any, setAny] = useState("");
+        const [hitFirst,setHitFirst]=useState(1);
+
     const [datefrom,setDatefrom]=useState(moment(new Date()).format("MM/DD/yyyy"));
     const [dateto,setDateto]=useState(moment(new Date()).format("MM/DD/yyyy"));
 
     useEffect(() => {
-        handleLoadData(`page=1&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=10`);
+         setArrDatum(datum.datum.data);
+        setArrData(datum.datum);
+        // handleLoadData(`page=1&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=10`);
     }, []);
    
     const handleLoadData = async(val:string)=>{
@@ -42,7 +46,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
         handleLoadData(`page=1&q=${btoa(any)}`);
     }
     const handlePage=(pagenum:number)=>{
-        handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=10`);
+        if(hitFirst===0) handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=10`);
 
     }
     const handleEvent=(event:any,picker:any)=>{
@@ -117,7 +121,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
                                                 </tr>
 
                                             )
-                                        }) : <img src={ httpService.noData}/>
+                                        }) : <tr><td colSpan={7}><img src={ httpService.noData}/></td></tr>
 
                                     }
                                 </tbody>
@@ -130,7 +134,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = () =>{
                         <Pagination
                             totalResults={arrData===undefined?0:arrData.total}
                             resultsPerPage={arrData===undefined?0:arrData.per_page}
-                            onChange={(val) => {handlePage(val)}}
+                            onChange={(val) => {setHitFirst(0);handlePage(val)}}
                             label="Page navigation"
                         />
                     </div>
@@ -146,8 +150,30 @@ export async function getServerSideProps(ctx:NextPageContext) {
     }else{
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
+    let datum=[];
+  try {
+      const getData = await Api.get(Api.apiUrl +`transaction/withdrawal?page=1&datefrom=${moment(new Date()).format('YYYY-MM-DD')}&dateto=${moment(new Date()).format('YYYY-MM-DD')}`);
+    if(getData.status===200){
+        datum = getData.data.result;
+    }else{
+      datum=[];
+    }
+  } catch (err) {
+        
+
+  }
+
+    try {
+      const getMou = await Api.get(Api.apiUrl +`site/mou/e88b0ddb-a41b-47a1-bf98-567c038f1992`);
+    if(getMou.status===200){
+       console.log('mou',getMou.data.result)
+    }
+  } catch (err) {
+        
+
+  }
     return { 
-        props:{}
+        props:{datum}
     }
 }
 

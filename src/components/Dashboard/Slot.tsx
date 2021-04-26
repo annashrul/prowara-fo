@@ -83,6 +83,7 @@ const Cards: React.FC<iCards> = () => {
                   <th className="px-4 py-3">Modal</th>
                   <th className="px-4 py-3">Profit Harian</th>
                   <th className="px-4 py-3">Dimulai pada</th>
+                  <th className="px-4 py-3">MOU</th>
                   <th className="px-4 py-3">Sisa Waktu</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Aksi</th>

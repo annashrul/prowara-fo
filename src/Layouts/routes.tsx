@@ -94,12 +94,12 @@ const Routes=[
             }
         ]
     },
-    {
-        link:'/mou',
-        title:'E-MoU',
-        icon: Download,
-        routes:[]
-    },
+    // {
+    //     link:'/mou',
+    //     title:'E-MoU',
+    //     icon: Download,
+    //     routes:[]
+    // },
     
   
 

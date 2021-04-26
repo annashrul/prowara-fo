@@ -14,17 +14,22 @@ import { handleGet } from "lib/handleAction";
 import httpService from "lib/httpService";
 import Mutasi from 'components/transaksi/mutasi_row'
 
-interface iReportTransaksi {}
+interface iReportTransaksi {
+    datum:any
+}
 
-const Transaksi: React.FC<iReportTransaksi> = () =>{
+const Transaksi: React.FC<iReportTransaksi> = (datum) =>{
     const [arrDatum,setArrDatum]= useState<Array<iTransaksi>>([]);
     const [arrData,setArrData]= useState<iPagin>();
     const [any,setAny]=useState("");
+    const [hitFirst,setHitFirst]=useState(1);
     const [datefrom,setDatefrom]=useState(moment(new Date()).format("MM/DD/yyyy"));
     const [dateto,setDateto]=useState(moment(new Date()).format("MM/DD/yyyy"));
     const no=10;
     useEffect(() => {
-        handleLoadData(`page=1&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
+        setArrDatum(datum.datum.data);
+        setArrData(datum.datum);
+        // handleLoadData(`page=1&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
     }, []);
    
     const handleLoadData = async(val:string)=>{
@@ -43,7 +48,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
         handleLoadData(`page=1&q=${btoa(any)}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
     }
     const handlePage=(pagenum:number)=>{
-        handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
+        if(hitFirst===0)handleLoadData(`page=${pagenum}&datefrom=${moment(datefrom).format('YYYY-MM-DD')}&dateto=${moment(dateto).format('YYYY-MM-DD')}&perpage=${no}`);
     }
 
     const handleEvent=(event:string,picker:any)=>{
@@ -113,7 +118,7 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
                 <Pagination
                     totalResults={arrData===undefined?0:arrData.total}
                     resultsPerPage={arrData===undefined?0:arrData.per_page}
-                    onChange={(val) => {handlePage(val)}}
+                        onChange={(val) => { setHitFirst(0);handlePage(val)}}
                     label="Page navigation"
                 />
             </div>
@@ -123,8 +128,20 @@ const Transaksi: React.FC<iReportTransaksi> = () =>{
 }
 export async function getServerSideProps(ctx:NextPageContext) {
     Helper.handleRoute(ctx);
+    let datum=[];
+  try {
+      const getData = await Api.get(Api.apiUrl +`transaction/history?page=1&datefrom=${moment(new Date()).format('YYYY-MM-DD')}&dateto=${moment(new Date()).format('YYYY-MM-DD')}`);
+    if(getData.status===200){
+        datum = getData.data.result;
+    }else{
+      datum=[];
+    }
+  } catch (err) {
+        
+
+  }
     return { 
-        props:{}
+        props:{datum}
     }
 }
 
