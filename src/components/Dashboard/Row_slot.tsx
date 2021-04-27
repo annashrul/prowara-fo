@@ -7,6 +7,7 @@ import { useToasts } from 'react-toast-notifications'
 import ModalWD from 'components/withdrawal/modal_wd';
 import Api from 'lib/httpService';
 import { handleGet } from 'lib/handleAction';
+import {Download} from 'icons'
 
 
 interface iCards {
@@ -54,7 +55,7 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
     }
     const handleMou = async (e: any, id: string) => {
         e.preventDefault();
-        await handleGet(Api.apiUrl + `site/mou/${id}`, (res) => {
+        await handleGet(Api.apiClient + `site/mou/${id}`, (res) => {
             window.open(res, '_blank');
         })
     
@@ -79,14 +80,14 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                 
                 <td className="px-4 py-3 text-sm">
                     {Helper.formatDate(`${datum?.start_date}`,false)}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
+                </td>
+                <td className="px-4 py-3 text-sm">
                     {parseFloat(datum?.amount)*(parseFloat(datum?.daily_earning)/100)} PW
-                      </td>
-                       <td className="px-4 py-3 text-sm">
-                          <button onClick={(e)=>handleMou(e,datum.id)} className="text-xs underline text-blue-700 dark:text-blue-200">
-                                  lihat mou
-                            </button>
+                </td>
+                <td className="px-4 py-3 text-sm">
+                    <button onClick={(e)=>handleMou(e,datum.id)} className="text-xs underline text-blue-700 dark:text-blue-200 flex gap-2 items-center">
+                            {Download} MoU Prowara
+                    </button>
                 </td>
                 <td className="px-4 py-3 text-sm">
                     {datum.status===1?Helper.calculateCountdown(`${datum.start_date}`):"-- Hari -- Jam -- Menit"}

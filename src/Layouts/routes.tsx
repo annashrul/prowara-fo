@@ -1,4 +1,4 @@
-import {Home,users,Invest,Ticket,poinTf,tiketTf,Deposit,Withdraw,History,Genealogy,Download} from 'icons';
+import {Home,users,Invest,Ticket,poinTf,tiketTf,Deposit,Withdraw,History,Genealogy} from 'icons';
 
 
 const Routes=[
