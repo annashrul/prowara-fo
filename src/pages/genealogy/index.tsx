@@ -9,7 +9,6 @@ import { NextPageContext } from 'next'
 import ProfileCard from "components/genealogy/ProfileCard";
 import { arrayToTree } from "performant-array-to-tree";
 import { handleGet } from "lib/handleAction";
-import Skeleton from "components/Common/Skeleton";
 import { iNetwork, iUser } from "lib/interface";
 import httpService from "lib/httpService";
 import moment from "moment";
@@ -19,7 +18,6 @@ interface iIndexGenealogy {
 }
 
 const Index: React.FC<iIndexGenealogy> = ({userData}) =>{
-  const [loading,setLoading]=useState(true);
   
   const [datumNetwork,setDatumNetwork]= useState<Array<iNetwork>>([]);
   useEffect(() => {
@@ -28,28 +26,23 @@ const Index: React.FC<iIndexGenealogy> = ({userData}) =>{
 
 
 const loadNetwork = async (val: string, id:string) => {
-    setLoading(true)
     let url = Api.apiClient+`member/network/${id}`;
     if(val!==null){
         url+=`?${val}`;
     }
     await handleGet(url,(datum)=>{
         setDatumNetwork(datum);
-        setLoading(false);
     })
    
 }
   const { addToast } = useToasts();
     const doMore = async (val:string)=>{
-      setLoading(true)
       let url = Api.apiClient+`member/network/${btoa(val)}`;
       await handleGet(url,(datum)=>{
         if(datum.length>0){
           setDatumNetwork(datumNetwork.concat(datum));
-          setLoading(false);
         } else {
           addToast("Jaringan untuk "+val+" tidak ada!", {appearance: 'warning',autoDismiss: true});
-          setLoading(false);
         }
       })
     }
@@ -79,7 +72,6 @@ const loadNetwork = async (val: string, id:string) => {
               </div>
             </div>
           </div>
-            {loading?<Skeleton/>:null}
         </div>
       </Layout>
     );
