@@ -94,7 +94,7 @@ const Routes=[
             },
             {
                 link:'/tiket/report',
-                title:'Mutasi Tiket',
+                title:'Riwayat Tiket',
                 icon: History
             }
         ]

@@ -73,12 +73,12 @@ const MutasiTiket: React.FC<iMutTiket> = ({datum,userData}) =>{
     }
 
     return (
-        <Layout title="Mutasi Tiket">
+        <Layout title="Riwayat Tiket">
             <div className="container grid  lg:px-6 mx-auto">
                 <div className="flex justify-between">
                     <div>
                         <h2 className="mt-6 text-2xl align-middle font-semibold text-gray-700 dark:text-gray-200">
-                            Mutasi Tiket
+                            Riwayat Tiket
                         </h2>
                        
                     </div>
