@@ -47,9 +47,7 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                 <td className="px-4 py-3 text-sm">
                 <Skeleton />
                 </td>
-                <td className="px-4 py-3 text-sm">
-                <Skeleton />
-                </td>
+               
             </tr>
         )
     }
@@ -77,20 +75,21 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                 <td className="px-4 py-3 text-sm">
                     {Helper.numFormat(datum?.amount)}
                 </td>
-                
-                <td className="px-4 py-3 text-sm">
-                    {Helper.formatDate(`${datum?.start_date}`,false)}
-                </td>
-                <td className="px-4 py-3 text-sm">
+                 <td className="px-4 py-3 text-sm">
                     {parseFloat(datum?.amount)*(parseFloat(datum?.daily_earning)/100)} PW
                 </td>
                 <td className="px-4 py-3 text-sm">
+                    {Helper.formatDate(`${datum?.start_date}`,false)}
+                </td>
+               
+                
+                <td className="px-4 py-3 text-sm">
+                    {datum.status===1?Helper.calculateCountdown(`${datum.start_date}`):"-- Hari -- Jam -- Menit"}
+                      </td>
+                      <td className="px-4 py-3 text-sm">
                     <button onClick={(e)=>handleMou(e,datum.id)} className="text-xs underline text-blue-700 dark:text-blue-200 flex gap-2 items-center">
                             {Download} MoU Prowara
                     </button>
-                </td>
-                <td className="px-4 py-3 text-sm">
-                    {datum.status===1?Helper.calculateCountdown(`${datum.start_date}`):"-- Hari -- Jam -- Menit"}
                 </td>
                 <td className="px-4 py-3 text-sm">
                     {

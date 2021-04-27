@@ -91,6 +91,11 @@ const Routes=[
                 link:'/wallet/withdrawal/report',
                 title:'Riwayat Penarikan',
                 icon: History
+            },
+            {
+                link:'/tiket/report',
+                title:'Riwayat Tiket',
+                icon: History
             }
         ]
     },

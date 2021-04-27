@@ -104,12 +104,12 @@ const ModalWD: React.FC<iModalWD> = ({open,closeModal,amount,id_slot}) => {
                             <tr>
                                 <td>Charge</td>
                                 <td>:</td>
-                                <td>{parseFloat(amount)*(arrDatumConfig?.wd_modal_charge/100)}</td>
+                                <td>{Helper.numFormat(`${parseFloat(amount)*(arrDatumConfig?.wd_modal_charge/100)}`)}</td>
                             </tr>
                             <tr>
                                 <td>Total Penarikan</td>
                                 <td>:</td>
-                                <td>{parseFloat(amount)-(parseFloat(amount)*(arrDatumConfig?.wd_modal_charge/100))}</td>
+                                <td>{Helper.numFormat(`${parseFloat(amount)-(parseFloat(amount)*(arrDatumConfig?.wd_modal_charge/100))}`)}</td>
                             </tr>
                            
                         </tbody>
