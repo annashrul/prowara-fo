@@ -4,7 +4,7 @@ import { NextPageContext } from 'next'
 import nookies from 'nookies'
 import Api from 'lib/httpService';
 import Helper from 'lib/helper';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 
 
 interface iDashboard{
