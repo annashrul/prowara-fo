@@ -116,8 +116,7 @@ const ReportWithdrawal: React.FC<iReportWithdrawal> = (datum) =>{
                                                     <td className="py-3 px-6 text-left text-sm">{item.bank_name} <br/>{item.acc_name} - ( <span className="text-sm">{item.acc_no}</span> )</td>
                                                     <td className="py-3 px-6 text-right text-old-gold-700"><span className="text-gray-400 text-xs">Penarikan:</span> <br/>{Helper.numFormat(item.amount)}</td>
                                                     <td className="py-3 px-6 text-right text-red-600"><span className="text-gray-400 text-xs">Charge:</span> <br/>{Helper.numFormat(item.charge)}</td>
-                                                    <td className="py-3 px-6 text-center">{stts}</td>
-                                                    <td className="py-3 px-6 text-center">{moment(item.created_at).format('YYYY-MM-DD')}</td>
+                                                    <td className="py-3 px-6 text-right">{stts}<br/>{Helper.formatDate(item.created_at,true)}</td>
                                                 </tr>
 
                                             )
@@ -157,16 +156,6 @@ export async function getServerSideProps(ctx:NextPageContext) {
         datum = getData.data.result;
     }else{
       datum=[];
-    }
-  } catch (err) {
-        
-
-  }
-
-    try {
-      const getMou = await Api.get(Api.apiUrl +`site/mou/e88b0ddb-a41b-47a1-bf98-567c038f1992`);
-    if(getMou.status===200){
-       console.log('mou',getMou.data.result)
     }
   } catch (err) {
         

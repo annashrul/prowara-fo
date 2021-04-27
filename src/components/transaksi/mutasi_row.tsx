@@ -21,7 +21,7 @@ const Mutasi: React.FC<iMutasi> = ({kd_trx,note,created_at,trx_in,trx_out}) => {
                 <div className="m-2 pb-2 text-xs text-gray-700 dark:text-gray-400 border-b-2 border-grey-lighter">
                     {note}
                 </div>
-                <div className="m-2 text-xs font-semibold text-gray-700 dark:text-gray-400">{moment(created_at).format("yyyy-MM-DD HH:mm")}</div>
+                <div className="m-2 text-xs font-semibold text-gray-700 dark:text-gray-400">{Helper.formatDate(created_at,true)}</div>
             </div>
             <div>
                 <div className="text-right m-2 text-xs font-semibold text-green-200">+ {Helper.numFormat(trx_in)}</div>

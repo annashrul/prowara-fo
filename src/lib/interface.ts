@@ -221,4 +221,13 @@ export interface iConfigWallet{
   tf_charge: string;
 }
 
+export interface iMutasiTiket{
+  kode: string;
+  fullname: string;
+  jenis_transaksi:string;
+  jumlah: string;
+  note: number;
+  created_at: string;
+}
+
 

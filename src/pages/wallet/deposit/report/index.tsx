@@ -111,11 +111,9 @@ const ReportDeposit: React.FC<iReportTopup> = (datum) =>{
                                             return (
                                                 <tr key={i} className={i%2===0?`bg-gray-700`:''}>
                                                     <td className="py-3 px-6 text-center">{i+1 + (10 * (arrData===undefined?0:arrData.current_page-1))}</td>
-                                                    <td className="py-3 px-6 text-left text-sm"><span className="text-white">{item.kd_trx}</span> <br/> {item.fullname}</td>
+                                                    <td className="py-3 px-6 text-left text-sm"><span className="text-white">{item.kd_trx}</span> <br/> {item.fullname}<br/> <span className='text-old-gold-700'>{Helper.numFormat(item.amount)}</span></td>
                                                     <td className="py-3 px-6 text-left text-sm">{item.bank_name} <br/>{item.acc_name} - ( <span className="text-sm">{item.acc_no}</span> )</td>
-                                                    <td className="py-3 px-6 text-right text-old-gold-700">{Helper.numFormat(item.amount)}</td>
-                                                    <td className="py-3 px-6 text-center">{stts}</td>
-                                                    <td className="py-3 px-6 text-center">{moment(item.created_at).format('YYYY-MM-DD')}</td>
+                                                    <td className="py-3 px-6 text-right">{Helper.formatDate(item.created_at,true)}<br/>{stts}</td>
                                                 </tr>
 
                                             )

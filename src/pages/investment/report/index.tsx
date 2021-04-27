@@ -15,23 +15,27 @@ import httpService from "lib/httpService";
 import Skeleton from "components/Common/Skeleton";
 import Mutasi from 'components/transaksi/mutasi_row'
 
-interface iReportInvestment {}
+interface iReportInvestment {
+    datum: any;
+}
 
 
-const ReportInvestment: React.FC<iReportInvestment> = () =>{
+const ReportInvestment: React.FC<iReportInvestment> = (datum) =>{
     const [datumInvestment,setDatumInvestment]= useState<Array<iInvestment>>([]);
     const [arrData, setArrData] = useState<iPagin>();
     const [datefrom,setDatefrom]=useState(moment(new Date()).format("MM/DD/yyyy"));
     const [dateto,setDateto]=useState(moment(new Date()).format("MM/DD/yyyy"));
     const [any,setAny]=useState("");
-    const [loading,setLoading]=useState(true);
+        const [hitFirst,setHitFirst]=useState(1);
+
     useEffect(() => {
-        handleLoadData(`page=1&datefrom=${datefrom}&dateto=${dateto}&perpage=10`);
+         setDatumInvestment(datum.datum.data);
+        setArrData(datum.datum);
+        // handleLoadData(`page=1&datefrom=${datefrom}&dateto=${dateto}&perpage=10`);
     }, []);
 
    
     const handleLoadData = async (val: string) => {
-        setLoading(true)
         let url = Api.apiClient+`transaction/history/investment`;
         if(val!==null){
             url+=`?${val}`;
@@ -39,7 +43,6 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
         await handleGet(url,(datum)=>{
             setDatumInvestment(datum.data);
             setArrData(datum);
-            setLoading(false);
         })
        
     }
@@ -48,12 +51,14 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
         handleLoadData(`page=1&q=${btoa(any)}`);
     }
     const handlePage=(pagenum:string)=>{
-        if (any !== '') {
-            handleLoadData(`page=${pagenum}&q=${btoa(any)}&datefrom=${datefrom}&dateto=${dateto}&perpage=10`);
+        if (hitFirst === 0) {
+             if (any !== '') {
+                handleLoadData(`page=${pagenum}&q=${btoa(any)}&datefrom=${datefrom}&dateto=${dateto}&perpage=10`);
+            }
         }
+       
     }
     const handleEvent=(event:any,picker:any)=>{
-        console.log(event);
         const from = moment(picker.startDate._d).format('YYYY-MM-DD');
         const to = moment(picker.endDate._d).format('YYYY-MM-DD');
         setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));
@@ -97,7 +102,7 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                
                 <div className="grid grid-cols-1 gap-4">
                     {
-                        loading?<Skeleton/>:datumInvestment?.length>0?datumInvestment.map((item:iInvestment,i:number)=>{
+                       datumInvestment?.length>0?datumInvestment.map((item:iInvestment,i:number)=>{
                             return(
                                 <Mutasi
                                     key={i}
@@ -116,7 +121,7 @@ const ReportInvestment: React.FC<iReportInvestment> = () =>{
                     <Pagination
                         totalResults={arrData===undefined?0:arrData.total}
                         resultsPerPage={arrData===undefined?0:arrData.per_page}
-                        onChange={() => {handlePage}}
+                        onChange={() => {setHitFirst(0);handlePage}}
                         label="Page navigation"
                     />
                 </div>
@@ -136,9 +141,21 @@ export async function getServerSideProps(ctx:NextPageContext) {
     }else{
         Api.axios.defaults.headers.common["Authorization"] = Helper.decode(cookies._prowara);
     }
+    //   const getData = await Api.get(Api.apiUrl +`transaction/history/investment?page=1&datefrom=${moment(new Date()).format('YYYY-MM-DD')}&dateto=${moment(new Date()).format('YYYY-MM-DD')}`);
+let datum=[];
+  try {
+      const getData = await Api.get(Api.apiUrl +`transaction/history/investment?page=1&datefrom=${moment(new Date()).format('YYYY-MM-DD')}&dateto=${moment(new Date()).format('YYYY-MM-DD')}`);
+    if(getData.status===200){
+        datum = getData.data.result;
+    }else{
+      datum=[];
+    }
+  } catch (err) {
+        
 
+  }
     return { 
-        props:{}
+        props:{datum}
     }
 }
 
