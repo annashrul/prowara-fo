@@ -30,7 +30,7 @@ const Dashboard: React.FC<iDashboard> = ({widget,berita,report,bonus}) => {
           </h2>
           {/* CARD SECTION */}
           <Widget
-            c1={`${Helper.numFormat(`${widget.saldo}`)}`}
+            c1={`${Helper.numFormat(`${parseFloat(`${widget.saldo}`).toFixed(2)}`)}`}
             c2={widget.total_pin + " Tiket"}
             c3={`${Helper.numFormat(`${widget.modal}`)}`}
             c4={`${widget.sponsor}`}
