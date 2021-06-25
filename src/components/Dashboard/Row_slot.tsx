@@ -84,7 +84,7 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                
                 
                 <td className="px-4 py-3 text-sm">
-                    {datum.status===1?Helper.calculateCountdown(`${datum.start_date}`):"-- Hari -- Jam -- Menit"}
+                    {datum.status===1?Helper.calculateCountdown(`${datum.start_date}`,datum.contract):"-- Hari -- Jam -- Menit"}
                       </td>
                       <td className="px-4 py-3 text-sm">
                     <button onClick={(e)=>handleMou(e,datum.id)} className="text-xs underline text-blue-700 dark:text-blue-200 flex gap-2 items-center">

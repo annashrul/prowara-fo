@@ -70,8 +70,9 @@ const numFormat=(angka:string)=>{
 }
 
 
-const calculateCountdown=(startDate:string) => {
-    const end =moment(startDate).add(50, 'days');
+const calculateCountdown=(startDate:string,kontrak:number) => {
+    const end =moment(startDate).add(kontrak, 'days');
+    console.log(end);
     const now =moment();
     let diff = (Date.parse(`${end}`) - Date.parse(`${now}`)) / 1000;
 

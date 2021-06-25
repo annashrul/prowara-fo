@@ -12,7 +12,6 @@ import { handleGet } from "lib/handleAction";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import httpService from "lib/httpService";
-import Skeleton from "components/Common/Skeleton";
 import Mutasi from 'components/transaksi/mutasi_row'
 
 interface iReportInvestment {
@@ -59,6 +58,7 @@ const ReportInvestment: React.FC<iReportInvestment> = (datum) =>{
        
     }
     const handleEvent=(event:any,picker:any)=>{
+        console.log(event);
         const from = moment(picker.startDate._d).format('YYYY-MM-DD');
         const to = moment(picker.endDate._d).format('YYYY-MM-DD');
         setDatefrom(moment(picker.startDate._d).format('MM/DD/yyyy'));

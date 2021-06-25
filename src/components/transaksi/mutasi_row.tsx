@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Helper from 'lib/helper';
-import moment from 'moment'
 
 interface iMutasi {
     kd_trx:string;
