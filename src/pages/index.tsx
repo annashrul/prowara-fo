@@ -21,7 +21,7 @@ interface iDashboard{
 }
 
 const Dashboard: React.FC<iDashboard> = ({widget,berita,report,bonus}) => {
-
+  console.log(widget.saldo)
   return (
       <Layout title="Dashboard">
         <div className="container mt-6 lg:px-6 md:px-3 mx-auto xs:px-2 sm:px-2 grid mb-20">
@@ -30,7 +30,8 @@ const Dashboard: React.FC<iDashboard> = ({widget,berita,report,bonus}) => {
           </h2>
           {/* CARD SECTION */}
           <Widget
-            c1={`${Helper.numFormat(`${parseFloat(`${widget.saldo}`).toFixed(2)}`)}`}
+            c1={`${Helper.numFormat(`${Math.round(widget.saldo)}`)}`}
+            // c1={`${Helper.numFormat(`${parseFloat(`1,4100000000000002`).toFixed(2)}`)}`}
             c2={widget.total_pin + " Tiket"}
             c3={`${Helper.numFormat(`${widget.modal}`)}`}
             c4={`${widget.sponsor}`}
