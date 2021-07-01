@@ -58,6 +58,7 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
         })
     
     }
+    let daily_earning = parseFloat(datum?.amount) * (parseFloat(datum?.daily_earning) / 100);
   return (
       <>
       <ModalWD 
@@ -76,7 +77,8 @@ const Cards: React.FC<iCards> = ({datum,isLoading}) => {
                     {Helper.numFormat(datum?.amount)}
                 </td>
                  <td className="px-4 py-3 text-sm">
-                    {parseFloat(datum?.amount)*(parseFloat(datum?.daily_earning)/100)} PW
+                    {daily_earning.toFixed(2)} PW
+                    
                 </td>
                 <td className="px-4 py-3 text-sm">
                     {Helper.formatDate(`${datum?.start_date}`,false)}

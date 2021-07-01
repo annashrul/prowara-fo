@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, CardBody } from '@windmill/react-ui'
-import Helper from 'lib/helper';
 import { iContent } from 'lib/interface';
 import Link from 'next/link'
+import Helper from '../../lib/helper'
 
 interface iCards {
     dataBerita:Array<iContent>;
@@ -47,7 +47,6 @@ const Cards: React.FC<iCards> = ({dataBerita}) => {
                                     </a>
                                 </div>
                             </div>
-
                         );
                     }):<div className="mt-3 pb-2 text-gray-700 dark:text-gray-400 text-center">Tidak ada data.</div>
 

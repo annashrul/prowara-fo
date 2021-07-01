@@ -68,14 +68,14 @@ const Login: NextPage<iLogin> = ({otpLength}) =>{
     }else{
       const phones = 62+clearNo;
       Swal.fire({
-            title: 'Silahkan tunggu...',
-            html: otp==='-'?'Sedang mengecek akun.':'Mengirim ulang OTP.',
-            willOpen: () => {
-                Swal.showLoading()
-            },
-            showConfirmButton:false,
-            willClose: () => {}
-        })
+        title: 'Silahkan tunggu...',
+        html: otp==='-'?'Sedang mengecek akun.':'Mengirim ulang OTP.',
+        willOpen: () => {
+            Swal.showLoading()
+        },
+        showConfirmButton:false,
+        willClose: () => {}
+      })
         try {
           const sendOtp=await Sess.http.post(Sess.http.apiClient+'auth/otp', {
                 "nomor":phones,
