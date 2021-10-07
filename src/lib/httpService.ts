@@ -17,5 +17,5 @@ export default {
   noData:'https://www.napro.id/assets/images/placeholder-no-data.png',
   apiUrl: "http://localhost:6704/",
   // apiUrl: "https://api.prowara.com/",
-  apiClient: "https://api.prowara.com/"
+  apiClient: "https://api-mitra.prowara.com/"
 }
