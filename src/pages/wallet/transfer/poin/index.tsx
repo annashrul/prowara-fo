@@ -73,7 +73,7 @@ const TransferPoin: React.FC<iTfPoin> =({config})=> {
                             <div className="lg:flex md:flex items-center">
                                 <div className="flex flex-col px-3">
                                     <div className="text-xs leading-3 text-gray-700 dark:text-gray-300 w-full">Poin Wallet Anda Saat Ini:</div>
-                                    <div className="text-sm leading-3 text-center text-gray-700 dark:text-gray-300 mt-2 font-bold w-full">{config.saldo}</div>
+                                    <div className="text-sm leading-3 text-center text-gray-700 dark:text-gray-300 mt-2 font-bold w-full">{Helper.numFormat(config.saldo)}</div>
                                 </div>
                             </div>
                         </div>
@@ -123,8 +123,8 @@ const TransferPoin: React.FC<iTfPoin> =({config})=> {
                     <Step2
                         penerima={user?.fullname}
                         jumlah_transfer={`${nominal}`}
-                        admin={`${nominal*(parseFloat(config.wd_charge)/100)}`}
-                        total_transfer={`${nominal+ (nominal*(parseFloat(config.wd_charge)/100))}`}
+                        admin={`${nominal*(parseFloat(config.tf_charge)/100)}`}
+                        total_transfer={`${nominal+ (nominal*(parseFloat(config.tf_charge)/100))}`}
                         handleClick={doVerif}
                         goBack={(val:number)=>doStep(val)}
                     />

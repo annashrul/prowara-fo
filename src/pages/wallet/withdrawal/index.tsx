@@ -35,7 +35,9 @@ const Withdrawal: React.FC<iTrxWithdrawal> =({dataBank,config})=> {
     const handleCheck=()=>{
         if(poin===0) addToast("poin tidak boleh kosong!", {appearance: 'warning',autoDismiss: true});
         else if(poin<min_nominal) addToast(`Minimal deposit adalah ${Helper.numFormat(`${min_nominal}`)}`, {appearance: 'warning',autoDismiss: true});
-        else{
+         else if (oldPoin<poin){
+            addToast("Poin kamu tidak mencukupi!", {appearance: 'warning',autoDismiss: true});
+        }else{
             setPoin(poin)
             setStep(step+1);
         }
